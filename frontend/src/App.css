@@ -1,0 +1,288 @@
+.app {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #2c3e50;
+}
+
+.backend-status {
+  font-size: 13px;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.analyze-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.analyze-btn:disabled {
+  background-color: #bdc3c7;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.results-card {
+  margin-top: 25px;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fdfdfd;
+  border: 1px solid #e2e8f0;
+}
+
+.primary-result {
+  background: #ebf8ff;
+  border-left: 4px solid #3182ce;
+  padding: 10px 15px;
+  border-radius: 4px;
+}
+
+.highlight {
+  color: #2b6cb0;
+}
+
+.prob-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.concern-name {
+  width: 110px;
+  text-transform: capitalize;
+}
+
+.bar-container {
+  flex: 1;
+  height: 10px;
+  background: #edf2f7;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 0 10px;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #3182ce;
+}
+
+.prob-val {
+  width: 45px;
+  text-align: right;
+}
+
+.recommendations-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f7fafc;
+  border-radius: 6px;
+}
+
+.guidance-note {
+  font-size: 13px;
+  color: #4a5568;
+  margin-top: 10px;
+}* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 15px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  color: #0f172a;
+  margin-bottom: 5px;
+}
+
+.app-header p {
+  color: #64748b;
+  font-size: 15px;
+}
+
+.input-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.input-card h2 {
+  font-size: 18px;
+  margin-top: 0;
+  color: #334155;
+}
+
+.analyze-btn {
+  margin-top: 15px;
+  background-color: #2563eb;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.analyze-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.loading-spinner {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.error-banner {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-radius: 6px;
+  border: 1px solid #fca5a5;
+}
+
+.results-container {
+  margin-top: 25px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.primary-badge {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.badge-label {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #1e40af;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.badge-value {
+  margin: 8px 0;
+  font-size: 32px;
+  color: #1e3a8a;
+}
+
+.confidence-score {
+  margin: 0;
+  color: #3b82f6;
+  font-size: 14px;
+}
+
+.breakdown-section {
+  margin-bottom: 25px;
+}
+
+.breakdown-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.breakdown-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.progress-bar-bg {
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 4px;
+}
+
+.recommendations-card {
+  border-top: 2px solid #f1f5f9;
+  padding-top: 20px;
+}
+
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.ingredient-pill {
+  background-color: #f1f5f9;
+  color: #334155;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.routine-list {
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.warning-box {
+  background-color: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #9a3412;
+}
+
+.disclaimer-note {
+  margin-top: 25px;
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+}
