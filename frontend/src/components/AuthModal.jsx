@@ -3,13 +3,19 @@ import React, { useState } from "react";
 export default function AuthModal({ authModal, onClose, onAuthSuccess, setAuthModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email && password) {
-      onAuthSuccess();
+      const computedName = name || email.split("@")[0];
+      onAuthSuccess({
+        name: computedName.charAt(0).toUpperCase() + computedName.slice(1),
+        email: email,
+      });
       setEmail("");
       setPassword("");
+      setName("");
     }
   };
 
@@ -19,14 +25,27 @@ export default function AuthModal({ authModal, onClose, onAuthSuccess, setAuthMo
         <button className="close-btn" onClick={onClose}>✕</button>
         <span className="brand-logo">✨</span>
         <h3>{authModal === "login" ? "Welcome Back" : "Create Account"}</h3>
-        
+
         <form onSubmit={handleSubmit}>
+          {authModal === "signup" && (
+            <div className="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. Bella Rose"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+          )}
+
           <div className="form-group">
             <label>Email</label>
-            <input 
-              type="email" 
-              required 
-              placeholder="yourname@example.com" 
+            <input
+              type="email"
+              required
+              placeholder="yourname@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -34,10 +53,10 @@ export default function AuthModal({ authModal, onClose, onAuthSuccess, setAuthMo
 
           <div className="form-group">
             <label>Password</label>
-            <input 
-              type="password" 
-              required 
-              placeholder="••••••••" 
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

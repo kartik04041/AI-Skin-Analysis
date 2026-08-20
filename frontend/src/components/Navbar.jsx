@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Navbar({ isLoggedIn, onOpenAuth, onOpenHistory, onLogout }) {
+export default function Navbar({ isLoggedIn, user, onOpenAuth, onOpenAccount, onLogout }) {
   return (
     <nav className="navbar">
       <div className="nav-brand">
@@ -20,8 +20,8 @@ export default function Navbar({ isLoggedIn, onOpenAuth, onOpenHistory, onLogout
       <div className="nav-auth">
         {isLoggedIn ? (
           <>
-            <button className="nav-btn ghost-btn" onClick={onOpenHistory}>
-              📋 History
+            <button className="nav-btn ghost-btn" onClick={onOpenAccount}>
+              👤 My Account ({user?.name || "User"})
             </button>
             <button className="nav-btn logout-btn" onClick={onLogout}>
               Logout
