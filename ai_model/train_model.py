@@ -16,12 +16,18 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 MODEL_PATH = os.path.join(MODEL_DIR, 'skin_model.keras')
 CLASS_INDICES_PATH = os.path.join(MODEL_DIR, 'class_indices.json')
 
-# Updated to target skin types
 CLASSES = ['acne', 'combination', 'dry', 'normal', 'oily', 'sensitive']
-class_indices = {str(i): name for i, name in enumerate(CLASSES)}
+class_indices = {str(i): name.capitalize() for i, name in enumerate(CLASSES)}
 
-if os.path.exists(DATASET_DIR) and len(os.listdir(DATASET_DIR)) > 0:
-    print("Training AI model on real dataset at: {}".format(DATASET_DIR))
+# Verify if valid dataset exists with subfolders
+has_real_dataset = (
+    os.path.exists(DATASET_DIR) 
+    and os.path.isdir(DATASET_DIR) 
+    and len([d for d in os.listdir(DATASET_DIR) if os.path.isdir(os.path.join(DATASET_DIR, d))]) >= 2
+)
+
+if has_real_dataset:
+    print(f"✅ Training AI model on dataset found at: {DATASET_DIR}")
     
     datagen = ImageDataGenerator(
         rescale=1./255,
@@ -40,38 +46,36 @@ if os.path.exists(DATASET_DIR) and len(os.listdir(DATASET_DIR)) > 0:
         subset='training'
     )
     
-    # Save real class indices
-    real_indices = {str(v): k for k, v in train_gen.class_indices.items()}
+    # Map class index back to label name correctly
+    real_indices = {str(v): k.capitalize() for k, v in train_gen.class_indices.items()}
     with open(CLASS_INDICES_PATH, 'w') as f:
-        json.dump(real_indices, f)
+        json.dump(real_indices, f, indent=2)
         
     num_classes = len(train_gen.class_indices)
 else:
-    print("No dataset folder found. Creating baseline model with default skin types: {}".format(CLASSES))
+    print(f"⚠️ No dataset found. Saving class map for 6 skin types: {CLASSES}")
     num_classes = len(CLASSES)
     with open(CLASS_INDICES_PATH, 'w') as f:
-        json.dump(class_indices, f)
+        json.dump(class_indices, f, indent=2)
 
-# Build MobileNetV2 Transfer Learning Architecture
+# MobileNetV2 Transfer Learning Setup
 base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-base_model.trainable = False
+base_model.trainable = False  # Freeze base layers
 
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
-x = Dropout(0.2)(x)
+x = Dropout(0.3)(x)
 outputs = Dense(num_classes, activation='softmax')(x)
 
 model = Model(inputs=base_model.input, outputs=outputs)
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-if os.path.exists(DATASET_DIR) and len(os.listdir(DATASET_DIR)) > 0:
-    model.fit(train_gen, epochs=5)
+if has_real_dataset:
+    # Fine-tune model on real data
+    model.fit(train_gen, epochs=8)
+    model.save(MODEL_PATH)
+    print(f"\n🎉 Saved trained skin model to: {MODEL_PATH}")
 else:
-    # Train 1 quick synthetic step to generate valid weight file
-    dummy_x = np.random.random((8, 224, 224, 3))
-    dummy_y = tf.keras.utils.to_categorical(np.random.randint(0, num_classes, size=(8,)), num_classes=num_classes)
-    model.fit(dummy_x, dummy_y, epochs=1, batch_size=4)
+    print("⚠️ Dataset not provided. Skipping saving empty untuned weights to avoid static predictions.")
 
-model.save(MODEL_PATH)
-print("\nSuccess! Saved skin type model to: {}".format(MODEL_PATH))
-print("Saved class map to: {}".format(CLASS_INDICES_PATH))
+print(f"✅ Class indices stored at: {CLASS_INDICES_PATH}")

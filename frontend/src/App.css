@@ -1143,4 +1143,149 @@ body {
 .review-meta small {
   color: #9d174d;
   font-size: 0.75rem;
+}/* CSS Styles to support the visual component */
+.metrics-comparison-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.comparison-header h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #1e293b;
+}
+
+.timestamps-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.current-dot { background-color: #ec4899; }
+.previous-dot { background-color: #94a3b8; }
+
+.metric-row {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.metric-name {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.delta-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.delta-badge.positive { background: #dcfce7; color: #166534; }
+.delta-badge.negative { background: #fee2e2; color: #991b1b; }
+.delta-badge.neutral { background: #f1f5f9; color: #475569; }
+
+.bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar-value {
+  width: 50px;
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: right;
+}
+
+.font-bold {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bar-track {
+  flex: 1;
+  height: 10px;
+  background-color: #f1f5f9;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s ease-in-out;
+}/* Camera container positioning */
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Expanded Face Guide Oval Overlay */
+.face-oval-guide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  /* Increased oval size (default was ~200px x 280px) */
+  width: 75%;          /* Increased width ratio */
+  height: 82%;         /* Increased height ratio */
+  max-width: 340px;    /* Max horizontal span */
+  max-height: 440px;   /* Max vertical span */
+  
+  border: 3.5px dashed #ff80ab; /* Baby pink accent line */
+  border-radius: 50% / 50%;    /* Creates a smooth facial oval */
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45); /* Darkens region outside face */
+  pointer-events: none;
+  z-index: 10;
+  transition: all 0.3s ease;
+}.oval-ring {
+  width: 340px;
+  height: 460px;
+  max-width: 85%;
+  max-height: 85%;
+  border: 3px dashed #ff69b4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

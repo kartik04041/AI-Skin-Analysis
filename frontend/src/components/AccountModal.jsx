@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 
-export default function AccountModal({ user, history, onClose, onAddReview }) {
+export default function AccountModal({ user = {}, history = [], onClose, onAddReview }) {
   const [activeTab, setActiveTab] = useState("profile");
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
   const [feedback, setFeedback] = useState("");
   const [submittedMessage, setSubmittedMessage] = useState("");
 
-  const latestTest = history[0];
-  const previousTest = history[1];
+  const latestTest = history?.[0];
+  const previousTest = history?.[1];
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
     if (!reviewText) return;
-    onAddReview({ user: user.name, text: reviewText, rating });
+    if (onAddReview) {
+      onAddReview({ user: user?.name || "User", text: reviewText, rating });
+    }
     setReviewText("");
     setSubmittedMessage("Thank you! Your review has been saved.");
     setTimeout(() => setSubmittedMessage(""), 3000);
@@ -195,25 +197,28 @@ export default function AccountModal({ user, history, onClose, onAddReview }) {
           </div>
         )}
 
-        {/* TAB 4: WHAT MORE IT CAN DO */}
+        {/* TAB 4: FUTURE UPGRADES */}
         {activeTab === "features" && (
           <div className="tab-content">
-            <h4 className="section-subtitle">What More Your AI Skincare Assistant Can Do</h4>
+            <h4 className="section-subtitle">What More You Can Do</h4>
             <ul className="feature-ideas-list">
               <li>
-                <strong>📸 Photo Progress Timeline:</strong> Compare weekly cheek/T-zone closeups to track acne or redness reduction over time.
+                <strong>💧 Water & Diet Trigger Journal:</strong> Log daily hydration levels and potential dietary triggers (like high-glycemic foods or dairy) to identify breakout patterns.
               </li>
               <li>
-                <strong>☀️ Real-time UV & Climate Sync:</strong> Dynamic routine adjustments based on your local weather and UV index.
+                <strong>⚠️ Active Ingredient Conflict Checker:</strong> Scan product combinations to prevent skin barrier damage from unsafe layering (e.g., mixing Retinol with AHAs or Vitamin C).
               </li>
               <li>
-                <strong>📄 PDF Exportable Routine:</strong> Download a clinical-style summary report to share with your dermatologist.
+                <strong>🧴 Product Expiration & PAO Tracker:</strong> Track shelf life and "Period After Opening" dates to avoid applying oxidized serums or degraded active ingredients.
               </li>
               <li>
-                <strong>🔔 Routine Completion Tracker:</strong> Daily checklist with push notifications for AM and PM routine compliance.
+                <strong>😴 Sleep & Stress Correlation Metrics:</strong> Map nightly sleep quality and stress spikes against skin clarity score trends over time.
               </li>
               <li>
-                <strong>🧪 Ingredient Allergy Guard:</strong> Flag products containing known triggers or allergens specific to your skin profile.
+                <strong>🧼 Hygiene & Tool Reminders:</strong> Set customized alerts for swapping pillowcases and sanitizing makeup brushes to reduce bacterial acne flare-ups.
+              </li>
+              <li>
+                <strong>🔬 48-Hour Patch Test Assistant:</strong> Step-by-step guided timers and reaction logging for introducing new active formulas safely.
               </li>
             </ul>
           </div>

@@ -26,7 +26,6 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
   }, []);
 
   const startCamera = async () => {
-    // GUARD: BLOCK CAMERA IF NOT LOGGED IN
     if (!isLoggedIn) {
       if (onOpenAuth) onOpenAuth();
       return;
@@ -105,7 +104,6 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
   };
 
   const handleFileUpload = (e, angle) => {
-    // GUARD: BLOCK FILE UPLOAD IF NOT LOGGED IN
     if (!isLoggedIn) {
       e.target.value = "";
       if (onOpenAuth) onOpenAuth();
@@ -186,7 +184,17 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
             />
 
             <div className={`oval-guide-overlay ${activeTab}`}>
-              <div className="oval-ring">
+              {/* Increased size using width, height, and max limits */}
+              <div
+                className="oval-ring"
+                style={{
+                  width: "320px",
+                  height: "440px",
+                  maxWidth: "85%",
+                  maxHeight: "85%",
+                  borderRadius: "50%",
+                }}
+              >
                 <span className="guide-text">{getGuideText()}</span>
               </div>
             </div>
