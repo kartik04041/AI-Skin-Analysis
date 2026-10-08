@@ -1,840 +1,516 @@
 import React, { useState, useEffect } from "react";
+
 import AnalyzerWorkspace from "./components/AnalyzerWorkspace";
 import AuthModal from "./components/AuthModal";
 import AccountModal from "./components/AccountModal";
+import AdminDashboard from "./components/AdminDashboard";
+import UserDashboard from "./components/UserDashboard";
+
 import "./App.css";
-
-
-// =========================================================
-// NODE BACKEND
-// =========================================================
 
 const API_BASE_URL = "http://localhost:5000";
 
-
 export default function App() {
-
-  // =======================================================
-  // AUTH STATE
-  // =======================================================
-
-  const [authModal, setAuthModal] =
-    useState(null);
+  const [authModal, setAuthModal] = useState(null);
 
   const [user, setUser] = useState(() => {
-
     try {
-
-      const savedUser =
-        localStorage.getItem("glow_user");
+      const savedUser = localStorage.getItem("glow_user");
 
       if (
         savedUser &&
         savedUser !== "undefined" &&
         savedUser !== "null"
       ) {
-
         return JSON.parse(savedUser);
-
       }
-
     } catch (error) {
-
-      console.error(
-        "User data error:",
-        error
-      );
-
+      console.error("User loading error:", error);
+      localStorage.removeItem("glow_user");
     }
 
     return null;
-
   });
 
-
   const [token, setToken] = useState(() => {
-
-    const savedToken =
-      localStorage.getItem("glow_token");
+    const savedToken = localStorage.getItem("glow_token");
 
     if (
       savedToken &&
       savedToken !== "null" &&
       savedToken !== "undefined"
     ) {
-
       return savedToken;
-
     }
 
     return null;
-
   });
 
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
 
-  const [isAccountOpen, setIsAccountOpen] =
-    useState(false);
+  const [userData, setUserData] = useState({
+    gender: "Female",
+    age: "18-24",
+    sleep: "7-9 hours",
+    concern: "Acne & Breakouts",
+    secondaryConcern: "Enlarged Pores",
+    sensitivity: "Slightly Sensitive",
+    waterIntake: "2L-3L",
+    climate: "Moderate",
+    lighting: "Natural Daylight",
+  });
 
+  const [capturedImages, setCapturedImages] = useState({
+    front: null,
+    left: null,
+    right: null,
+  });
 
-  // =======================================================
-  // USER SKIN PROFILE
-  // =======================================================
+  const [analysis, setAnalysis] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
-  const [userData, setUserData] =
-    useState({
+  // =========================================================
+  // ADMIN CHECK
+  // =========================================================
 
-      gender: "Female",
+  const isAdmin =
+    user?.isAdmin === true ||
+    user?.role === "admin" ||
+    localStorage.getItem("isAdmin") === "true";
 
-      age: "18-24",
+  // =========================================================
+  // LOGOUT
+  // =========================================================
 
-      sleep: "7-9 hours",
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    setHistory([]);
+    setAnalysis(null);
+    setError(null);
+    setIsAccountOpen(false);
+    setAuthModal(null);
 
-      concern: "Acne & Breakouts",
-
-      secondaryConcern:
-        "Enlarged Pores",
-
-      sensitivity:
-        "Slightly Sensitive",
-
-      waterIntake:
-        "2L-3L",
-
-      climate:
-        "Moderate",
-
-      lighting:
-        "Natural Daylight"
-
-    });
-
-
-  // =======================================================
-  // IMAGES
-  // =======================================================
-
-  const [capturedImages, setCapturedImages] =
-    useState({
-
+    setCapturedImages({
       front: null,
-
       left: null,
-
-      right: null
-
+      right: null,
     });
 
+    localStorage.removeItem("glow_user");
+    localStorage.removeItem("glow_token");
+    localStorage.removeItem("isAdmin");
+  };
 
-  // =======================================================
-  // ANALYSIS
-  // =======================================================
+  // =========================================================
+  // AUTH SUCCESS
+  // =========================================================
 
-  const [analysis, setAnalysis] =
-    useState(null);
+  const handleAuthSuccess = (loggedInUser, authToken) => {
+    console.log("=================================");
+    console.log("AUTH SUCCESS");
+    console.log("USER:", loggedInUser);
+    console.log("ADMIN:", loggedInUser?.isAdmin);
+    console.log("ROLE:", loggedInUser?.role);
+    console.log("=================================");
 
-  const [loading, setLoading] =
-    useState(false);
+    if (loggedInUser) {
+      setUser(loggedInUser);
 
-  const [error, setError] =
-    useState(null);
+      localStorage.setItem(
+        "glow_user",
+        JSON.stringify(loggedInUser)
+      );
 
+      const adminUser =
+        loggedInUser.isAdmin === true ||
+        loggedInUser.role === "admin";
 
-  // =======================================================
-  // DATABASE DATA
-  // =======================================================
-
-  const [history, setHistory] =
-    useState([]);
-
-  const [reviews, setReviews] =
-    useState([]);
-
-
-  // =======================================================
-  // LOAD REVIEWS + HISTORY
-  // =======================================================
-
-  useEffect(() => {
-
-    fetchReviews();
-
-    if (
-      token &&
-      token !== "null" &&
-      token !== "undefined"
-    ) {
-
-      fetchHistory(token);
-
+      localStorage.setItem(
+        "isAdmin",
+        adminUser ? "true" : "false"
+      );
     }
 
-  }, [token]);
+    if (authToken) {
+      setToken(authToken);
+      localStorage.setItem(
+        "glow_token",
+        authToken
+      );
+    }
 
+    setAuthModal(null);
+    setError(null);
+  };
 
-  // =======================================================
-  // GET REVIEWS
-  // =======================================================
+  // =========================================================
+  // FETCH REVIEWS
+  // =========================================================
 
   const fetchReviews = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/reviews`
+      );
+
+      if (!response.ok) {
+        console.warn(
+          "Reviews request failed:",
+          response.status
+        );
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setReviews(data.reviews || []);
+      }
+    } catch (err) {
+      console.error(
+        "Reviews error:",
+        err
+      );
+    }
+  };
+
+  // =========================================================
+  // FETCH USER HISTORY
+  // IMPORTANT:
+  // ADMIN MUST NOT CALL THIS ROUTE
+  // =========================================================
+
+  const fetchHistory = async (authToken) => {
+    if (isAdmin) {
+      console.log(
+        "Admin detected - skipping user history request."
+      );
+      return;
+    }
+
+    if (
+      !authToken ||
+      authToken === "null" ||
+      authToken === "undefined"
+    ) {
+      return;
+    }
 
     try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/history`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
-      const response =
-        await fetch(
-          `${API_BASE_URL}/api/reviews`
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setHistory(data.history || []);
+      } else if (response.status === 401) {
+        console.warn(
+          "User session expired."
         );
 
+        handleLogout();
+      }
+    } catch (err) {
+      console.error(
+        "History error:",
+        err
+      );
+    }
+  };
+
+  // =========================================================
+  // LOAD DATA
+  // =========================================================
+
+  useEffect(() => {
+    fetchReviews();
+
+    // NEVER fetch history for admin
+    if (token && !isAdmin) {
+      fetchHistory(token);
+    }
+  }, [token, isAdmin]);
+
+  // =========================================================
+  // USER DATA
+  // =========================================================
+
+  const handleUserDataChange = (
+    field,
+    value
+  ) => {
+    setUserData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  // =========================================================
+  // IMAGE UPDATE
+  // =========================================================
+
+  const handleImagesUpdated = (
+    images
+  ) => {
+    setCapturedImages(images);
+    setAnalysis(null);
+    setError(null);
+  };
+
+  // =========================================================
+  // ADD REVIEW
+  // =========================================================
+
+  const handleAddReview = async (
+    newReview
+  ) => {
+    if (!token) {
+      alert(
+        "Please login to submit a review."
+      );
+      setAuthModal("login");
+      return;
+    }
+
+    // Admin should not submit normal user reviews
+    if (isAdmin) {
+      alert(
+        "Admin accounts cannot submit user reviews."
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: newReview.text,
+            rating:
+              newReview.rating || 5,
+          }),
+        }
+      );
 
       const data =
         await response.json();
 
+      if (response.status === 401) {
+        handleLogout();
+        setAuthModal("login");
 
-      if (data.success) {
-
-        setReviews(
-          data.reviews || []
+        alert(
+          "Session expired. Please login again."
         );
 
+        return;
       }
 
-    } catch (err) {
+      if (data.success) {
+        setReviews((prev) => [
+          data.review || newReview,
+          ...prev,
+        ]);
 
+        fetchReviews();
+      } else {
+        alert(
+          data.message ||
+            "Failed to submit review."
+        );
+      }
+    } catch (err) {
       console.error(
-        "Error fetching reviews:",
+        "Review submission error:",
         err
       );
 
+      alert(
+        "Unable to submit review."
+      );
+    }
+  };
+
+  // =========================================================
+  // ANALYZE SKIN
+  // =========================================================
+
+  const handleAnalyze = async () => {
+    if (!token) {
+      setError(
+        "Please login or create an account before scanning."
+      );
+
+      setAuthModal("login");
+      return;
     }
 
-  };
-
-
-  // =======================================================
-  // GET USER HISTORY
-  // =======================================================
-
-  const fetchHistory =
-    async (authToken) => {
-
-      if (
-        !authToken ||
-        authToken === "null" ||
-        authToken === "undefined"
-      ) {
-
-        return;
-
-      }
-
-
-      try {
-
-        const response =
-          await fetch(
-
-            `${API_BASE_URL}/api/history`,
-
-            {
-
-              method: "GET",
-
-              headers: {
-
-                Authorization:
-                  `Bearer ${authToken}`
-
-              }
-
-            }
-
-          );
-
-
-        const data =
-          await response.json();
-
-
-        if (
-          response.ok &&
-          data.success
-        ) {
-
-          setHistory(
-            data.history || []
-          );
-
-        }
-
-
-        else if (
-          response.status === 401
-        ) {
-
-          handleLogout();
-
-        }
-
-      } catch (err) {
-
-        console.error(
-          "Error fetching history:",
-          err
-        );
-
-      }
-
-    };
-
-
-  // =======================================================
-  // LOGIN SUCCESS
-  // =======================================================
-
-  const handleAuthSuccess =
-    (authData) => {
-
-      console.log(
-        "✅ Authentication successful:",
-        authData
+    if (isAdmin) {
+      setError(
+        "Admin accounts are for dashboard management only."
       );
+      return;
+    }
 
+    const hasImage =
+      capturedImages.front ||
+      capturedImages.left ||
+      capturedImages.right;
 
-      setUser(
-        authData.user
+    if (!hasImage) {
+      setError(
+        "Please capture or upload at least one facial angle."
       );
+      return;
+    }
 
-      setToken(
-        authData.token
-      );
-
-
-      localStorage.setItem(
-
-        "glow_user",
-
-        JSON.stringify(
-          authData.user
-        )
-
-      );
-
-
-      localStorage.setItem(
-
-        "glow_token",
-
-        authData.token
-
-      );
-
-
-      setAuthModal(null);
-
-
-      fetchHistory(
-        authData.token
-      );
-
-    };
-
-
-  // =======================================================
-  // LOGOUT
-  // =======================================================
-
-  const handleLogout = () => {
-
-    setUser(null);
-
-    setToken(null);
-
-    setHistory([]);
-
+    setLoading(true);
+    setError(null);
     setAnalysis(null);
 
-    setError(null);
+    const formData =
+      new FormData();
 
+    if (capturedImages.front) {
+      formData.append(
+        "front",
+        capturedImages.front
+      );
+    }
 
-    localStorage.removeItem(
-      "glow_user"
+    if (capturedImages.left) {
+      formData.append(
+        "left",
+        capturedImages.left
+      );
+    }
+
+    if (capturedImages.right) {
+      formData.append(
+        "right",
+        capturedImages.right
+      );
+    }
+
+    Object.entries(userData).forEach(
+      ([key, value]) => {
+        formData.append(
+          key,
+          value
+        );
+      }
     );
 
-    localStorage.removeItem(
-      "glow_token"
-    );
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/upload`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
+      const data =
+        await response.json();
+
+      if (response.status === 401) {
+        handleLogout();
+
+        setError(
+          "Session expired. Please login again."
+        );
+
+        setAuthModal("login");
+        return;
+      }
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+        throw new Error(
+          data.message ||
+            "Analysis failed."
+        );
+      }
+
+      setAnalysis(
+        data.analysis || data
+      );
+
+      fetchHistory(token);
+    } catch (err) {
+      console.error(
+        "Analysis error:",
+        err
+      );
+
+      setError(
+        err.message ||
+          "Failed to reach AI service."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // =========================================================
+  // ADMIN DASHBOARD
+  // =========================================================
 
-  // =======================================================
-  // USER DATA CHANGE
-  // =======================================================
-
-  const handleUserDataChange =
-    (field, value) => {
-
-      setUserData(
-        (prev) => ({
-
-          ...prev,
-
-          [field]:
-            value
-
-        })
-
-      );
-
-    };
-
-
-  // =======================================================
-  // IMAGE CHANGE
-  // =======================================================
-
-  const handleImagesUpdated =
-    (images) => {
-
-      setCapturedImages(
-        images
-      );
-
-      setAnalysis(null);
-
-      setError(null);
-
-    };
-
-
-  // =======================================================
-  // ADD REVIEW
-  // =======================================================
-
-  const handleAddReview =
-    async (newReview) => {
-
-      if (!token) {
-
-        alert(
-          "Please log in to submit a review."
-        );
-
-        setAuthModal("login");
-
-        return;
-
-      }
-
-
-      try {
-
-        const response =
-          await fetch(
-
-            `${API_BASE_URL}/api/reviews`,
-
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "Content-Type":
-                  "application/json",
-
-                Authorization:
-                  `Bearer ${token}`
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  text:
-                    newReview.text,
-
-                  rating:
-                    newReview.rating || 5,
-
-                  user:
-                    user?.name ||
-                    "Anonymous"
-
-                })
-
-            }
-
-          );
-
-
-        const data =
-          await response.json();
-
-
-        if (
-          response.status === 401
-        ) {
-
-          handleLogout();
-
-          alert(
-            "Session expired. Please log in again."
-          );
-
-          setAuthModal("login");
-
-          return;
-
+  if (isAdmin && user) {
+    return (
+      <AdminDashboard
+        user={user}
+        token={token}
+        reviews={reviews}
+        onRefreshReviews={
+          fetchReviews
         }
-
-
-        if (data.success) {
-
-          setReviews(
-            (prev) => [
-              data.review ||
-              newReview,
-
-              ...prev
-            ]
-          );
-
-          fetchReviews();
-
+        onLogout={handleLogout}
+        API_BASE_URL={
+          API_BASE_URL
         }
-
-        else {
-
-          alert(
-
-            data.message ||
-            "Failed to submit review."
-
-          );
-
-        }
-
-      } catch (err) {
-
-        console.error(
-          "Error submitting review:",
-          err
-        );
-
-      }
-
-    };
-
-
-  // =======================================================
-  // ANALYZE SKIN
-  // =======================================================
-
-  const handleAnalyze =
-    async () => {
-
-      // -----------------------------------------------
-      // LOGIN CHECK
-      // -----------------------------------------------
-
-      if (!token) {
-
-        setError(
-          "🔐 Please log in or create an account before scanning."
-        );
-
-        setAuthModal("login");
-
-        return;
-
-      }
-
-
-      // -----------------------------------------------
-      // IMAGE CHECK
-      // -----------------------------------------------
-
-      const hasAtLeastOne =
-
-        capturedImages.front ||
-
-        capturedImages.left ||
-
-        capturedImages.right;
-
-
-      if (!hasAtLeastOne) {
-
-        setError(
-          "Please capture or upload at least 1 facial angle."
-        );
-
-        return;
-
-      }
-
-
-      setLoading(true);
-
-      setError(null);
-
-      setAnalysis(null);
-
-
-      // -----------------------------------------------
-      // FORM DATA
-      // -----------------------------------------------
-
-      const formData =
-        new FormData();
-
-
-      if (
-        capturedImages.front
-      ) {
-
-        formData.append(
-
-          "front",
-
-          capturedImages.front
-
-        );
-
-      }
-
-
-      if (
-        capturedImages.left
-      ) {
-
-        formData.append(
-
-          "left",
-
-          capturedImages.left
-
-        );
-
-      }
-
-
-      if (
-        capturedImages.right
-      ) {
-
-        formData.append(
-
-          "right",
-
-          capturedImages.right
-
-        );
-
-      }
-
-
-      // -----------------------------------------------
-      // USER PROFILE
-      // -----------------------------------------------
-
-      formData.append(
-        "gender",
-        userData.gender
-      );
-
-      formData.append(
-        "age",
-        userData.age
-      );
-
-      formData.append(
-        "sleep",
-        userData.sleep
-      );
-
-      formData.append(
-        "concern",
-        userData.concern
-      );
-
-      formData.append(
-        "secondaryConcern",
-        userData.secondaryConcern
-      );
-
-      formData.append(
-        "sensitivity",
-        userData.sensitivity
-      );
-
-      formData.append(
-        "waterIntake",
-        userData.waterIntake
-      );
-
-      formData.append(
-        "climate",
-        userData.climate
-      );
-
-      formData.append(
-        "lighting",
-        userData.lighting
-      );
-
-
-      // -----------------------------------------------
-      // SEND TO NODE SERVER
-      // -----------------------------------------------
-
-      try {
-
-        console.log(
-          "📤 Sending scan to Node backend..."
-        );
-
-
-        const response =
-          await fetch(
-
-            `${API_BASE_URL}/api/upload`,
-
-            {
-
-              method: "POST",
-
-              headers: {
-
-                Authorization:
-                  `Bearer ${token}`
-
-              },
-
-              body: formData
-
-            }
-
-          );
-
-
-        const data =
-          await response.json();
-
-
-        console.log(
-          "📥 Backend response:",
-          data
-        );
-
-
-        // ---------------------------------------------
-        // SESSION EXPIRED
-        // ---------------------------------------------
-
-        if (
-          response.status === 401
-        ) {
-
-          handleLogout();
-
-          setError(
-            "Session expired. Please log in again."
-          );
-
-          setAuthModal("login");
-
-          return;
-
-        }
-
-
-        // ---------------------------------------------
-        // ERROR
-        // ---------------------------------------------
-
-        if (
-          !response.ok ||
-          !data.success
-        ) {
-
-          throw new Error(
-
-            data.message ||
-            "Analysis failed."
-
-          );
-
-        }
-
-
-        // ---------------------------------------------
-        // SAVE ANALYSIS
-        // ---------------------------------------------
-
-        setAnalysis(
-
-          data.analysis ||
-          data
-
-        );
-
-
-        // ---------------------------------------------
-        // REFRESH HISTORY
-        // ---------------------------------------------
-
-        fetchHistory(
-          token
-        );
-
-
-      } catch (err) {
-
-        console.error(
-          "❌ Analysis error:",
-          err
-        );
-
-
-        setError(
-
-          err.message ||
-          "Failed to reach backend AI service."
-
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-
-  // =======================================================
-  // PAGE
-  // =======================================================
+      />
+    );
+  }
+
+  // =========================================================
+  // NORMAL USER WEBSITE
+  // =========================================================
 
   return (
-
     <div className="app-container">
 
-
-      {/* =================================================
-          NAVBAR
-      ================================================= */}
+      {/* NAVBAR */}
 
       <nav className="navbar">
 
-
         <div className="nav-logo">
-
-          🌸 AI Skin Analysis & Recommendation System
-
+          AI Skin Analysis &
+          Recommendation System
         </div>
-
 
         <ul className="nav-links">
 
@@ -870,113 +546,78 @@ export default function App() {
 
         </ul>
 
-
         <div className="nav-auth">
 
           {user ? (
-
             <div className="user-profile-badge">
 
               <button
-
                 className="profile-btn"
-
                 onClick={() =>
                   setIsAccountOpen(true)
                 }
-
               >
-
-                👤 {user.name}
-
+                👤{" "}
+                {user.name ||
+                  user.username ||
+                  "User"}
               </button>
 
-
               <button
-
                 className="logout-btn"
-
                 onClick={
                   handleLogout
                 }
-
               >
-
                 Logout
-
               </button>
 
             </div>
-
           ) : (
-
             <button
-
               className="pink-login-btn"
-
               onClick={() =>
                 setAuthModal("login")
               }
-
             >
-
-              ✨ Login / Signup
-
+              Login / Signup
             </button>
-
           )}
 
         </div>
 
       </nav>
 
-
-      {/* =================================================
-          HERO
-      ================================================= */}
+      {/* HERO */}
 
       <header
         id="hero"
         className="hero-section"
       >
-
         <span className="hero-badge">
-
-          ✨ AI skin Analyst
-
+          AI Skin Analyst
         </span>
 
-
         <h1>
-
-          Personalized Clinical AI & Diagnostics
-
+          Personalized Skin Analysis
         </h1>
 
-
         <p>
-
-          Analyze skin barrier, capture
-          multi-angle scans, and receive
-          custom routines.
-
+          Analyze skin features,
+          capture multi-angle scans,
+          and receive personalized
+          skincare guidance.
         </p>
-
       </header>
 
-
-      {/* =================================================
-          WORKSPACE
-      ================================================= */}
+      {/* WORKSPACE */}
 
       <section
         id="workspace"
         className="workspace-section"
       >
 
-
         {!user && (
-
           <div className="auth-prompt-banner">
 
             🔒{" "}
@@ -1005,60 +646,34 @@ export default function App() {
               Create an Account
             </span>{" "}
 
-            to unlock skin scanning
-            & save diagnostic history.
+            to unlock skin scanning.
 
           </div>
-
         )}
 
-
         <AnalyzerWorkspace
-
-          userData={
-            userData
-          }
-
+          userData={userData}
           onUserDataChange={
             handleUserDataChange
           }
-
           onImagesUpdated={
             handleImagesUpdated
           }
-
           onAnalyze={
             handleAnalyze
           }
-
-          loading={
-            loading
-          }
-
-          analysis={
-            analysis
-          }
-
-          error={
-            error
-          }
-
-          isLoggedIn={
-            !!token
-          }
-
+          loading={loading}
+          analysis={analysis}
+          error={error}
+          isLoggedIn={!!token}
           onOpenAuth={() =>
             setAuthModal("login")
           }
-
         />
 
       </section>
 
-
-      {/* =================================================
-          MODEL
-      ================================================= */}
+      {/* MODEL */}
 
       <section
         id="model-used"
@@ -1066,12 +681,10 @@ export default function App() {
       >
 
         <h2>
-          💖 Model Used & AI Engine
+          Model Used & AI Engine
         </h2>
 
-
         <div className="model-details-grid">
-
 
           <div className="pink-card">
 
@@ -1080,16 +693,15 @@ export default function App() {
             </h4>
 
             <p>
-
-              Trained on high-resolution
-              skincare datasets using
-              transfer learning to detect
-              skin features.
-
+              The system uses computer
+              vision and deep learning
+              techniques to analyze
+              uploaded skin images and
+              identify visible skin
+              features.
             </p>
 
           </div>
-
 
           <div className="pink-card">
 
@@ -1098,24 +710,19 @@ export default function App() {
             </h4>
 
             <p>
-
-              Aggregates prediction
-              probabilities across Front,
-              Left, and Right scans.
-
+              Predictions from Front,
+              Left and Right scans can
+              be combined to provide
+              consolidated analysis.
             </p>
 
           </div>
-
 
         </div>
 
       </section>
 
-
-      {/* =================================================
-          ABOUT
-      ================================================= */}
+      {/* ABOUT */}
 
       <section
         id="about"
@@ -1123,35 +730,27 @@ export default function App() {
       >
 
         <h2>
-          🌷 About Us
+          About Us
         </h2>
-
 
         <div className="pink-card">
 
           <p>
-
             At{" "}
-
             <strong>
-              GlowAI Diagnostics
+              AI Skin Analysis System
             </strong>
-
-            , we combine intelligent
-            computer vision with skincare
-            guidance to make skin analysis
-            easier and more accessible.
-
+            , we combine computer
+            vision, artificial
+            intelligence and skincare
+            guidance.
           </p>
 
         </div>
 
       </section>
 
-
-      {/* =================================================
-          REVIEWS
-      ================================================= */}
+      {/* REVIEWS */}
 
       <section
         id="reviews"
@@ -1159,166 +758,116 @@ export default function App() {
       >
 
         <h2>
-
-          ⭐ Glowing User Reviews
-          ({reviews.length})
-
+          User Reviews ({reviews.length})
         </h2>
 
-
         {reviews.length === 0 ? (
-
           <p className="no-reviews-text">
-
             No reviews stored yet.
-            Be the first to post!
-
           </p>
-
         ) : (
-
           <div className="reviews-grid">
 
             {reviews.map(
               (rev, idx) => (
-
                 <div
-                  key={idx}
+                  key={
+                    rev._id || idx
+                  }
                   className="pink-card review-card"
                 >
 
                   <div className="stars-row">
-
                     {"⭐".repeat(
-                      rev.rating || 5
+                      Math.min(
+                        Math.max(
+                          Number(
+                            rev.rating || 5
+                          ),
+                          1
+                        ),
+                        5
+                      )
                     )}
-
                   </div>
 
-
                   <p>
-
                     "{rev.text}"
-
                   </p>
-
 
                   <div className="review-meta">
 
                     <h4>
-
                       —{" "}
                       {rev.user ||
-                       rev.name ||
-                       "Verified User"}
-
+                        rev.name ||
+                        "Verified User"}
                     </h4>
 
-
                     <small>
-
                       {rev.date ||
-                       "Verified User"}
-
+                        "Verified User"}
                     </small>
 
                   </div>
 
                 </div>
-
               )
             )}
 
           </div>
-
         )}
 
       </section>
 
-
-      {/* =================================================
-          AUTH MODAL
-      ================================================= */}
+      {/* AUTH MODAL */}
 
       {authModal && (
-
         <AuthModal
-
           authModal={
             authModal
           }
-
           setAuthModal={
             setAuthModal
           }
-
           onClose={() =>
             setAuthModal(null)
           }
-
           onAuthSuccess={
             handleAuthSuccess
           }
-
         />
-
       )}
 
-
-      {/* =================================================
-          ACCOUNT MODAL
-      ================================================= */}
+      {/* ACCOUNT MODAL */}
 
       {isAccountOpen &&
-       user && (
+        user && (
+          <AccountModal
+            user={user}
+            history={history}
+            userData={userData}
+            onClose={() =>
+              setIsAccountOpen(false)
+            }
+            onAddReview={
+              handleAddReview
+            }
+          />
+        )}
 
-        <AccountModal
-
-          user={
-            user
-          }
-
-          history={
-            history
-          }
-
-          userData={
-            userData
-          }
-
-          onClose={() =>
-            setIsAccountOpen(false)
-          }
-
-          onAddReview={
-            handleAddReview
-          }
-
-        />
-
-      )}
-
-
-      {/* =================================================
-          FOOTER
-      ================================================= */}
+      {/* FOOTER */}
 
       <footer className="app-footer">
 
         <p>
-
-          🎀 AI Skincare Analysis &
+          AI Skincare Analysis &
           Recommendation System ©{" "}
-
           {new Date().getFullYear()}
-
         </p>
 
       </footer>
 
-
     </div>
-
   );
-
 }
