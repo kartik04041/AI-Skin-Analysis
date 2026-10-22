@@ -2068,3 +2068,126 @@
     flex-wrap: wrap;
   }
 }
+/* =====================================================
+   FIX: ADMIN DASHBOARD CHARTS
+   ===================================================== */
+
+.admin-chart {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 260px;
+  gap: 12px;
+  padding: 12px 0 0;
+  overflow: hidden;
+}
+
+.chart-axis-labels {
+  width: 38px;
+  flex: 0 0 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 30px;
+  color: #aaa4bc;
+  font-size: 11px;
+}
+
+.chart-plot {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 225px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.chart-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
+.chart-grid-line.top {
+  top: 0;
+}
+
+.chart-grid-line.middle {
+  top: 50%;
+}
+
+.chart-grid-line.bottom {
+  bottom: 0;
+}
+
+.chart-bar-column {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.chart-bar-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 3px;
+}
+
+.chart-bar {
+  width: min(32px, 75%);
+  min-height: 3px;
+  flex-shrink: 0;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #f472b6, #a855f7);
+  box-shadow: 0 0 12px rgba(219, 39, 119, 0.2);
+  transition: height 0.3s ease, filter 0.2s ease;
+}
+
+.chart-bar:hover {
+  filter: brightness(1.25);
+}
+
+.chart-bar-column small {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  overflow: hidden;
+  color: #aaa4bc;
+  font-size: 9px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .admin-chart {
+    height: 225px;
+    gap: 6px;
+  }
+
+  .chart-plot {
+    height: 190px;
+  }
+
+  .chart-axis-labels {
+    width: 28px;
+    flex-basis: 28px;
+    font-size: 9px;
+  }
+
+  .chart-bar-column small {
+    font-size: 8px;
+  }
+}

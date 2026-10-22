@@ -1,0 +1,45 @@
+{
+  "acne": {
+    "precision": 0.8607594936708861,
+    "recall": 0.85,
+    "f1-score": 0.8553459119496856,
+    "support": 80.0
+  },
+  "blackheads": {
+    "precision": 0.9166666666666666,
+    "recall": 0.825,
+    "f1-score": 0.868421052631579,
+    "support": 80.0
+  },
+  "dark spots": {
+    "precision": 0.8372093023255814,
+    "recall": 0.9,
+    "f1-score": 0.8674698795180723,
+    "support": 80.0
+  },
+  "pores": {
+    "precision": 0.8863636363636364,
+    "recall": 0.975,
+    "f1-score": 0.9285714285714286,
+    "support": 80.0
+  },
+  "wrinkles": {
+    "precision": 0.96,
+    "recall": 0.9,
+    "f1-score": 0.9290322580645162,
+    "support": 80.0
+  },
+  "accuracy": 0.89,
+  "macro avg": {
+    "precision": 0.892199819805354,
+    "recall": 0.89,
+    "f1-score": 0.8897681061470563,
+    "support": 400.0
+  },
+  "weighted avg": {
+    "precision": 0.8921998198053542,
+    "recall": 0.89,
+    "f1-score": 0.8897681061470563,
+    "support": 400.0
+  }
+}

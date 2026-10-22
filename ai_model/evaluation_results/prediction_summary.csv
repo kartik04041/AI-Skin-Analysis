@@ -1,0 +1,2001 @@
+image,dataset_label,predicted_class,top_confidence_percent
+acne_0001.jpg,acne,Sensitive,57.83
+acne_0002.jpg,acne,Normal,41.27
+acne_0003.jpg,acne,Oily,35.58
+acne_0004.jpg,acne,Oily,49.94
+acne_0005.jpg,acne,Sensitive,43.07
+acne_0006.jpg,acne,Sensitive,34.95
+acne_0007.jpg,acne,Sensitive,41.22
+acne_0008.jpg,acne,Oily,73.85
+acne_0009.jpg,acne,Sensitive,70.43
+acne_0010.jpg,acne,Sensitive,47.7
+acne_0011.jpg,acne,Sensitive,68.53
+acne_0012.jpg,acne,Sensitive,66.25
+acne_0013.jpg,acne,Sensitive,52.37
+acne_0014.jpg,acne,Sensitive,49.59
+acne_0015.jpg,acne,Sensitive,57.9
+acne_0016.jpg,acne,Sensitive,39.5
+acne_0017.jpg,acne,Sensitive,60.29
+acne_0018.jpg,acne,Sensitive,67.97
+acne_0019.jpg,acne,Sensitive,58.36
+acne_0020.jpg,acne,Sensitive,52.04
+acne_0021.jpg,acne,Sensitive,82.13
+acne_0022.jpg,acne,Sensitive,51.38
+acne_0023.jpg,acne,Sensitive,73.32
+acne_0024.jpg,acne,Sensitive,58.3
+acne_0025.jpg,acne,Sensitive,39.38
+acne_0026.jpg,acne,Sensitive,48.81
+acne_0027.jpg,acne,Oily,41.39
+acne_0028.jpg,acne,Sensitive,46.54
+acne_0029.jpg,acne,Sensitive,54.07
+acne_0030.jpg,acne,Sensitive,40.31
+acne_0031.jpg,acne,Sensitive,44.53
+acne_0032.jpg,acne,Sensitive,73.77
+acne_0033.jpg,acne,Normal,44.41
+acne_0034.jpg,acne,Sensitive,33.35
+acne_0035.jpg,acne,Oily,38.8
+acne_0036.jpg,acne,Sensitive,48.74
+acne_0037.jpg,acne,Sensitive,45.29
+acne_0038.jpg,acne,Sensitive,59.5
+acne_0039.jpg,acne,Sensitive,53.27
+acne_0040.jpg,acne,Sensitive,51.16
+acne_0041.jpg,acne,Normal,54.65
+acne_0042.jpg,acne,Normal,45.11
+acne_0043.jpg,acne,Sensitive,56.0
+acne_0044.jpg,acne,Sensitive,51.89
+acne_0045.jpg,acne,Sensitive,42.88
+acne_0046.jpg,acne,Sensitive,54.06
+acne_0047.jpg,acne,Sensitive,58.81
+acne_0048.jpg,acne,Sensitive,61.43
+acne_0049.jpg,acne,Oily,45.08
+acne_0050.jpg,acne,Oily,44.01
+acne_0051.jpg,acne,Sensitive,64.72
+acne_0052.jpg,acne,Sensitive,37.39
+acne_0053.jpg,acne,Sensitive,41.87
+acne_0054.jpg,acne,Oily,47.14
+acne_0055.jpg,acne,Sensitive,36.75
+acne_0056.jpg,acne,Sensitive,43.96
+acne_0057.jpg,acne,Oily,42.71
+acne_0058.jpg,acne,Sensitive,53.64
+acne_0059.jpg,acne,Sensitive,46.14
+acne_0060.jpg,acne,Sensitive,47.44
+acne_0061.jpg,acne,Oily,42.07
+acne_0062.jpg,acne,Sensitive,55.19
+acne_0063.jpg,acne,Oily,48.02
+acne_0064.jpg,acne,Sensitive,59.19
+acne_0065.jpg,acne,Sensitive,76.81
+acne_0066.jpg,acne,Sensitive,45.54
+acne_0067.jpg,acne,Sensitive,75.62
+acne_0068.jpg,acne,Normal,69.96
+acne_0069.jpg,acne,Oily,39.38
+acne_0070.jpg,acne,Sensitive,48.1
+acne_0071.jpg,acne,Oily,47.21
+acne_0072.jpg,acne,Sensitive,57.07
+acne_0073.jpg,acne,Normal,28.14
+acne_0074.jpg,acne,Sensitive,62.23
+acne_0075.jpg,acne,Sensitive,44.74
+acne_0076.jpg,acne,Sensitive,62.76
+acne_0077.jpg,acne,Sensitive,32.48
+acne_0078.jpg,acne,Sensitive,49.77
+acne_0079.jpg,acne,Sensitive,36.06
+acne_0080.jpg,acne,Sensitive,50.57
+acne_0081.jpg,acne,Sensitive,58.44
+acne_0082.jpg,acne,Sensitive,27.02
+acne_0083.jpg,acne,Sensitive,52.66
+acne_0084.jpg,acne,Sensitive,33.26
+acne_0085.jpg,acne,Sensitive,75.77
+acne_0086.jpg,acne,Sensitive,73.36
+acne_0087.jpg,acne,Sensitive,42.26
+acne_0088.jpg,acne,Oily,56.12
+acne_0089.jpg,acne,Normal,37.34
+acne_0090.jpg,acne,Sensitive,48.61
+acne_0091.jpg,acne,Sensitive,46.82
+acne_0092.jpg,acne,Sensitive,74.11
+acne_0093.jpg,acne,Sensitive,44.6
+acne_0094.jpg,acne,Sensitive,60.59
+acne_0095.jpg,acne,Sensitive,42.34
+acne_0096.jpg,acne,Sensitive,39.24
+acne_0097.jpg,acne,Sensitive,67.37
+acne_0098.jpg,acne,Sensitive,69.74
+acne_0099.jpg,acne,Sensitive,51.39
+acne_0100.jpg,acne,Sensitive,44.53
+acne_0101.jpg,acne,Sensitive,39.4
+acne_0102.jpg,acne,Sensitive,32.97
+acne_0103.jpg,acne,Sensitive,77.66
+acne_0104.jpg,acne,Oily,42.94
+acne_0105.jpg,acne,Sensitive,62.85
+acne_0106.jpg,acne,Sensitive,64.56
+acne_0107.jpg,acne,Sensitive,57.55
+acne_0108.jpg,acne,Sensitive,64.14
+acne_0109.jpg,acne,Sensitive,57.7
+acne_0110.jpg,acne,Oily,47.63
+acne_0111.jpg,acne,Sensitive,48.15
+acne_0112.jpg,acne,Sensitive,68.56
+acne_0113.jpg,acne,Sensitive,70.3
+acne_0114.jpg,acne,Sensitive,68.39
+acne_0115.jpg,acne,Oily,52.22
+acne_0116.jpg,acne,Sensitive,40.95
+acne_0117.jpg,acne,Sensitive,33.99
+acne_0118.jpg,acne,Sensitive,49.8
+acne_0119.jpg,acne,Sensitive,48.99
+acne_0120.jpg,acne,Sensitive,26.4
+acne_0121.jpg,acne,Sensitive,54.3
+acne_0122.jpg,acne,Sensitive,37.89
+acne_0123.jpg,acne,Oily,69.71
+acne_0124.jpg,acne,Sensitive,57.34
+acne_0125.jpg,acne,Sensitive,52.24
+acne_0126.jpg,acne,Sensitive,49.42
+acne_0127.jpg,acne,Sensitive,50.45
+acne_0128.jpg,acne,Sensitive,60.6
+acne_0129.jpg,acne,Sensitive,34.59
+acne_0130.jpg,acne,Sensitive,44.06
+acne_0131.jpg,acne,Oily,41.77
+acne_0132.jpg,acne,Sensitive,46.09
+acne_0133.jpg,acne,Sensitive,56.29
+acne_0134.jpg,acne,Sensitive,61.33
+acne_0135.jpg,acne,Sensitive,70.06
+acne_0136.jpg,acne,Sensitive,63.94
+acne_0137.jpg,acne,Sensitive,42.13
+acne_0138.jpg,acne,Oily,50.58
+acne_0139.jpg,acne,Sensitive,42.7
+acne_0140.jpg,acne,Sensitive,54.46
+acne_0141.jpg,acne,Sensitive,47.5
+acne_0142.jpg,acne,Normal,36.78
+acne_0143.jpg,acne,Sensitive,67.29
+acne_0144.jpg,acne,Sensitive,41.87
+acne_0145.jpg,acne,Sensitive,73.75
+acne_0146.jpg,acne,Sensitive,71.22
+acne_0147.jpg,acne,Sensitive,51.93
+acne_0148.jpg,acne,Sensitive,77.62
+acne_0149.jpg,acne,Sensitive,50.89
+acne_0150.jpg,acne,Sensitive,74.57
+acne_0151.jpg,acne,Oily,48.58
+acne_0152.jpg,acne,Sensitive,46.4
+acne_0153.jpg,acne,Sensitive,67.18
+acne_0154.jpg,acne,Sensitive,64.82
+acne_0155.jpg,acne,Sensitive,53.96
+acne_0156.jpg,acne,Sensitive,56.05
+acne_0157.jpg,acne,Sensitive,63.2
+acne_0158.jpg,acne,Oily,59.59
+acne_0159.jpg,acne,Oily,45.73
+acne_0160.jpg,acne,Sensitive,46.94
+acne_0161.jpg,acne,Sensitive,58.32
+acne_0162.jpg,acne,Oily,43.42
+acne_0163.jpg,acne,Sensitive,65.3
+acne_0164.jpg,acne,Sensitive,44.5
+acne_0165.jpg,acne,Sensitive,51.66
+acne_0166.jpg,acne,Oily,45.88
+acne_0167.jpg,acne,Sensitive,48.4
+acne_0168.jpg,acne,Sensitive,72.54
+acne_0169.jpg,acne,Sensitive,54.54
+acne_0170.jpg,acne,Sensitive,25.52
+acne_0171.jpg,acne,Sensitive,50.77
+acne_0172.jpg,acne,Sensitive,80.26
+acne_0173.jpg,acne,Sensitive,37.14
+acne_0174.jpg,acne,Normal,30.24
+acne_0175.jpg,acne,Oily,42.29
+acne_0176.jpg,acne,Sensitive,66.12
+acne_0177.jpg,acne,Sensitive,59.35
+acne_0178.jpg,acne,Oily,51.89
+acne_0179.jpg,acne,Oily,41.83
+acne_0180.jpg,acne,Sensitive,41.47
+acne_0181.jpg,acne,Sensitive,59.48
+acne_0182.jpg,acne,Sensitive,39.8
+acne_0183.jpg,acne,Sensitive,49.65
+acne_0184.jpg,acne,Sensitive,59.36
+acne_0185.jpg,acne,Oily,48.04
+acne_0186.jpg,acne,Sensitive,54.28
+acne_0187.jpg,acne,Sensitive,44.34
+acne_0188.jpg,acne,Sensitive,35.28
+acne_0189.jpg,acne,Oily,66.16
+acne_0190.jpg,acne,Sensitive,57.75
+acne_0191.jpg,acne,Oily,58.72
+acne_0192.jpg,acne,Normal,52.06
+acne_0193.jpg,acne,Sensitive,45.95
+acne_0194.jpg,acne,Sensitive,42.6
+acne_0195.jpg,acne,Sensitive,46.23
+acne_0196.jpg,acne,Sensitive,75.67
+acne_0197.jpg,acne,Sensitive,56.03
+acne_0198.jpg,acne,Sensitive,50.67
+acne_0199.jpg,acne,Sensitive,61.08
+acne_0200.jpg,acne,Sensitive,57.68
+acne_0201.jpg,acne,Oily,46.77
+acne_0202.jpg,acne,Oily,54.09
+acne_0203.jpg,acne,Sensitive,58.76
+acne_0204.jpg,acne,Sensitive,62.12
+acne_0205.jpg,acne,Sensitive,47.27
+acne_0206.jpg,acne,Sensitive,46.16
+acne_0207.jpg,acne,Sensitive,71.07
+acne_0208.jpg,acne,Sensitive,75.3
+acne_0209.jpg,acne,Sensitive,75.94
+acne_0210.jpg,acne,Sensitive,54.59
+acne_0211.jpg,acne,Sensitive,53.35
+acne_0212.jpg,acne,Sensitive,60.32
+acne_0213.jpg,acne,Sensitive,69.67
+acne_0214.jpg,acne,Sensitive,54.29
+acne_0215.jpg,acne,Sensitive,63.72
+acne_0216.jpg,acne,Sensitive,61.52
+acne_0217.jpg,acne,Sensitive,62.12
+acne_0218.jpg,acne,Sensitive,59.72
+acne_0219.jpg,acne,Sensitive,58.87
+acne_0220.jpg,acne,Sensitive,82.26
+acne_0221.jpg,acne,Sensitive,61.94
+acne_0222.jpg,acne,Sensitive,42.51
+acne_0223.jpg,acne,Sensitive,36.18
+acne_0224.jpg,acne,Sensitive,42.31
+acne_0225.jpg,acne,Sensitive,69.79
+acne_0226.jpg,acne,Sensitive,35.86
+acne_0227.jpg,acne,Sensitive,36.23
+acne_0228.jpg,acne,Oily,62.49
+acne_0229.jpg,acne,Sensitive,44.54
+acne_0230.jpg,acne,Oily,50.4
+acne_0231.jpg,acne,Sensitive,83.75
+acne_0232.jpg,acne,Dry,27.34
+acne_0233.jpg,acne,Sensitive,58.48
+acne_0234.jpg,acne,Sensitive,66.78
+acne_0235.jpg,acne,Sensitive,42.88
+acne_0236.jpg,acne,Sensitive,78.2
+acne_0237.jpg,acne,Sensitive,66.15
+acne_0238.jpg,acne,Sensitive,47.53
+acne_0239.jpg,acne,Sensitive,39.92
+acne_0240.jpg,acne,Sensitive,50.61
+acne_0241.jpg,acne,Sensitive,51.98
+acne_0242.jpg,acne,Oily,50.14
+acne_0243.jpg,acne,Sensitive,71.67
+acne_0244.jpg,acne,Sensitive,64.91
+acne_0245.jpg,acne,Sensitive,64.8
+acne_0246.jpg,acne,Sensitive,54.73
+acne_0247.jpg,acne,Sensitive,38.68
+acne_0248.jpg,acne,Normal,90.52
+acne_0249.jpg,acne,Sensitive,59.52
+acne_0250.jpg,acne,Sensitive,50.54
+acne_0251.jpg,acne,Sensitive,46.22
+acne_0252.jpg,acne,Sensitive,67.07
+acne_0253.jpg,acne,Sensitive,58.21
+acne_0254.jpg,acne,Sensitive,43.37
+acne_0255.jpg,acne,Sensitive,37.25
+acne_0256.jpg,acne,Oily,37.74
+acne_0257.jpg,acne,Sensitive,50.32
+acne_0258.jpg,acne,Oily,43.16
+acne_0259.jpg,acne,Sensitive,60.22
+acne_0260.jpg,acne,Oily,48.29
+acne_0261.jpg,acne,Sensitive,45.57
+acne_0262.jpg,acne,Sensitive,79.29
+acne_0263.jpg,acne,Normal,58.88
+acne_0264.jpg,acne,Sensitive,54.15
+acne_0265.jpg,acne,Sensitive,69.15
+acne_0266.jpg,acne,Sensitive,60.14
+acne_0267.jpg,acne,Sensitive,43.17
+acne_0268.jpg,acne,Sensitive,66.43
+acne_0269.jpg,acne,Sensitive,51.78
+acne_0270.jpg,acne,Sensitive,64.82
+acne_0271.jpg,acne,Sensitive,32.3
+acne_0272.jpg,acne,Sensitive,72.64
+acne_0273.jpg,acne,Oily,69.22
+acne_0274.jpg,acne,Oily,35.3
+acne_0275.jpg,acne,Sensitive,63.67
+acne_0276.jpg,acne,Sensitive,66.64
+acne_0277.jpg,acne,Sensitive,69.05
+acne_0278.jpg,acne,Sensitive,44.69
+acne_0279.jpg,acne,Sensitive,57.22
+acne_0280.jpg,acne,Sensitive,52.72
+acne_0281.jpg,acne,Sensitive,42.05
+acne_0282.jpg,acne,Sensitive,69.51
+acne_0283.jpg,acne,Sensitive,38.11
+acne_0284.jpg,acne,Acne,31.67
+acne_0285.jpg,acne,Sensitive,49.97
+acne_0286.jpg,acne,Sensitive,76.02
+acne_0287.jpg,acne,Sensitive,43.13
+acne_0288.jpg,acne,Sensitive,71.74
+acne_0289.jpg,acne,Sensitive,75.34
+acne_0290.jpg,acne,Sensitive,43.21
+acne_0291.jpg,acne,Sensitive,56.77
+acne_0292.jpg,acne,Sensitive,59.65
+acne_0293.jpg,acne,Normal,42.61
+acne_0294.jpg,acne,Sensitive,39.59
+acne_0295.jpg,acne,Sensitive,48.39
+acne_0296.jpg,acne,Sensitive,57.24
+acne_0297.jpg,acne,Sensitive,56.26
+acne_0298.jpg,acne,Sensitive,51.52
+acne_0299.jpg,acne,Sensitive,51.44
+acne_0300.jpg,acne,Sensitive,69.26
+acne_0301.jpg,acne,Sensitive,58.74
+acne_0302.jpg,acne,Sensitive,67.54
+acne_0303.jpg,acne,Sensitive,60.9
+acne_0304.jpg,acne,Oily,44.28
+acne_0305.jpg,acne,Sensitive,51.41
+acne_0306.jpg,acne,Sensitive,51.72
+acne_0307.jpg,acne,Sensitive,33.11
+acne_0308.jpg,acne,Sensitive,51.74
+acne_0309.jpg,acne,Sensitive,48.51
+acne_0310.jpg,acne,Sensitive,66.33
+acne_0311.jpg,acne,Sensitive,81.91
+acne_0312.jpg,acne,Oily,37.77
+acne_0313.jpg,acne,Sensitive,31.41
+acne_0314.jpg,acne,Sensitive,38.6
+acne_0315.jpg,acne,Oily,57.41
+acne_0316.jpg,acne,Sensitive,68.62
+acne_0317.jpg,acne,Sensitive,48.18
+acne_0318.jpg,acne,Sensitive,61.97
+acne_0319.jpg,acne,Oily,42.58
+acne_0320.jpg,acne,Sensitive,73.39
+acne_0321.jpg,acne,Sensitive,48.92
+acne_0322.jpg,acne,Sensitive,56.25
+acne_0323.jpg,acne,Oily,49.52
+acne_0324.jpg,acne,Normal,38.29
+acne_0325.jpg,acne,Oily,45.4
+acne_0326.jpg,acne,Sensitive,81.46
+acne_0327.jpg,acne,Sensitive,53.74
+acne_0328.jpg,acne,Sensitive,48.82
+acne_0329.jpg,acne,Sensitive,57.16
+acne_0330.jpg,acne,Sensitive,73.92
+acne_0331.jpg,acne,Sensitive,52.77
+acne_0332.jpg,acne,Sensitive,40.17
+acne_0333.jpg,acne,Sensitive,66.26
+acne_0334.jpg,acne,Sensitive,42.03
+acne_0335.jpg,acne,Sensitive,69.24
+acne_0336.jpg,acne,Sensitive,72.74
+acne_0337.jpg,acne,Sensitive,58.91
+acne_0338.jpg,acne,Oily,39.89
+acne_0339.jpg,acne,Sensitive,34.26
+acne_0340.jpg,acne,Sensitive,62.01
+acne_0341.jpg,acne,Sensitive,54.34
+acne_0342.jpg,acne,Sensitive,28.82
+acne_0343.jpg,acne,Sensitive,49.2
+acne_0344.jpg,acne,Normal,41.57
+acne_0345.jpg,acne,Sensitive,48.97
+acne_0346.jpg,acne,Sensitive,60.8
+acne_0347.jpg,acne,Sensitive,47.07
+acne_0348.jpg,acne,Sensitive,56.55
+acne_0349.jpg,acne,Sensitive,81.43
+acne_0350.jpg,acne,Sensitive,69.64
+acne_0351.jpg,acne,Sensitive,51.8
+acne_0352.jpg,acne,Oily,32.24
+acne_0353.jpg,acne,Sensitive,44.66
+acne_0354.jpg,acne,Sensitive,44.97
+acne_0355.jpg,acne,Sensitive,60.3
+acne_0356.jpg,acne,Sensitive,38.41
+acne_0357.jpg,acne,Sensitive,72.62
+acne_0358.jpg,acne,Sensitive,55.24
+acne_0359.jpg,acne,Sensitive,62.5
+acne_0360.jpg,acne,Sensitive,54.21
+acne_0361.jpg,acne,Sensitive,35.68
+acne_0362.jpg,acne,Sensitive,40.65
+acne_0363.jpg,acne,Sensitive,57.04
+acne_0364.jpg,acne,Sensitive,45.48
+acne_0365.jpg,acne,Oily,63.7
+acne_0366.jpg,acne,Sensitive,61.43
+acne_0367.jpg,acne,Sensitive,43.81
+acne_0368.jpg,acne,Sensitive,63.06
+acne_0369.jpg,acne,Sensitive,35.74
+acne_0370.jpg,acne,Sensitive,67.24
+acne_0371.jpg,acne,Sensitive,72.47
+acne_0372.jpg,acne,Sensitive,73.76
+acne_0373.jpg,acne,Sensitive,82.7
+acne_0374.jpg,acne,Sensitive,47.38
+acne_0375.jpg,acne,Sensitive,53.51
+acne_0376.jpg,acne,Sensitive,57.18
+acne_0377.jpg,acne,Sensitive,44.99
+acne_0378.jpg,acne,Sensitive,60.7
+acne_0379.jpg,acne,Sensitive,68.46
+acne_0380.jpg,acne,Sensitive,45.42
+acne_0381.jpg,acne,Sensitive,43.37
+acne_0382.jpg,acne,Sensitive,57.03
+acne_0383.jpg,acne,Oily,42.47
+acne_0384.jpg,acne,Sensitive,52.9
+acne_0385.jpg,acne,Sensitive,46.33
+acne_0386.jpg,acne,Sensitive,52.96
+acne_0387.jpg,acne,Sensitive,57.57
+acne_0388.jpg,acne,Sensitive,38.23
+acne_0389.jpg,acne,Sensitive,46.1
+acne_0390.jpg,acne,Sensitive,59.25
+acne_0391.jpg,acne,Sensitive,65.64
+acne_0392.jpg,acne,Sensitive,42.39
+acne_0393.jpg,acne,Sensitive,48.01
+acne_0394.jpg,acne,Sensitive,55.52
+acne_0395.jpg,acne,Sensitive,41.32
+acne_0396.jpg,acne,Sensitive,51.54
+acne_0397.jpg,acne,Sensitive,71.68
+acne_0398.jpg,acne,Sensitive,72.84
+acne_0399.jpg,acne,Sensitive,88.97
+acne_0400.jpg,acne,Sensitive,43.84
+blackheades_0001.jpg,blackheades,Normal,49.65
+blackheades_0002.jpg,blackheades,Sensitive,38.29
+blackheades_0003.jpg,blackheades,Normal,42.74
+blackheades_0004.jpg,blackheades,Sensitive,47.5
+blackheades_0005.jpg,blackheades,Acne,33.57
+blackheades_0006.jpg,blackheades,Sensitive,59.89
+blackheades_0007.jpg,blackheades,Normal,37.46
+blackheades_0008.jpg,blackheades,Sensitive,53.14
+blackheades_0009.jpg,blackheades,Sensitive,56.14
+blackheades_0010.jpg,blackheades,Sensitive,40.64
+blackheades_0011.jpg,blackheades,Acne,39.52
+blackheades_0012.jpg,blackheades,Sensitive,64.32
+blackheades_0013.jpg,blackheades,Normal,32.74
+blackheades_0014.jpg,blackheades,Oily,48.27
+blackheades_0015.jpg,blackheades,Sensitive,68.37
+blackheades_0016.jpg,blackheades,Sensitive,53.11
+blackheades_0017.jpg,blackheades,Sensitive,38.09
+blackheades_0018.jpg,blackheades,Sensitive,50.92
+blackheades_0019.jpg,blackheades,Normal,46.65
+blackheades_0020.jpg,blackheades,Oily,46.59
+blackheades_0021.jpg,blackheades,Sensitive,37.42
+blackheades_0022.jpg,blackheades,Sensitive,50.57
+blackheades_0023.jpg,blackheades,Sensitive,40.39
+blackheades_0024.jpg,blackheades,Sensitive,50.29
+blackheades_0025.jpg,blackheades,Normal,41.74
+blackheades_0026.jpg,blackheades,Sensitive,60.67
+blackheades_0027.jpg,blackheades,Oily,29.99
+blackheades_0028.jpg,blackheades,Sensitive,49.33
+blackheades_0029.jpg,blackheades,Sensitive,41.3
+blackheades_0030.jpg,blackheades,Sensitive,43.43
+blackheades_0031.jpg,blackheades,Sensitive,53.27
+blackheades_0032.jpg,blackheades,Sensitive,57.52
+blackheades_0033.jpg,blackheades,Sensitive,42.34
+blackheades_0034.jpg,blackheades,Oily,70.29
+blackheades_0035.jpg,blackheades,Sensitive,73.94
+blackheades_0036.jpg,blackheades,Sensitive,37.01
+blackheades_0037.jpg,blackheades,Sensitive,69.63
+blackheades_0038.jpg,blackheades,Sensitive,52.0
+blackheades_0039.jpg,blackheades,Sensitive,64.46
+blackheades_0040.jpg,blackheades,Normal,35.95
+blackheades_0041.jpg,blackheades,Normal,34.44
+blackheades_0042.jpg,blackheades,Sensitive,50.38
+blackheades_0043.jpg,blackheades,Sensitive,53.3
+blackheades_0044.jpg,blackheades,Sensitive,34.1
+blackheades_0045.jpg,blackheades,Sensitive,53.42
+blackheades_0046.jpg,blackheades,Sensitive,70.23
+blackheades_0047.jpg,blackheades,Sensitive,41.11
+blackheades_0048.jpg,blackheades,Sensitive,34.09
+blackheades_0049.jpg,blackheades,Sensitive,54.58
+blackheades_0050.jpg,blackheades,Sensitive,57.79
+blackheades_0051.jpg,blackheades,Sensitive,51.24
+blackheades_0052.jpg,blackheades,Sensitive,45.12
+blackheades_0053.jpg,blackheades,Sensitive,72.33
+blackheades_0054.jpg,blackheades,Sensitive,47.05
+blackheades_0055.jpg,blackheades,Sensitive,55.65
+blackheades_0056.jpg,blackheades,Sensitive,41.47
+blackheades_0057.jpg,blackheades,Sensitive,40.59
+blackheades_0058.jpg,blackheades,Sensitive,59.21
+blackheades_0059.jpg,blackheades,Sensitive,79.41
+blackheades_0060.jpg,blackheades,Oily,38.88
+blackheades_0061.jpg,blackheades,Sensitive,57.49
+blackheades_0062.jpg,blackheades,Sensitive,69.85
+blackheades_0063.jpg,blackheades,Normal,50.97
+blackheades_0064.jpg,blackheades,Sensitive,40.02
+blackheades_0065.jpg,blackheades,Sensitive,80.8
+blackheades_0066.jpg,blackheades,Sensitive,46.31
+blackheades_0067.jpg,blackheades,Sensitive,40.16
+blackheades_0068.jpg,blackheades,Sensitive,76.02
+blackheades_0069.jpg,blackheades,Sensitive,59.95
+blackheades_0070.jpg,blackheades,Sensitive,63.29
+blackheades_0071.jpg,blackheades,Sensitive,39.98
+blackheades_0072.jpg,blackheades,Sensitive,56.06
+blackheades_0073.jpg,blackheades,Sensitive,33.12
+blackheades_0074.jpg,blackheades,Normal,30.96
+blackheades_0075.jpg,blackheades,Sensitive,59.11
+blackheades_0076.jpg,blackheades,Sensitive,35.91
+blackheades_0077.jpg,blackheades,Oily,39.94
+blackheades_0078.jpg,blackheades,Sensitive,51.92
+blackheades_0079.jpg,blackheades,Normal,48.78
+blackheades_0080.jpg,blackheades,Sensitive,50.8
+blackheades_0081.jpg,blackheades,Sensitive,41.89
+blackheades_0082.jpg,blackheades,Sensitive,58.48
+blackheades_0083.jpg,blackheades,Sensitive,61.61
+blackheades_0084.jpg,blackheades,Sensitive,58.85
+blackheades_0085.jpg,blackheades,Sensitive,47.26
+blackheades_0086.jpg,blackheades,Sensitive,31.77
+blackheades_0087.jpg,blackheades,Sensitive,31.86
+blackheades_0088.jpg,blackheades,Sensitive,50.86
+blackheades_0089.jpg,blackheades,Sensitive,50.35
+blackheades_0090.jpg,blackheades,Sensitive,26.17
+blackheades_0091.jpg,blackheades,Sensitive,46.15
+blackheades_0092.jpg,blackheades,Oily,58.85
+blackheades_0093.jpg,blackheades,Sensitive,58.88
+blackheades_0094.jpg,blackheades,Sensitive,45.04
+blackheades_0095.jpg,blackheades,Sensitive,57.21
+blackheades_0096.jpg,blackheades,Sensitive,46.5
+blackheades_0097.jpg,blackheades,Normal,35.87
+blackheades_0098.jpg,blackheades,Sensitive,62.44
+blackheades_0099.jpg,blackheades,Oily,46.56
+blackheades_0100.jpg,blackheades,Sensitive,32.9
+blackheades_0101.jpg,blackheades,Oily,41.33
+blackheades_0102.jpg,blackheades,Sensitive,50.4
+blackheades_0103.jpg,blackheades,Acne,58.02
+blackheades_0104.jpg,blackheades,Sensitive,57.09
+blackheades_0105.jpg,blackheades,Sensitive,46.02
+blackheades_0106.jpg,blackheades,Sensitive,71.12
+blackheades_0107.jpg,blackheades,Oily,35.21
+blackheades_0108.jpg,blackheades,Sensitive,52.17
+blackheades_0109.jpg,blackheades,Sensitive,63.78
+blackheades_0110.jpg,blackheades,Sensitive,28.38
+blackheades_0111.jpg,blackheades,Normal,55.58
+blackheades_0112.jpg,blackheades,Acne,47.72
+blackheades_0113.jpg,blackheades,Oily,35.35
+blackheades_0114.jpg,blackheades,Dry,37.99
+blackheades_0115.jpg,blackheades,Sensitive,61.0
+blackheades_0116.jpg,blackheades,Normal,47.3
+blackheades_0117.jpg,blackheades,Normal,64.51
+blackheades_0118.jpg,blackheades,Sensitive,60.24
+blackheades_0119.jpg,blackheades,Oily,54.84
+blackheades_0120.jpg,blackheades,Sensitive,50.79
+blackheades_0121.jpg,blackheades,Sensitive,66.45
+blackheades_0122.jpg,blackheades,Normal,32.43
+blackheades_0123.jpg,blackheades,Sensitive,48.86
+blackheades_0124.jpg,blackheades,Sensitive,41.16
+blackheades_0125.jpg,blackheades,Sensitive,75.14
+blackheades_0126.jpg,blackheades,Sensitive,36.31
+blackheades_0127.jpg,blackheades,Normal,40.75
+blackheades_0128.jpg,blackheades,Sensitive,61.97
+blackheades_0129.jpg,blackheades,Sensitive,58.4
+blackheades_0130.jpg,blackheades,Sensitive,48.02
+blackheades_0131.jpg,blackheades,Oily,55.46
+blackheades_0132.jpg,blackheades,Oily,54.84
+blackheades_0133.jpg,blackheades,Sensitive,41.05
+blackheades_0134.jpg,blackheades,Sensitive,72.98
+blackheades_0135.jpg,blackheades,Oily,44.44
+blackheades_0136.jpg,blackheades,Sensitive,59.88
+blackheades_0137.jpg,blackheades,Normal,46.87
+blackheades_0138.jpg,blackheades,Oily,36.95
+blackheades_0139.jpg,blackheades,Oily,39.51
+blackheades_0140.jpg,blackheades,Sensitive,33.12
+blackheades_0141.jpg,blackheades,Sensitive,64.16
+blackheades_0142.jpg,blackheades,Sensitive,44.34
+blackheades_0143.jpg,blackheades,Sensitive,51.27
+blackheades_0144.jpg,blackheades,Normal,39.13
+blackheades_0145.jpg,blackheades,Oily,39.68
+blackheades_0146.jpg,blackheades,Normal,34.38
+blackheades_0147.jpg,blackheades,Oily,30.64
+blackheades_0148.jpg,blackheades,Sensitive,32.61
+blackheades_0149.jpg,blackheades,Sensitive,62.6
+blackheades_0150.jpg,blackheades,Normal,33.72
+blackheades_0151.jpg,blackheades,Sensitive,56.62
+blackheades_0152.jpg,blackheades,Sensitive,63.63
+blackheades_0153.jpg,blackheades,Sensitive,64.38
+blackheades_0154.jpg,blackheades,Sensitive,55.34
+blackheades_0155.jpg,blackheades,Sensitive,38.24
+blackheades_0156.jpg,blackheades,Sensitive,54.92
+blackheades_0157.jpg,blackheades,Normal,36.45
+blackheades_0158.jpg,blackheades,Sensitive,41.82
+blackheades_0159.jpg,blackheades,Sensitive,25.52
+blackheades_0160.jpg,blackheades,Normal,50.68
+blackheades_0161.jpg,blackheades,Normal,55.98
+blackheades_0162.jpg,blackheades,Sensitive,43.44
+blackheades_0163.jpg,blackheades,Sensitive,41.93
+blackheades_0164.jpg,blackheades,Sensitive,36.73
+blackheades_0165.jpg,blackheades,Sensitive,44.82
+blackheades_0166.jpg,blackheades,Normal,28.64
+blackheades_0167.jpg,blackheades,Sensitive,56.02
+blackheades_0168.jpg,blackheades,Sensitive,83.51
+blackheades_0169.jpg,blackheades,Oily,66.1
+blackheades_0170.jpg,blackheades,Sensitive,42.77
+blackheades_0171.jpg,blackheades,Sensitive,40.02
+blackheades_0172.jpg,blackheades,Sensitive,45.35
+blackheades_0173.jpg,blackheades,Oily,62.35
+blackheades_0174.jpg,blackheades,Sensitive,62.63
+blackheades_0175.jpg,blackheades,Oily,43.4
+blackheades_0176.jpg,blackheades,Sensitive,62.91
+blackheades_0177.jpg,blackheades,Sensitive,54.32
+blackheades_0178.jpg,blackheades,Sensitive,73.79
+blackheades_0179.jpg,blackheades,Sensitive,42.34
+blackheades_0180.jpg,blackheades,Sensitive,58.02
+blackheades_0181.jpg,blackheades,Oily,41.96
+blackheades_0182.jpg,blackheades,Sensitive,39.99
+blackheades_0183.jpg,blackheades,Oily,76.23
+blackheades_0184.jpg,blackheades,Sensitive,65.85
+blackheades_0185.jpg,blackheades,Normal,40.49
+blackheades_0186.jpg,blackheades,Oily,32.94
+blackheades_0187.jpg,blackheades,Sensitive,48.17
+blackheades_0188.jpg,blackheades,Oily,53.7
+blackheades_0189.jpg,blackheades,Oily,40.98
+blackheades_0190.jpg,blackheades,Oily,43.7
+blackheades_0191.jpg,blackheades,Oily,67.41
+blackheades_0192.jpg,blackheades,Sensitive,59.56
+blackheades_0193.jpg,blackheades,Sensitive,43.54
+blackheades_0194.jpg,blackheades,Sensitive,46.15
+blackheades_0195.jpg,blackheades,Sensitive,75.38
+blackheades_0196.jpg,blackheades,Sensitive,64.72
+blackheades_0197.jpg,blackheades,Sensitive,51.15
+blackheades_0198.jpg,blackheades,Sensitive,40.0
+blackheades_0199.jpg,blackheades,Sensitive,31.65
+blackheades_0201.jpg,blackheades,Sensitive,62.45
+blackheades_0202.jpg,blackheades,Sensitive,34.05
+blackheades_0203.jpg,blackheades,Oily,60.72
+blackheades_0204.jpg,blackheades,Sensitive,54.91
+blackheades_0205.jpg,blackheades,Sensitive,67.23
+blackheades_0206.jpg,blackheades,Sensitive,46.86
+blackheades_0207.jpg,blackheades,Sensitive,65.95
+blackheades_0208.jpg,blackheades,Sensitive,50.14
+blackheades_0209.jpg,blackheades,Sensitive,67.22
+blackheades_0210.jpg,blackheades,Sensitive,42.9
+blackheades_0211.jpg,blackheades,Sensitive,51.26
+blackheades_0212.jpg,blackheades,Sensitive,43.99
+blackheades_0213.jpg,blackheades,Normal,60.34
+blackheades_0214.jpg,blackheades,Sensitive,55.2
+blackheades_0215.jpg,blackheades,Sensitive,47.36
+blackheades_0216.jpg,blackheades,Sensitive,60.17
+blackheades_0217.jpg,blackheades,Sensitive,70.56
+blackheades_0218.jpg,blackheades,Sensitive,58.41
+blackheades_0219.jpg,blackheades,Normal,41.97
+blackheades_0220.jpg,blackheades,Normal,47.83
+blackheades_0221.jpg,blackheades,Sensitive,55.87
+blackheades_0222.jpg,blackheades,Sensitive,68.99
+blackheades_0223.jpg,blackheades,Oily,51.52
+blackheades_0224.jpg,blackheades,Sensitive,38.35
+blackheades_0225.jpg,blackheades,Acne,28.7
+blackheades_0226.jpg,blackheades,Sensitive,39.62
+blackheades_0227.jpg,blackheades,Oily,62.84
+blackheades_0228.jpg,blackheades,Sensitive,40.36
+blackheades_0229.jpg,blackheades,Sensitive,62.17
+blackheades_0230.jpg,blackheades,Sensitive,47.34
+blackheades_0231.jpg,blackheades,Sensitive,52.81
+blackheades_0232.jpg,blackheades,Sensitive,73.37
+blackheades_0233.jpg,blackheades,Normal,44.81
+blackheades_0234.jpg,blackheades,Sensitive,67.45
+blackheades_0235.jpg,blackheades,Oily,33.93
+blackheades_0236.jpg,blackheades,Sensitive,59.83
+blackheades_0237.jpg,blackheades,Sensitive,62.73
+blackheades_0238.jpg,blackheades,Normal,50.46
+blackheades_0239.jpg,blackheades,Sensitive,40.29
+blackheades_0240.jpg,blackheades,Normal,40.01
+blackheades_0241.jpg,blackheades,Sensitive,65.99
+blackheades_0242.jpg,blackheades,Sensitive,43.54
+blackheades_0243.jpg,blackheades,Normal,40.87
+blackheades_0244.jpg,blackheades,Sensitive,65.54
+blackheades_0245.jpg,blackheades,Sensitive,67.54
+blackheades_0246.jpg,blackheades,Normal,41.85
+blackheades_0247.jpg,blackheades,Sensitive,66.4
+blackheades_0248.jpg,blackheades,Sensitive,49.02
+blackheades_0249.jpg,blackheades,Sensitive,58.49
+blackheades_0250.jpg,blackheades,Sensitive,43.07
+blackheades_0251.jpg,blackheades,Sensitive,54.96
+blackheades_0252.jpg,blackheades,Sensitive,40.71
+blackheades_0253.jpg,blackheades,Normal,61.23
+blackheades_0254.jpg,blackheades,Normal,38.72
+blackheades_0255.jpg,blackheades,Sensitive,29.73
+blackheades_0256.jpg,blackheades,Sensitive,59.42
+blackheades_0257.jpg,blackheades,Oily,46.51
+blackheades_0258.jpg,blackheades,Sensitive,62.15
+blackheades_0259.jpg,blackheades,Sensitive,37.09
+blackheades_0260.jpg,blackheades,Sensitive,41.17
+blackheades_0261.jpg,blackheades,Sensitive,57.52
+blackheades_0262.jpg,blackheades,Sensitive,68.99
+blackheades_0263.jpg,blackheades,Normal,38.49
+blackheades_0264.jpg,blackheades,Acne,40.38
+blackheades_0265.jpg,blackheades,Sensitive,47.86
+blackheades_0266.jpg,blackheades,Oily,29.8
+blackheades_0267.jpg,blackheades,Sensitive,64.96
+blackheades_0268.jpg,blackheades,Sensitive,47.64
+blackheades_0269.jpg,blackheades,Oily,48.52
+blackheades_0270.jpg,blackheades,Sensitive,52.36
+blackheades_0271.jpg,blackheades,Sensitive,52.28
+blackheades_0272.jpg,blackheades,Sensitive,66.67
+blackheades_0273.jpg,blackheades,Sensitive,56.93
+blackheades_0274.jpg,blackheades,Sensitive,67.55
+blackheades_0275.jpg,blackheades,Normal,42.54
+blackheades_0276.jpg,blackheades,Normal,31.18
+blackheades_0277.jpg,blackheades,Sensitive,45.4
+blackheades_0278.jpg,blackheades,Sensitive,57.77
+blackheades_0279.jpg,blackheades,Sensitive,65.38
+blackheades_0280.jpg,blackheades,Normal,30.82
+blackheades_0281.jpg,blackheades,Sensitive,30.69
+blackheades_0282.jpg,blackheades,Sensitive,57.35
+blackheades_0283.jpg,blackheades,Sensitive,47.39
+blackheades_0284.jpg,blackheades,Normal,30.07
+blackheades_0285.jpg,blackheades,Sensitive,59.51
+blackheades_0286.jpg,blackheades,Sensitive,41.42
+blackheades_0288.jpg,blackheades,Sensitive,52.31
+blackheades_0289.jpg,blackheades,Sensitive,39.24
+blackheades_0290.jpg,blackheades,Sensitive,57.46
+blackheades_0291.jpg,blackheades,Oily,44.01
+blackheades_0292.jpg,blackheades,Sensitive,58.33
+blackheades_0293.jpg,blackheades,Sensitive,44.28
+blackheades_0294.jpg,blackheades,Sensitive,47.78
+blackheades_0295.jpg,blackheades,Normal,54.34
+blackheades_0296.jpg,blackheades,Sensitive,53.32
+blackheades_0297.jpg,blackheades,Sensitive,45.46
+blackheades_0298.jpg,blackheades,Sensitive,51.34
+blackheades_0299.jpg,blackheades,Oily,47.6
+blackheades_0300.jpg,blackheades,Sensitive,61.14
+blackheades_0301.jpg,blackheades,Sensitive,50.46
+blackheades_0302.jpg,blackheades,Normal,53.57
+blackheades_0304.jpg,blackheades,Normal,59.61
+blackheades_0305.jpg,blackheades,Sensitive,77.31
+blackheades_0306.jpg,blackheades,Sensitive,64.02
+blackheades_0307.jpg,blackheades,Sensitive,63.14
+blackheades_0308.jpg,blackheades,Sensitive,40.17
+blackheades_0309.jpg,blackheades,Sensitive,43.16
+blackheades_0310.jpg,blackheades,Sensitive,73.52
+blackheades_0311.jpg,blackheades,Sensitive,62.13
+blackheades_0312.jpg,blackheades,Sensitive,58.83
+blackheades_0313.jpg,blackheades,Sensitive,37.93
+blackheades_0314.jpg,blackheades,Sensitive,53.89
+blackheades_0315.jpg,blackheades,Sensitive,74.47
+blackheades_0316.jpg,blackheades,Normal,33.43
+blackheades_0317.jpg,blackheades,Normal,41.48
+blackheades_0318.jpg,blackheades,Sensitive,66.57
+blackheades_0319.jpg,blackheades,Sensitive,65.77
+blackheades_0320.jpg,blackheades,Sensitive,70.99
+blackheades_0321.jpg,blackheades,Sensitive,31.53
+blackheades_0322.jpg,blackheades,Sensitive,41.73
+blackheades_0323.jpg,blackheades,Sensitive,50.89
+blackheades_0325.jpg,blackheades,Sensitive,52.4
+blackheades_0326.jpg,blackheades,Sensitive,61.36
+blackheades_0327.jpg,blackheades,Sensitive,62.72
+blackheades_0328.jpg,blackheades,Normal,50.28
+blackheades_0329.jpg,blackheades,Oily,78.85
+blackheades_0330.jpg,blackheades,Sensitive,49.21
+blackheades_0331.jpg,blackheades,Oily,32.24
+blackheades_0332.jpg,blackheades,Sensitive,31.91
+blackheades_0333.jpg,blackheades,Sensitive,50.14
+blackheades_0334.jpg,blackheades,Oily,39.1
+blackheades_0335.jpg,blackheades,Sensitive,58.08
+blackheades_0336.jpg,blackheades,Sensitive,40.54
+blackheades_0337.jpg,blackheades,Oily,39.08
+blackheades_0338.jpg,blackheades,Sensitive,60.35
+blackheades_0339.jpg,blackheades,Oily,67.38
+blackheades_0340.jpg,blackheades,Normal,69.38
+blackheades_0341.jpg,blackheades,Sensitive,41.46
+blackheades_0342.jpg,blackheades,Sensitive,62.91
+blackheades_0343.jpg,blackheades,Sensitive,38.25
+blackheades_0344.jpg,blackheades,Sensitive,67.42
+blackheades_0345.jpg,blackheades,Normal,37.38
+blackheades_0346.jpg,blackheades,Oily,39.46
+blackheades_0347.jpg,blackheades,Sensitive,60.42
+blackheades_0348.jpg,blackheades,Acne,51.32
+blackheades_0349.jpg,blackheades,Sensitive,50.25
+blackheades_0350.jpg,blackheades,Sensitive,43.12
+blackheades_0351.jpg,blackheades,Sensitive,48.8
+blackheades_0352.jpg,blackheades,Oily,52.18
+blackheades_0353.jpg,blackheades,Normal,53.18
+blackheades_0354.jpg,blackheades,Sensitive,57.2
+blackheades_0355.jpg,blackheades,Sensitive,75.97
+blackheades_0356.jpg,blackheades,Sensitive,40.13
+blackheades_0357.jpg,blackheades,Sensitive,50.3
+blackheades_0358.jpg,blackheades,Sensitive,75.58
+blackheades_0359.jpg,blackheades,Sensitive,44.22
+blackheades_0360.jpg,blackheades,Normal,34.58
+blackheades_0361.jpg,blackheades,Sensitive,40.79
+blackheades_0362.jpg,blackheades,Oily,56.88
+blackheades_0363.jpg,blackheades,Sensitive,44.41
+blackheades_0364.jpg,blackheades,Sensitive,66.14
+blackheades_0365.jpg,blackheades,Oily,80.6
+blackheades_0366.jpg,blackheades,Normal,59.23
+blackheades_0367.jpg,blackheades,Normal,39.48
+blackheades_0368.jpg,blackheades,Sensitive,68.02
+blackheades_0369.jpg,blackheades,Sensitive,52.17
+blackheades_0370.jpg,blackheades,Sensitive,56.52
+blackheades_0371.jpg,blackheades,Sensitive,62.57
+blackheades_0372.jpg,blackheades,Sensitive,31.82
+blackheades_0373.jpg,blackheades,Oily,41.87
+blackheades_0374.jpg,blackheades,Sensitive,42.22
+blackheades_0375.jpg,blackheades,Acne,56.91
+blackheades_0376.jpg,blackheades,Oily,73.52
+blackheades_0377.jpg,blackheades,Sensitive,33.75
+blackheades_0378.jpg,blackheades,Oily,70.15
+blackheades_0379.jpg,blackheades,Sensitive,50.64
+blackheades_0380.jpg,blackheades,Normal,39.82
+blackheades_0381.jpg,blackheades,Normal,52.32
+blackheades_0382.jpg,blackheades,Sensitive,58.74
+blackheades_0383.jpg,blackheades,Sensitive,46.33
+blackheades_0384.jpg,blackheades,Sensitive,58.96
+blackheades_0385.jpg,blackheades,Sensitive,45.09
+blackheades_0386.jpg,blackheades,Oily,35.51
+blackheades_0387.jpg,blackheades,Normal,47.97
+blackheades_0388.jpg,blackheades,Sensitive,71.9
+blackheades_0389.jpg,blackheades,Oily,49.77
+blackheades_0390.jpg,blackheades,Sensitive,67.45
+blackheades_0391.jpg,blackheades,Sensitive,74.78
+blackheades_0392.jpg,blackheades,Sensitive,38.78
+blackheades_0393.jpg,blackheades,Sensitive,51.02
+blackheades_0394.jpg,blackheades,Oily,36.82
+blackheades_0395.jpg,blackheades,Sensitive,76.24
+blackheades_0396.jpg,blackheades,Sensitive,77.52
+blackheades_0397.jpg,blackheades,Sensitive,54.0
+blackheades_0398.jpg,blackheades,Sensitive,65.45
+blackheades_0399.jpg,blackheades,Sensitive,54.45
+blackheades_0400.jpg,blackheades,Sensitive,79.0
+blackheades_replacement_0001.jpg,blackheades,Sensitive,40.64
+blackheades_replacement_0002.jpg,blackheades,Sensitive,79.21
+blackheades_replacement_0003.jpg,blackheades,Sensitive,52.09
+blackheades_replacement_0004.jpg,blackheades,Sensitive,72.9
+dark_spots_0001.jpg,dark spots,Oily,38.98
+dark_spots_0002.jpg,dark spots,Sensitive,46.38
+dark_spots_0003.jpg,dark spots,Sensitive,80.35
+dark_spots_0004.jpg,dark spots,Sensitive,86.18
+dark_spots_0005.jpg,dark spots,Normal,34.77
+dark_spots_0006.jpg,dark spots,Sensitive,56.85
+dark_spots_0007.jpg,dark spots,Sensitive,70.49
+dark_spots_0008.jpg,dark spots,Sensitive,72.7
+dark_spots_0009.jpg,dark spots,Sensitive,48.44
+dark_spots_0010.jpg,dark spots,Sensitive,46.29
+dark_spots_0011.jpg,dark spots,Sensitive,78.22
+dark_spots_0012.jpg,dark spots,Sensitive,76.89
+dark_spots_0013.jpg,dark spots,Sensitive,51.84
+dark_spots_0014.jpg,dark spots,Sensitive,64.86
+dark_spots_0015.jpg,dark spots,Sensitive,37.59
+dark_spots_0016.jpg,dark spots,Sensitive,61.82
+dark_spots_0017.jpg,dark spots,Sensitive,57.67
+dark_spots_0018.jpg,dark spots,Sensitive,90.58
+dark_spots_0019.jpg,dark spots,Sensitive,60.18
+dark_spots_0020.jpg,dark spots,Sensitive,45.19
+dark_spots_0021.jpg,dark spots,Sensitive,40.82
+dark_spots_0022.jpg,dark spots,Sensitive,46.82
+dark_spots_0023.jpg,dark spots,Sensitive,66.33
+dark_spots_0024.jpg,dark spots,Sensitive,68.11
+dark_spots_0025.jpg,dark spots,Sensitive,86.75
+dark_spots_0026.jpg,dark spots,Oily,49.27
+dark_spots_0027.jpg,dark spots,Sensitive,43.64
+dark_spots_0028.jpg,dark spots,Sensitive,70.04
+dark_spots_0029.jpg,dark spots,Sensitive,57.2
+dark_spots_0030.jpg,dark spots,Sensitive,86.06
+dark_spots_0031.jpg,dark spots,Sensitive,77.52
+dark_spots_0032.jpg,dark spots,Sensitive,57.63
+dark_spots_0033.jpg,dark spots,Sensitive,66.52
+dark_spots_0034.jpg,dark spots,Sensitive,39.63
+dark_spots_0035.jpg,dark spots,Sensitive,30.43
+dark_spots_0036.jpg,dark spots,Sensitive,55.12
+dark_spots_0037.jpg,dark spots,Sensitive,81.26
+dark_spots_0038.jpg,dark spots,Sensitive,37.72
+dark_spots_0039.jpg,dark spots,Sensitive,46.12
+dark_spots_0040.jpg,dark spots,Sensitive,85.72
+dark_spots_0041.jpg,dark spots,Sensitive,70.38
+dark_spots_0042.jpg,dark spots,Sensitive,62.48
+dark_spots_0043.jpg,dark spots,Oily,47.91
+dark_spots_0044.jpg,dark spots,Sensitive,60.81
+dark_spots_0045.jpg,dark spots,Normal,37.4
+dark_spots_0046.jpg,dark spots,Sensitive,35.9
+dark_spots_0047.jpg,dark spots,Sensitive,72.39
+dark_spots_0048.jpg,dark spots,Sensitive,68.2
+dark_spots_0049.jpg,dark spots,Sensitive,35.49
+dark_spots_0050.jpg,dark spots,Sensitive,53.48
+dark_spots_0051.jpg,dark spots,Sensitive,64.21
+dark_spots_0052.jpg,dark spots,Sensitive,74.45
+dark_spots_0053.jpg,dark spots,Sensitive,58.6
+dark_spots_0054.jpg,dark spots,Sensitive,60.46
+dark_spots_0055.jpg,dark spots,Sensitive,84.05
+dark_spots_0056.jpg,dark spots,Sensitive,59.82
+dark_spots_0057.jpg,dark spots,Sensitive,52.98
+dark_spots_0058.jpg,dark spots,Sensitive,76.58
+dark_spots_0059.jpg,dark spots,Sensitive,80.6
+dark_spots_0060.jpg,dark spots,Sensitive,63.03
+dark_spots_0061.jpg,dark spots,Sensitive,62.67
+dark_spots_0062.jpg,dark spots,Sensitive,62.36
+dark_spots_0063.jpg,dark spots,Sensitive,44.49
+dark_spots_0064.jpg,dark spots,Acne,33.48
+dark_spots_0065.jpg,dark spots,Sensitive,36.32
+dark_spots_0066.jpg,dark spots,Sensitive,38.69
+dark_spots_0067.jpg,dark spots,Normal,39.95
+dark_spots_0068.jpg,dark spots,Sensitive,61.53
+dark_spots_0069.jpg,dark spots,Oily,35.27
+dark_spots_0070.jpg,dark spots,Sensitive,61.93
+dark_spots_0071.jpg,dark spots,Sensitive,69.74
+dark_spots_0072.jpg,dark spots,Sensitive,68.43
+dark_spots_0073.jpg,dark spots,Sensitive,73.5
+dark_spots_0074.jpg,dark spots,Sensitive,89.77
+dark_spots_0075.jpg,dark spots,Sensitive,38.98
+dark_spots_0076.jpg,dark spots,Sensitive,58.09
+dark_spots_0077.jpg,dark spots,Sensitive,48.59
+dark_spots_0078.jpg,dark spots,Sensitive,42.88
+dark_spots_0079.jpg,dark spots,Sensitive,48.19
+dark_spots_0080.jpg,dark spots,Acne,29.16
+dark_spots_0081.jpg,dark spots,Sensitive,54.18
+dark_spots_0082.jpg,dark spots,Sensitive,42.85
+dark_spots_0083.jpg,dark spots,Sensitive,65.75
+dark_spots_0084.jpg,dark spots,Sensitive,47.44
+dark_spots_0085.jpg,dark spots,Sensitive,72.17
+dark_spots_0086.jpg,dark spots,Sensitive,42.1
+dark_spots_0087.jpg,dark spots,Normal,38.11
+dark_spots_0088.jpg,dark spots,Sensitive,61.41
+dark_spots_0089.jpg,dark spots,Sensitive,73.15
+dark_spots_0090.jpg,dark spots,Oily,42.66
+dark_spots_0091.jpg,dark spots,Sensitive,54.43
+dark_spots_0092.jpg,dark spots,Sensitive,83.19
+dark_spots_0093.jpg,dark spots,Oily,55.74
+dark_spots_0094.jpg,dark spots,Normal,37.62
+dark_spots_0095.jpg,dark spots,Sensitive,40.18
+dark_spots_0096.jpg,dark spots,Oily,74.66
+dark_spots_0097.jpg,dark spots,Sensitive,74.14
+dark_spots_0098.jpg,dark spots,Sensitive,59.52
+dark_spots_0099.jpg,dark spots,Sensitive,73.66
+dark_spots_0100.jpg,dark spots,Sensitive,72.21
+dark_spots_0101.jpg,dark spots,Sensitive,57.67
+dark_spots_0102.jpg,dark spots,Sensitive,55.64
+dark_spots_0103.jpg,dark spots,Sensitive,77.94
+dark_spots_0104.jpg,dark spots,Sensitive,56.91
+dark_spots_0105.jpg,dark spots,Sensitive,70.29
+dark_spots_0106.jpg,dark spots,Sensitive,74.3
+dark_spots_0107.jpg,dark spots,Sensitive,67.55
+dark_spots_0108.jpg,dark spots,Oily,51.17
+dark_spots_0109.jpg,dark spots,Sensitive,38.11
+dark_spots_0110.jpg,dark spots,Sensitive,33.82
+dark_spots_0111.jpg,dark spots,Sensitive,55.1
+dark_spots_0112.jpg,dark spots,Sensitive,62.99
+dark_spots_0113.jpg,dark spots,Sensitive,70.41
+dark_spots_0114.jpg,dark spots,Sensitive,66.29
+dark_spots_0115.jpg,dark spots,Sensitive,38.54
+dark_spots_0116.jpg,dark spots,Sensitive,67.07
+dark_spots_0117.jpg,dark spots,Sensitive,41.15
+dark_spots_0118.jpg,dark spots,Sensitive,66.35
+dark_spots_0119.jpg,dark spots,Sensitive,68.46
+dark_spots_0120.jpg,dark spots,Sensitive,68.29
+dark_spots_0121.jpg,dark spots,Sensitive,30.63
+dark_spots_0122.jpg,dark spots,Sensitive,82.62
+dark_spots_0123.jpg,dark spots,Sensitive,81.3
+dark_spots_0124.jpg,dark spots,Sensitive,53.49
+dark_spots_0125.jpg,dark spots,Sensitive,55.97
+dark_spots_0126.jpg,dark spots,Sensitive,74.58
+dark_spots_0127.jpg,dark spots,Sensitive,44.65
+dark_spots_0128.jpg,dark spots,Oily,44.13
+dark_spots_0129.jpg,dark spots,Sensitive,74.73
+dark_spots_0130.jpg,dark spots,Sensitive,76.34
+dark_spots_0131.jpg,dark spots,Sensitive,42.5
+dark_spots_0132.jpg,dark spots,Sensitive,71.09
+dark_spots_0133.jpg,dark spots,Oily,40.04
+dark_spots_0134.jpg,dark spots,Sensitive,64.04
+dark_spots_0135.jpg,dark spots,Sensitive,71.59
+dark_spots_0136.jpg,dark spots,Sensitive,84.01
+dark_spots_0137.jpg,dark spots,Sensitive,86.01
+dark_spots_0138.jpg,dark spots,Sensitive,70.21
+dark_spots_0139.jpg,dark spots,Sensitive,77.9
+dark_spots_0140.jpg,dark spots,Sensitive,47.79
+dark_spots_0141.jpg,dark spots,Sensitive,56.07
+dark_spots_0142.jpg,dark spots,Sensitive,85.5
+dark_spots_0143.jpg,dark spots,Sensitive,58.12
+dark_spots_0144.jpg,dark spots,Sensitive,53.94
+dark_spots_0145.jpg,dark spots,Sensitive,43.28
+dark_spots_0146.jpg,dark spots,Sensitive,82.59
+dark_spots_0147.jpg,dark spots,Sensitive,46.36
+dark_spots_0148.jpg,dark spots,Sensitive,59.63
+dark_spots_0149.jpg,dark spots,Sensitive,56.57
+dark_spots_0150.jpg,dark spots,Sensitive,43.31
+dark_spots_0151.jpg,dark spots,Oily,50.55
+dark_spots_0152.jpg,dark spots,Sensitive,64.77
+dark_spots_0153.jpg,dark spots,Sensitive,67.33
+dark_spots_0154.jpg,dark spots,Oily,50.23
+dark_spots_0155.jpg,dark spots,Sensitive,56.03
+dark_spots_0156.jpg,dark spots,Sensitive,68.88
+dark_spots_0157.jpg,dark spots,Sensitive,78.56
+dark_spots_0158.jpg,dark spots,Sensitive,67.51
+dark_spots_0159.jpg,dark spots,Sensitive,56.39
+dark_spots_0160.jpg,dark spots,Sensitive,77.68
+dark_spots_0161.jpg,dark spots,Sensitive,46.2
+dark_spots_0162.jpg,dark spots,Sensitive,75.84
+dark_spots_0163.jpg,dark spots,Sensitive,41.79
+dark_spots_0164.jpg,dark spots,Sensitive,84.52
+dark_spots_0165.jpg,dark spots,Sensitive,80.21
+dark_spots_0166.jpg,dark spots,Sensitive,39.55
+dark_spots_0167.jpg,dark spots,Sensitive,70.78
+dark_spots_0168.jpg,dark spots,Sensitive,53.16
+dark_spots_0169.jpg,dark spots,Sensitive,82.59
+dark_spots_0170.jpg,dark spots,Sensitive,57.33
+dark_spots_0171.jpg,dark spots,Oily,40.82
+dark_spots_0172.jpg,dark spots,Sensitive,57.34
+dark_spots_0173.jpg,dark spots,Sensitive,38.76
+dark_spots_0174.jpg,dark spots,Sensitive,60.33
+dark_spots_0175.jpg,dark spots,Sensitive,71.29
+dark_spots_0176.jpg,dark spots,Sensitive,57.67
+dark_spots_0177.jpg,dark spots,Sensitive,67.75
+dark_spots_0178.jpg,dark spots,Sensitive,66.51
+dark_spots_0179.jpg,dark spots,Sensitive,87.32
+dark_spots_0180.jpg,dark spots,Sensitive,38.54
+dark_spots_0181.jpg,dark spots,Sensitive,50.5
+dark_spots_0182.jpg,dark spots,Sensitive,54.7
+dark_spots_0183.jpg,dark spots,Sensitive,84.58
+dark_spots_0184.jpg,dark spots,Sensitive,89.61
+dark_spots_0185.jpg,dark spots,Oily,40.41
+dark_spots_0186.jpg,dark spots,Sensitive,45.91
+dark_spots_0187.jpg,dark spots,Sensitive,46.09
+dark_spots_0188.jpg,dark spots,Sensitive,37.99
+dark_spots_0189.jpg,dark spots,Sensitive,43.94
+dark_spots_0190.jpg,dark spots,Sensitive,81.47
+dark_spots_0191.jpg,dark spots,Sensitive,71.36
+dark_spots_0192.jpg,dark spots,Sensitive,74.93
+dark_spots_0193.jpg,dark spots,Sensitive,82.54
+dark_spots_0194.jpg,dark spots,Sensitive,76.58
+dark_spots_0195.jpg,dark spots,Sensitive,57.29
+dark_spots_0196.jpg,dark spots,Sensitive,71.2
+dark_spots_0197.jpg,dark spots,Sensitive,53.69
+dark_spots_0198.jpg,dark spots,Sensitive,78.4
+dark_spots_0199.jpg,dark spots,Sensitive,63.77
+dark_spots_0201.jpg,dark spots,Sensitive,59.48
+dark_spots_0202.jpg,dark spots,Sensitive,74.52
+dark_spots_0203.jpg,dark spots,Sensitive,57.85
+dark_spots_0204.jpg,dark spots,Sensitive,68.84
+dark_spots_0205.jpg,dark spots,Oily,31.88
+dark_spots_0206.jpg,dark spots,Sensitive,66.96
+dark_spots_0207.jpg,dark spots,Sensitive,59.36
+dark_spots_0208.jpg,dark spots,Normal,48.44
+dark_spots_0209.jpg,dark spots,Sensitive,31.67
+dark_spots_0210.jpg,dark spots,Sensitive,36.37
+dark_spots_0211.jpg,dark spots,Sensitive,78.22
+dark_spots_0212.jpg,dark spots,Sensitive,51.1
+dark_spots_0213.jpg,dark spots,Sensitive,84.67
+dark_spots_0214.jpg,dark spots,Sensitive,81.27
+dark_spots_0215.jpg,dark spots,Sensitive,53.44
+dark_spots_0216.jpg,dark spots,Sensitive,32.99
+dark_spots_0217.jpg,dark spots,Oily,53.61
+dark_spots_0218.jpg,dark spots,Sensitive,62.58
+dark_spots_0219.jpg,dark spots,Sensitive,71.72
+dark_spots_0220.jpg,dark spots,Sensitive,71.53
+dark_spots_0221.jpg,dark spots,Sensitive,79.89
+dark_spots_0222.jpg,dark spots,Sensitive,81.0
+dark_spots_0223.jpg,dark spots,Sensitive,35.36
+dark_spots_0224.jpg,dark spots,Oily,38.16
+dark_spots_0225.jpg,dark spots,Sensitive,53.43
+dark_spots_0226.jpg,dark spots,Sensitive,72.64
+dark_spots_0227.jpg,dark spots,Sensitive,48.45
+dark_spots_0228.jpg,dark spots,Sensitive,71.33
+dark_spots_0229.jpg,dark spots,Sensitive,75.3
+dark_spots_0230.jpg,dark spots,Sensitive,41.23
+dark_spots_0231.jpg,dark spots,Sensitive,75.74
+dark_spots_0232.jpg,dark spots,Sensitive,45.98
+dark_spots_0233.jpg,dark spots,Sensitive,76.54
+dark_spots_0234.jpg,dark spots,Sensitive,40.92
+dark_spots_0235.jpg,dark spots,Sensitive,86.39
+dark_spots_0236.jpg,dark spots,Sensitive,76.58
+dark_spots_0237.jpg,dark spots,Sensitive,81.77
+dark_spots_0238.jpg,dark spots,Sensitive,68.76
+dark_spots_0239.jpg,dark spots,Sensitive,50.9
+dark_spots_0240.jpg,dark spots,Sensitive,63.08
+dark_spots_0241.jpg,dark spots,Sensitive,81.31
+dark_spots_0242.jpg,dark spots,Sensitive,45.9
+dark_spots_0243.jpg,dark spots,Sensitive,79.94
+dark_spots_0244.jpg,dark spots,Acne,29.22
+dark_spots_0245.jpg,dark spots,Normal,43.3
+dark_spots_0246.jpg,dark spots,Sensitive,72.03
+dark_spots_0247.jpg,dark spots,Sensitive,74.13
+dark_spots_0248.jpg,dark spots,Sensitive,40.61
+dark_spots_0249.jpg,dark spots,Sensitive,60.85
+dark_spots_0250.jpg,dark spots,Sensitive,38.91
+dark_spots_0251.jpg,dark spots,Sensitive,72.72
+dark_spots_0252.jpg,dark spots,Sensitive,59.56
+dark_spots_0253.jpg,dark spots,Sensitive,38.23
+dark_spots_0254.jpg,dark spots,Sensitive,47.9
+dark_spots_0255.jpg,dark spots,Sensitive,51.5
+dark_spots_0256.jpg,dark spots,Sensitive,81.75
+dark_spots_0257.jpg,dark spots,Sensitive,65.56
+dark_spots_0259.jpg,dark spots,Sensitive,71.35
+dark_spots_0260.jpg,dark spots,Sensitive,33.24
+dark_spots_0261.jpg,dark spots,Sensitive,45.7
+dark_spots_0262.jpg,dark spots,Sensitive,53.18
+dark_spots_0263.jpg,dark spots,Sensitive,94.55
+dark_spots_0264.jpg,dark spots,Sensitive,74.35
+dark_spots_0265.jpg,dark spots,Sensitive,76.02
+dark_spots_0266.jpg,dark spots,Sensitive,76.04
+dark_spots_0267.jpg,dark spots,Sensitive,62.09
+dark_spots_0268.jpg,dark spots,Sensitive,60.48
+dark_spots_0269.jpg,dark spots,Sensitive,52.82
+dark_spots_0270.jpg,dark spots,Sensitive,44.46
+dark_spots_0271.jpg,dark spots,Sensitive,69.08
+dark_spots_0272.jpg,dark spots,Sensitive,56.92
+dark_spots_0273.jpg,dark spots,Sensitive,71.78
+dark_spots_0274.jpg,dark spots,Normal,51.95
+dark_spots_0275.jpg,dark spots,Sensitive,41.35
+dark_spots_0277.jpg,dark spots,Oily,47.31
+dark_spots_0278.jpg,dark spots,Normal,34.77
+dark_spots_0279.jpg,dark spots,Sensitive,53.77
+dark_spots_0280.jpg,dark spots,Sensitive,55.3
+dark_spots_0281.jpg,dark spots,Sensitive,81.21
+dark_spots_0282.jpg,dark spots,Oily,54.52
+dark_spots_0283.jpg,dark spots,Sensitive,72.65
+dark_spots_0284.jpg,dark spots,Sensitive,50.13
+dark_spots_0285.jpg,dark spots,Sensitive,50.34
+dark_spots_0286.jpg,dark spots,Sensitive,51.03
+dark_spots_0287.jpg,dark spots,Sensitive,39.39
+dark_spots_0288.jpg,dark spots,Sensitive,75.46
+dark_spots_0289.jpg,dark spots,Sensitive,57.52
+dark_spots_0290.jpg,dark spots,Sensitive,83.85
+dark_spots_0291.jpg,dark spots,Sensitive,48.23
+dark_spots_0292.jpg,dark spots,Sensitive,58.39
+dark_spots_0293.jpg,dark spots,Sensitive,73.63
+dark_spots_0294.jpg,dark spots,Sensitive,73.71
+dark_spots_0295.jpg,dark spots,Sensitive,71.03
+dark_spots_0296.jpg,dark spots,Sensitive,60.44
+dark_spots_0297.jpg,dark spots,Sensitive,73.44
+dark_spots_0298.jpg,dark spots,Sensitive,82.99
+dark_spots_0299.jpg,dark spots,Sensitive,66.94
+dark_spots_0300.jpg,dark spots,Sensitive,84.69
+dark_spots_0301.jpg,dark spots,Sensitive,42.42
+dark_spots_0302.jpg,dark spots,Sensitive,37.78
+dark_spots_0303.jpg,dark spots,Sensitive,51.1
+dark_spots_0304.jpg,dark spots,Sensitive,64.31
+dark_spots_0305.jpg,dark spots,Sensitive,70.09
+dark_spots_0306.jpg,dark spots,Sensitive,50.5
+dark_spots_0307.jpg,dark spots,Sensitive,73.31
+dark_spots_0308.jpg,dark spots,Sensitive,73.11
+dark_spots_0309.jpg,dark spots,Sensitive,58.26
+dark_spots_0310.jpg,dark spots,Sensitive,74.95
+dark_spots_0311.jpg,dark spots,Sensitive,77.47
+dark_spots_0312.jpg,dark spots,Sensitive,79.53
+dark_spots_0313.jpg,dark spots,Sensitive,63.62
+dark_spots_0314.jpg,dark spots,Sensitive,67.32
+dark_spots_0315.jpg,dark spots,Sensitive,55.81
+dark_spots_0316.jpg,dark spots,Oily,41.84
+dark_spots_0317.jpg,dark spots,Sensitive,44.99
+dark_spots_0318.jpg,dark spots,Sensitive,37.15
+dark_spots_0319.jpg,dark spots,Sensitive,43.48
+dark_spots_0320.jpg,dark spots,Sensitive,77.49
+dark_spots_0321.jpg,dark spots,Sensitive,60.87
+dark_spots_0323.jpg,dark spots,Sensitive,52.88
+dark_spots_0324.jpg,dark spots,Sensitive,38.7
+dark_spots_0325.jpg,dark spots,Sensitive,76.34
+dark_spots_0326.jpg,dark spots,Sensitive,70.99
+dark_spots_0327.jpg,dark spots,Sensitive,77.55
+dark_spots_0328.jpg,dark spots,Sensitive,46.12
+dark_spots_0329.jpg,dark spots,Sensitive,70.43
+dark_spots_0330.jpg,dark spots,Sensitive,52.05
+dark_spots_0331.jpg,dark spots,Oily,40.96
+dark_spots_0332.jpg,dark spots,Sensitive,55.34
+dark_spots_0333.jpg,dark spots,Sensitive,60.81
+dark_spots_0334.jpg,dark spots,Sensitive,67.02
+dark_spots_0335.jpg,dark spots,Sensitive,63.1
+dark_spots_0336.jpg,dark spots,Sensitive,65.75
+dark_spots_0337.jpg,dark spots,Sensitive,76.32
+dark_spots_0338.jpg,dark spots,Sensitive,80.27
+dark_spots_0339.jpg,dark spots,Sensitive,52.5
+dark_spots_0340.jpg,dark spots,Sensitive,48.3
+dark_spots_0341.jpg,dark spots,Sensitive,72.69
+dark_spots_0342.jpg,dark spots,Oily,44.52
+dark_spots_0343.jpg,dark spots,Sensitive,51.03
+dark_spots_0344.jpg,dark spots,Sensitive,80.49
+dark_spots_0345.jpg,dark spots,Sensitive,49.54
+dark_spots_0346.jpg,dark spots,Sensitive,44.12
+dark_spots_0347.jpg,dark spots,Sensitive,62.62
+dark_spots_0348.jpg,dark spots,Sensitive,67.74
+dark_spots_0349.jpg,dark spots,Sensitive,52.33
+dark_spots_0350.jpg,dark spots,Sensitive,69.21
+dark_spots_0351.jpg,dark spots,Sensitive,58.19
+dark_spots_0352.jpg,dark spots,Sensitive,65.31
+dark_spots_0353.jpg,dark spots,Oily,45.64
+dark_spots_0354.jpg,dark spots,Sensitive,52.29
+dark_spots_0355.jpg,dark spots,Sensitive,55.88
+dark_spots_0356.jpg,dark spots,Sensitive,52.0
+dark_spots_0357.jpg,dark spots,Sensitive,64.35
+dark_spots_0358.jpg,dark spots,Sensitive,36.38
+dark_spots_0359.jpg,dark spots,Sensitive,39.48
+dark_spots_0360.jpg,dark spots,Sensitive,65.93
+dark_spots_0361.jpg,dark spots,Sensitive,55.29
+dark_spots_0362.jpg,dark spots,Sensitive,47.47
+dark_spots_0363.jpg,dark spots,Normal,30.08
+dark_spots_0364.jpg,dark spots,Oily,56.07
+dark_spots_0365.jpg,dark spots,Sensitive,66.39
+dark_spots_0366.jpg,dark spots,Oily,26.78
+dark_spots_0367.jpg,dark spots,Sensitive,51.45
+dark_spots_0368.jpg,dark spots,Sensitive,89.65
+dark_spots_0369.jpg,dark spots,Oily,40.05
+dark_spots_0370.jpg,dark spots,Sensitive,56.59
+dark_spots_0371.jpg,dark spots,Sensitive,42.22
+dark_spots_0372.jpg,dark spots,Sensitive,58.86
+dark_spots_0373.jpg,dark spots,Sensitive,56.31
+dark_spots_0374.jpg,dark spots,Sensitive,48.02
+dark_spots_0375.jpg,dark spots,Sensitive,77.41
+dark_spots_0376.jpg,dark spots,Sensitive,43.49
+dark_spots_0377.jpg,dark spots,Sensitive,57.19
+dark_spots_0378.jpg,dark spots,Sensitive,70.73
+dark_spots_0379.jpg,dark spots,Sensitive,33.96
+dark_spots_0380.jpg,dark spots,Sensitive,55.1
+dark_spots_0381.jpg,dark spots,Sensitive,45.65
+dark_spots_0382.jpg,dark spots,Sensitive,53.18
+dark_spots_0383.jpg,dark spots,Sensitive,48.12
+dark_spots_0384.jpg,dark spots,Sensitive,59.8
+dark_spots_0385.jpg,dark spots,Sensitive,61.95
+dark_spots_0386.jpg,dark spots,Sensitive,62.94
+dark_spots_0387.jpg,dark spots,Sensitive,69.01
+dark_spots_0388.jpg,dark spots,Oily,55.65
+dark_spots_0389.jpg,dark spots,Sensitive,46.65
+dark_spots_0390.jpg,dark spots,Sensitive,86.3
+dark_spots_0391.jpg,dark spots,Sensitive,50.34
+dark_spots_0392.jpg,dark spots,Sensitive,56.21
+dark_spots_0393.jpg,dark spots,Sensitive,57.63
+dark_spots_0394.jpg,dark spots,Sensitive,67.3
+dark_spots_0395.jpg,dark spots,Sensitive,87.24
+dark_spots_0396.jpg,dark spots,Sensitive,45.09
+dark_spots_0397.jpg,dark spots,Dry,32.41
+dark_spots_0398.jpg,dark spots,Sensitive,73.85
+dark_spots_0399.jpg,dark spots,Sensitive,80.6
+dark_spots_0400.jpg,dark spots,Sensitive,66.21
+dark_spots_replacement_0001.jpg,dark spots,Sensitive,65.8
+dark_spots_replacement_0002.jpg,dark spots,Sensitive,55.13
+dark_spots_replacement_0003.jpg,dark spots,Sensitive,83.43
+dark_spots_replacement_0004.jpg,dark spots,Sensitive,88.95
+pores_0001.jpg,pores,Sensitive,76.35
+pores_0002.jpg,pores,Sensitive,44.58
+pores_0003.jpg,pores,Sensitive,39.37
+pores_0004.jpg,pores,Sensitive,36.66
+pores_0005.jpg,pores,Sensitive,45.13
+pores_0006.jpg,pores,Sensitive,59.41
+pores_0007.jpg,pores,Sensitive,41.19
+pores_0008.jpg,pores,Sensitive,73.13
+pores_0009.jpg,pores,Sensitive,79.06
+pores_0010.jpg,pores,Sensitive,57.5
+pores_0011.jpg,pores,Sensitive,39.29
+pores_0012.jpg,pores,Sensitive,70.21
+pores_0013.jpg,pores,Sensitive,63.27
+pores_0014.jpg,pores,Sensitive,42.82
+pores_0015.jpg,pores,Sensitive,62.87
+pores_0016.jpg,pores,Oily,25.92
+pores_0017.jpg,pores,Normal,42.23
+pores_0018.jpg,pores,Sensitive,44.82
+pores_0019.jpg,pores,Sensitive,49.4
+pores_0020.jpg,pores,Normal,34.59
+pores_0021.jpg,pores,Sensitive,59.45
+pores_0022.jpg,pores,Sensitive,35.03
+pores_0023.jpg,pores,Sensitive,56.78
+pores_0024.jpg,pores,Sensitive,47.05
+pores_0025.jpg,pores,Normal,35.37
+pores_0026.jpg,pores,Sensitive,36.44
+pores_0027.jpg,pores,Sensitive,50.38
+pores_0028.jpg,pores,Normal,38.08
+pores_0029.jpg,pores,Sensitive,65.58
+pores_0030.jpg,pores,Sensitive,35.45
+pores_0031.jpg,pores,Sensitive,68.74
+pores_0032.jpg,pores,Sensitive,35.24
+pores_0033.jpg,pores,Sensitive,74.08
+pores_0034.jpg,pores,Sensitive,66.25
+pores_0035.jpg,pores,Sensitive,43.43
+pores_0036.jpg,pores,Sensitive,46.19
+pores_0037.jpg,pores,Sensitive,45.01
+pores_0038.jpg,pores,Sensitive,81.62
+pores_0039.jpg,pores,Sensitive,57.2
+pores_0040.jpg,pores,Normal,23.63
+pores_0041.jpg,pores,Sensitive,63.47
+pores_0042.jpg,pores,Normal,50.28
+pores_0043.jpg,pores,Sensitive,74.19
+pores_0044.jpg,pores,Sensitive,52.02
+pores_0045.jpg,pores,Sensitive,44.46
+pores_0046.jpg,pores,Sensitive,63.68
+pores_0047.jpg,pores,Sensitive,63.37
+pores_0048.jpg,pores,Sensitive,59.28
+pores_0049.jpg,pores,Oily,58.88
+pores_0050.jpg,pores,Sensitive,41.27
+pores_0051.jpg,pores,Sensitive,51.47
+pores_0052.jpg,pores,Sensitive,55.83
+pores_0053.jpg,pores,Sensitive,63.9
+pores_0054.jpg,pores,Normal,33.6
+pores_0055.jpg,pores,Sensitive,45.27
+pores_0056.jpg,pores,Sensitive,56.9
+pores_0057.jpg,pores,Normal,31.77
+pores_0058.jpg,pores,Sensitive,33.32
+pores_0059.jpg,pores,Sensitive,36.81
+pores_0060.jpg,pores,Sensitive,31.99
+pores_0061.jpg,pores,Oily,34.8
+pores_0062.jpg,pores,Sensitive,63.6
+pores_0063.jpg,pores,Sensitive,42.83
+pores_0064.jpg,pores,Sensitive,54.44
+pores_0065.jpg,pores,Sensitive,74.49
+pores_0066.jpg,pores,Sensitive,58.91
+pores_0067.jpg,pores,Sensitive,42.21
+pores_0068.jpg,pores,Sensitive,59.6
+pores_0069.jpg,pores,Sensitive,33.28
+pores_0070.jpg,pores,Normal,35.27
+pores_0071.jpg,pores,Sensitive,54.87
+pores_0072.jpg,pores,Sensitive,47.45
+pores_0073.jpg,pores,Normal,36.93
+pores_0074.jpg,pores,Sensitive,32.26
+pores_0075.jpg,pores,Sensitive,47.88
+pores_0076.jpg,pores,Oily,35.03
+pores_0077.jpg,pores,Normal,42.14
+pores_0078.jpg,pores,Sensitive,69.9
+pores_0079.jpg,pores,Sensitive,60.55
+pores_0080.jpg,pores,Sensitive,64.08
+pores_0081.jpg,pores,Sensitive,36.47
+pores_0082.jpg,pores,Sensitive,32.18
+pores_0083.jpg,pores,Oily,33.49
+pores_0084.jpg,pores,Sensitive,68.17
+pores_0085.jpg,pores,Normal,24.67
+pores_0086.jpg,pores,Sensitive,65.63
+pores_0087.jpg,pores,Oily,43.13
+pores_0088.jpg,pores,Oily,48.33
+pores_0089.jpg,pores,Sensitive,39.82
+pores_0090.jpg,pores,Sensitive,38.12
+pores_0091.jpg,pores,Sensitive,39.7
+pores_0092.jpg,pores,Sensitive,53.16
+pores_0093.jpg,pores,Sensitive,53.18
+pores_0094.jpg,pores,Sensitive,50.68
+pores_0095.jpg,pores,Sensitive,54.25
+pores_0096.jpg,pores,Sensitive,41.07
+pores_0097.jpg,pores,Sensitive,34.91
+pores_0098.jpg,pores,Sensitive,50.84
+pores_0099.jpg,pores,Normal,45.67
+pores_0100.jpg,pores,Sensitive,35.56
+pores_0101.jpg,pores,Sensitive,47.02
+pores_0102.jpg,pores,Oily,35.26
+pores_0103.jpg,pores,Sensitive,61.17
+pores_0104.jpg,pores,Sensitive,55.93
+pores_0105.jpg,pores,Sensitive,76.54
+pores_0106.jpg,pores,Sensitive,38.96
+pores_0107.jpg,pores,Sensitive,51.79
+pores_0108.jpg,pores,Sensitive,70.51
+pores_0109.jpg,pores,Sensitive,51.07
+pores_0110.jpg,pores,Sensitive,57.42
+pores_0111.jpg,pores,Normal,41.24
+pores_0112.jpg,pores,Sensitive,42.4
+pores_0113.jpg,pores,Sensitive,42.29
+pores_0114.jpg,pores,Sensitive,46.65
+pores_0115.jpg,pores,Sensitive,59.15
+pores_0116.jpg,pores,Sensitive,46.13
+pores_0117.jpg,pores,Normal,30.22
+pores_0118.jpg,pores,Sensitive,37.5
+pores_0119.jpg,pores,Sensitive,32.55
+pores_0120.jpg,pores,Normal,39.94
+pores_0121.jpg,pores,Sensitive,59.9
+pores_0122.jpg,pores,Normal,35.75
+pores_0123.jpg,pores,Sensitive,69.96
+pores_0124.jpg,pores,Sensitive,36.04
+pores_0125.jpg,pores,Sensitive,44.77
+pores_0126.jpg,pores,Normal,38.37
+pores_0127.jpg,pores,Sensitive,63.65
+pores_0128.jpg,pores,Sensitive,50.37
+pores_0129.jpg,pores,Normal,43.99
+pores_0130.jpg,pores,Sensitive,36.69
+pores_0131.jpg,pores,Sensitive,39.59
+pores_0132.jpg,pores,Sensitive,41.2
+pores_0133.jpg,pores,Sensitive,71.59
+pores_0134.jpg,pores,Sensitive,41.69
+pores_0135.jpg,pores,Oily,30.86
+pores_0136.jpg,pores,Sensitive,32.85
+pores_0137.jpg,pores,Sensitive,60.11
+pores_0138.jpg,pores,Sensitive,63.99
+pores_0139.jpg,pores,Oily,42.74
+pores_0140.jpg,pores,Sensitive,44.9
+pores_0141.jpg,pores,Sensitive,32.64
+pores_0142.jpg,pores,Sensitive,63.02
+pores_0143.jpg,pores,Sensitive,64.99
+pores_0144.jpg,pores,Sensitive,57.06
+pores_0145.jpg,pores,Sensitive,48.73
+pores_0146.jpg,pores,Sensitive,57.4
+pores_0147.jpg,pores,Sensitive,80.04
+pores_0148.jpg,pores,Sensitive,50.41
+pores_0149.jpg,pores,Sensitive,72.41
+pores_0150.jpg,pores,Normal,37.59
+pores_0151.jpg,pores,Normal,40.87
+pores_0152.jpg,pores,Sensitive,34.39
+pores_0153.jpg,pores,Sensitive,56.52
+pores_0154.jpg,pores,Normal,41.81
+pores_0155.jpg,pores,Sensitive,73.46
+pores_0156.jpg,pores,Sensitive,48.69
+pores_0157.jpg,pores,Sensitive,54.47
+pores_0158.jpg,pores,Sensitive,52.92
+pores_0159.jpg,pores,Acne,32.0
+pores_0160.jpg,pores,Sensitive,59.23
+pores_0161.jpg,pores,Sensitive,38.89
+pores_0162.jpg,pores,Sensitive,60.36
+pores_0163.jpg,pores,Sensitive,67.56
+pores_0164.jpg,pores,Normal,34.3
+pores_0165.jpg,pores,Sensitive,57.46
+pores_0166.jpg,pores,Sensitive,40.08
+pores_0167.jpg,pores,Sensitive,33.3
+pores_0168.jpg,pores,Sensitive,36.81
+pores_0169.jpg,pores,Sensitive,53.67
+pores_0170.jpg,pores,Oily,46.45
+pores_0171.jpg,pores,Sensitive,71.5
+pores_0172.jpg,pores,Sensitive,64.07
+pores_0173.jpg,pores,Acne,30.02
+pores_0174.jpg,pores,Sensitive,38.6
+pores_0175.jpg,pores,Sensitive,71.52
+pores_0176.jpg,pores,Sensitive,52.04
+pores_0177.jpg,pores,Sensitive,46.21
+pores_0178.jpg,pores,Normal,33.06
+pores_0179.jpg,pores,Sensitive,80.27
+pores_0180.jpg,pores,Sensitive,42.68
+pores_0181.jpg,pores,Sensitive,29.82
+pores_0182.jpg,pores,Sensitive,62.55
+pores_0183.jpg,pores,Sensitive,41.24
+pores_0184.jpg,pores,Sensitive,49.83
+pores_0185.jpg,pores,Sensitive,43.21
+pores_0186.jpg,pores,Normal,34.77
+pores_0187.jpg,pores,Sensitive,24.25
+pores_0188.jpg,pores,Sensitive,41.74
+pores_0189.jpg,pores,Sensitive,44.41
+pores_0190.jpg,pores,Oily,40.7
+pores_0191.jpg,pores,Sensitive,42.32
+pores_0192.jpg,pores,Sensitive,76.41
+pores_0193.jpg,pores,Sensitive,69.55
+pores_0194.jpg,pores,Sensitive,68.49
+pores_0195.jpg,pores,Sensitive,72.04
+pores_0196.jpg,pores,Sensitive,36.31
+pores_0197.jpg,pores,Sensitive,51.57
+pores_0198.jpg,pores,Oily,35.76
+pores_0199.jpg,pores,Sensitive,36.99
+pores_0200.jpg,pores,Normal,34.2
+pores_0201.jpg,pores,Oily,49.99
+pores_0202.jpg,pores,Sensitive,50.51
+pores_0203.jpg,pores,Sensitive,41.49
+pores_0204.jpg,pores,Sensitive,73.15
+pores_0205.jpg,pores,Sensitive,62.84
+pores_0206.jpg,pores,Sensitive,27.21
+pores_0207.jpg,pores,Sensitive,47.94
+pores_0208.jpg,pores,Sensitive,40.1
+pores_0209.jpg,pores,Sensitive,41.37
+pores_0210.jpg,pores,Sensitive,68.57
+pores_0211.jpg,pores,Sensitive,36.19
+pores_0212.jpg,pores,Sensitive,52.16
+pores_0213.jpg,pores,Sensitive,57.14
+pores_0214.jpg,pores,Sensitive,46.91
+pores_0215.jpg,pores,Normal,39.7
+pores_0216.jpg,pores,Normal,29.42
+pores_0217.jpg,pores,Sensitive,54.48
+pores_0218.jpg,pores,Normal,47.65
+pores_0219.jpg,pores,Sensitive,47.84
+pores_0220.jpg,pores,Sensitive,46.53
+pores_0221.jpg,pores,Sensitive,37.41
+pores_0222.jpg,pores,Sensitive,35.19
+pores_0223.jpg,pores,Sensitive,70.34
+pores_0224.jpg,pores,Sensitive,44.24
+pores_0225.jpg,pores,Oily,30.08
+pores_0226.jpg,pores,Sensitive,74.39
+pores_0227.jpg,pores,Sensitive,34.61
+pores_0228.jpg,pores,Sensitive,57.22
+pores_0229.jpg,pores,Oily,46.6
+pores_0230.jpg,pores,Sensitive,36.93
+pores_0231.jpg,pores,Sensitive,58.54
+pores_0232.jpg,pores,Sensitive,73.47
+pores_0233.jpg,pores,Sensitive,34.92
+pores_0234.jpg,pores,Sensitive,55.27
+pores_0235.jpg,pores,Sensitive,27.07
+pores_0236.jpg,pores,Normal,36.57
+pores_0237.jpg,pores,Sensitive,55.7
+pores_0238.jpg,pores,Sensitive,47.57
+pores_0239.jpg,pores,Sensitive,49.03
+pores_0240.jpg,pores,Sensitive,60.98
+pores_0241.jpg,pores,Sensitive,33.06
+pores_0242.jpg,pores,Sensitive,35.6
+pores_0243.jpg,pores,Sensitive,53.93
+pores_0244.jpg,pores,Sensitive,29.76
+pores_0245.jpg,pores,Sensitive,49.29
+pores_0246.jpg,pores,Sensitive,52.86
+pores_0247.jpg,pores,Sensitive,50.65
+pores_0248.jpg,pores,Sensitive,38.82
+pores_0249.jpg,pores,Sensitive,64.41
+pores_0250.jpg,pores,Sensitive,39.65
+pores_0251.jpg,pores,Sensitive,40.72
+pores_0252.jpg,pores,Sensitive,32.78
+pores_0253.jpg,pores,Sensitive,44.25
+pores_0254.jpg,pores,Sensitive,48.87
+pores_0255.jpg,pores,Oily,55.05
+pores_0256.jpg,pores,Normal,37.15
+pores_0257.jpg,pores,Sensitive,49.38
+pores_0258.jpg,pores,Sensitive,69.36
+pores_0259.jpg,pores,Sensitive,48.17
+pores_0260.jpg,pores,Sensitive,32.59
+pores_0261.jpg,pores,Sensitive,63.98
+pores_0262.jpg,pores,Normal,43.01
+pores_0263.jpg,pores,Sensitive,66.19
+pores_0264.jpg,pores,Sensitive,41.95
+pores_0265.jpg,pores,Sensitive,68.9
+pores_0266.jpg,pores,Sensitive,57.53
+pores_0267.jpg,pores,Sensitive,51.63
+pores_0268.jpg,pores,Oily,38.58
+pores_0269.jpg,pores,Sensitive,60.89
+pores_0270.jpg,pores,Normal,40.03
+pores_0271.jpg,pores,Sensitive,36.9
+pores_0272.jpg,pores,Sensitive,68.82
+pores_0273.jpg,pores,Sensitive,72.93
+pores_0274.jpg,pores,Sensitive,47.24
+pores_0275.jpg,pores,Normal,52.57
+pores_0276.jpg,pores,Sensitive,56.89
+pores_0277.jpg,pores,Sensitive,40.28
+pores_0278.jpg,pores,Normal,43.0
+pores_0279.jpg,pores,Sensitive,51.25
+pores_0280.jpg,pores,Sensitive,56.8
+pores_0281.jpg,pores,Sensitive,38.68
+pores_0282.jpg,pores,Sensitive,60.49
+pores_0283.jpg,pores,Sensitive,41.66
+pores_0284.jpg,pores,Sensitive,35.42
+pores_0285.jpg,pores,Sensitive,33.62
+pores_0286.jpg,pores,Sensitive,64.19
+pores_0287.jpg,pores,Sensitive,55.39
+pores_0288.jpg,pores,Sensitive,63.13
+pores_0289.jpg,pores,Normal,25.5
+pores_0290.jpg,pores,Sensitive,48.25
+pores_0291.jpg,pores,Sensitive,29.08
+pores_0292.jpg,pores,Sensitive,45.73
+pores_0293.jpg,pores,Sensitive,50.36
+pores_0294.jpg,pores,Normal,42.73
+pores_0295.jpg,pores,Sensitive,55.38
+pores_0296.jpg,pores,Normal,46.87
+pores_0297.jpg,pores,Oily,57.35
+pores_0298.jpg,pores,Sensitive,76.08
+pores_0299.jpg,pores,Sensitive,48.28
+pores_0300.jpg,pores,Sensitive,46.56
+pores_0301.jpg,pores,Sensitive,46.74
+pores_0302.jpg,pores,Sensitive,31.91
+pores_0303.jpg,pores,Sensitive,60.12
+pores_0304.jpg,pores,Normal,39.94
+pores_0305.jpg,pores,Sensitive,53.37
+pores_0306.jpg,pores,Normal,41.18
+pores_0307.jpg,pores,Oily,32.71
+pores_0308.jpg,pores,Sensitive,40.62
+pores_0309.jpg,pores,Sensitive,37.13
+pores_0310.jpg,pores,Sensitive,50.49
+pores_0311.jpg,pores,Sensitive,45.25
+pores_0312.jpg,pores,Sensitive,39.5
+pores_0313.jpg,pores,Sensitive,39.64
+pores_0314.jpg,pores,Sensitive,59.37
+pores_0315.jpg,pores,Sensitive,39.22
+pores_0316.jpg,pores,Sensitive,50.79
+pores_0317.jpg,pores,Sensitive,30.69
+pores_0318.jpg,pores,Sensitive,80.02
+pores_0319.jpg,pores,Sensitive,58.91
+pores_0320.jpg,pores,Sensitive,56.3
+pores_0321.jpg,pores,Sensitive,32.91
+pores_0322.jpg,pores,Sensitive,59.85
+pores_0323.jpg,pores,Sensitive,50.79
+pores_0324.jpg,pores,Sensitive,62.13
+pores_0325.jpg,pores,Normal,42.0
+pores_0326.jpg,pores,Normal,32.38
+pores_0327.jpg,pores,Normal,44.69
+pores_0328.jpg,pores,Sensitive,50.87
+pores_0329.jpg,pores,Oily,29.52
+pores_0330.jpg,pores,Sensitive,33.51
+pores_0331.jpg,pores,Sensitive,30.93
+pores_0332.jpg,pores,Sensitive,51.39
+pores_0333.jpg,pores,Sensitive,50.87
+pores_0334.jpg,pores,Normal,58.68
+pores_0336.jpg,pores,Sensitive,60.19
+pores_0337.jpg,pores,Sensitive,46.84
+pores_0338.jpg,pores,Oily,39.12
+pores_0339.jpg,pores,Sensitive,39.13
+pores_0340.jpg,pores,Normal,31.09
+pores_0341.jpg,pores,Sensitive,36.38
+pores_0342.jpg,pores,Sensitive,78.11
+pores_0343.jpg,pores,Sensitive,54.2
+pores_0344.jpg,pores,Sensitive,38.75
+pores_0345.jpg,pores,Sensitive,56.92
+pores_0346.jpg,pores,Sensitive,54.03
+pores_0348.jpg,pores,Normal,33.37
+pores_0349.jpg,pores,Sensitive,44.85
+pores_0350.jpg,pores,Sensitive,45.95
+pores_0351.jpg,pores,Normal,34.11
+pores_0353.jpg,pores,Sensitive,41.12
+pores_0354.jpg,pores,Sensitive,43.66
+pores_0355.jpg,pores,Sensitive,61.47
+pores_0356.jpg,pores,Sensitive,46.93
+pores_0357.jpg,pores,Sensitive,42.78
+pores_0358.jpg,pores,Normal,58.92
+pores_0359.jpg,pores,Sensitive,49.93
+pores_0360.jpg,pores,Sensitive,61.76
+pores_0361.jpg,pores,Sensitive,71.5
+pores_0362.jpg,pores,Sensitive,49.03
+pores_0363.jpg,pores,Sensitive,45.07
+pores_0364.jpg,pores,Normal,40.68
+pores_0365.jpg,pores,Sensitive,34.19
+pores_0366.jpg,pores,Sensitive,44.37
+pores_0367.jpg,pores,Sensitive,60.33
+pores_0368.jpg,pores,Sensitive,36.55
+pores_0369.jpg,pores,Sensitive,80.24
+pores_0370.jpg,pores,Sensitive,36.27
+pores_0371.jpg,pores,Oily,39.36
+pores_0372.jpg,pores,Sensitive,78.87
+pores_0373.jpg,pores,Sensitive,45.65
+pores_0374.jpg,pores,Normal,45.59
+pores_0375.jpg,pores,Sensitive,54.81
+pores_0376.jpg,pores,Sensitive,47.84
+pores_0377.jpg,pores,Sensitive,74.92
+pores_0378.jpg,pores,Sensitive,35.8
+pores_0379.jpg,pores,Sensitive,65.02
+pores_0380.jpg,pores,Sensitive,80.84
+pores_0381.jpg,pores,Oily,34.76
+pores_0382.jpg,pores,Sensitive,46.23
+pores_0383.jpg,pores,Sensitive,34.91
+pores_0384.jpg,pores,Sensitive,31.33
+pores_0385.jpg,pores,Sensitive,43.1
+pores_0386.jpg,pores,Sensitive,51.87
+pores_0387.jpg,pores,Sensitive,47.85
+pores_0388.jpg,pores,Sensitive,48.75
+pores_0389.jpg,pores,Sensitive,50.95
+pores_0390.jpg,pores,Sensitive,52.1
+pores_0391.jpg,pores,Sensitive,51.83
+pores_0392.jpg,pores,Sensitive,71.83
+pores_0393.jpg,pores,Sensitive,46.26
+pores_0394.jpg,pores,Sensitive,38.86
+pores_0395.jpg,pores,Sensitive,55.39
+pores_0396.jpg,pores,Sensitive,55.83
+pores_0397.jpg,pores,Oily,42.62
+pores_0398.jpg,pores,Sensitive,43.12
+pores_0399.jpg,pores,Sensitive,34.91
+pores_0400.jpg,pores,Sensitive,56.22
+pores_replacement_0001.jpg,pores,Sensitive,28.67
+pores_replacement_0002.jpg,pores,Sensitive,78.21
+pores_replacement_0003.jpg,pores,Normal,53.53
+wrinkles_0001.jpg,wrinkles,Sensitive,56.34
+wrinkles_0002.jpg,wrinkles,Sensitive,66.2
+wrinkles_0003.jpg,wrinkles,Sensitive,42.35
+wrinkles_0004.jpg,wrinkles,Sensitive,75.15
+wrinkles_0005.jpg,wrinkles,Sensitive,59.04
+wrinkles_0006.jpg,wrinkles,Sensitive,44.5
+wrinkles_0007.jpg,wrinkles,Sensitive,72.26
+wrinkles_0008.jpg,wrinkles,Sensitive,45.03
+wrinkles_0009.jpg,wrinkles,Sensitive,31.58
+wrinkles_0010.jpg,wrinkles,Sensitive,56.37
+wrinkles_0011.jpg,wrinkles,Sensitive,46.34
+wrinkles_0012.jpg,wrinkles,Acne,37.98
+wrinkles_0013.jpg,wrinkles,Sensitive,64.37
+wrinkles_0014.jpg,wrinkles,Sensitive,51.9
+wrinkles_0015.jpg,wrinkles,Sensitive,52.93
+wrinkles_0016.jpg,wrinkles,Sensitive,36.99
+wrinkles_0017.jpg,wrinkles,Dry,40.19
+wrinkles_0018.jpg,wrinkles,Sensitive,48.67
+wrinkles_0019.jpg,wrinkles,Sensitive,47.06
+wrinkles_0020.jpg,wrinkles,Sensitive,83.04
+wrinkles_0021.jpg,wrinkles,Sensitive,65.23
+wrinkles_0022.jpg,wrinkles,Sensitive,40.08
+wrinkles_0023.jpg,wrinkles,Sensitive,46.4
+wrinkles_0024.jpg,wrinkles,Sensitive,71.1
+wrinkles_0025.jpg,wrinkles,Sensitive,49.1
+wrinkles_0026.jpg,wrinkles,Combination,27.38
+wrinkles_0027.jpg,wrinkles,Sensitive,60.54
+wrinkles_0028.jpg,wrinkles,Sensitive,43.31
+wrinkles_0029.jpg,wrinkles,Sensitive,42.02
+wrinkles_0030.jpg,wrinkles,Sensitive,76.75
+wrinkles_0031.jpg,wrinkles,Sensitive,46.31
+wrinkles_0032.jpg,wrinkles,Sensitive,47.37
+wrinkles_0033.jpg,wrinkles,Sensitive,35.19
+wrinkles_0034.jpg,wrinkles,Sensitive,48.47
+wrinkles_0035.jpg,wrinkles,Sensitive,42.32
+wrinkles_0036.jpg,wrinkles,Sensitive,75.07
+wrinkles_0037.jpg,wrinkles,Sensitive,58.77
+wrinkles_0038.jpg,wrinkles,Dry,38.49
+wrinkles_0039.jpg,wrinkles,Sensitive,46.07
+wrinkles_0040.jpg,wrinkles,Sensitive,31.61
+wrinkles_0041.jpg,wrinkles,Sensitive,55.84
+wrinkles_0042.jpg,wrinkles,Sensitive,56.74
+wrinkles_0043.jpg,wrinkles,Sensitive,70.87
+wrinkles_0044.jpg,wrinkles,Normal,42.33
+wrinkles_0045.jpg,wrinkles,Sensitive,41.79
+wrinkles_0046.jpg,wrinkles,Sensitive,45.04
+wrinkles_0047.jpg,wrinkles,Sensitive,67.23
+wrinkles_0048.jpg,wrinkles,Sensitive,42.31
+wrinkles_0049.jpg,wrinkles,Sensitive,33.63
+wrinkles_0050.jpg,wrinkles,Sensitive,61.92
+wrinkles_0051.jpg,wrinkles,Oily,46.98
+wrinkles_0052.jpg,wrinkles,Sensitive,83.63
+wrinkles_0053.jpg,wrinkles,Sensitive,86.24
+wrinkles_0054.jpg,wrinkles,Sensitive,42.21
+wrinkles_0055.jpg,wrinkles,Sensitive,66.0
+wrinkles_0056.jpg,wrinkles,Dry,35.1
+wrinkles_0057.jpg,wrinkles,Sensitive,64.02
+wrinkles_0058.jpg,wrinkles,Sensitive,58.37
+wrinkles_0059.jpg,wrinkles,Dry,43.52
+wrinkles_0060.jpg,wrinkles,Sensitive,71.43
+wrinkles_0061.jpg,wrinkles,Sensitive,71.56
+wrinkles_0062.jpg,wrinkles,Dry,40.05
+wrinkles_0063.jpg,wrinkles,Sensitive,80.21
+wrinkles_0064.jpg,wrinkles,Sensitive,54.06
+wrinkles_0065.jpg,wrinkles,Acne,32.25
+wrinkles_0066.jpg,wrinkles,Sensitive,41.93
+wrinkles_0067.jpg,wrinkles,Sensitive,42.21
+wrinkles_0068.jpg,wrinkles,Sensitive,67.81
+wrinkles_0069.jpg,wrinkles,Sensitive,56.1
+wrinkles_0070.jpg,wrinkles,Sensitive,43.09
+wrinkles_0071.jpg,wrinkles,Normal,36.29
+wrinkles_0072.jpg,wrinkles,Sensitive,73.3
+wrinkles_0073.jpg,wrinkles,Sensitive,73.95
+wrinkles_0074.jpg,wrinkles,Sensitive,54.36
+wrinkles_0075.jpg,wrinkles,Sensitive,64.63
+wrinkles_0076.jpg,wrinkles,Sensitive,38.56
+wrinkles_0077.jpg,wrinkles,Sensitive,64.79
+wrinkles_0078.jpg,wrinkles,Sensitive,59.79
+wrinkles_0079.jpg,wrinkles,Sensitive,52.43
+wrinkles_0080.jpg,wrinkles,Sensitive,70.65
+wrinkles_0081.jpg,wrinkles,Sensitive,62.98
+wrinkles_0082.jpg,wrinkles,Sensitive,67.76
+wrinkles_0083.jpg,wrinkles,Normal,32.23
+wrinkles_0084.jpg,wrinkles,Sensitive,55.0
+wrinkles_0085.jpg,wrinkles,Sensitive,40.61
+wrinkles_0086.jpg,wrinkles,Sensitive,71.2
+wrinkles_0087.jpg,wrinkles,Sensitive,41.35
+wrinkles_0088.jpg,wrinkles,Dry,33.9
+wrinkles_0089.jpg,wrinkles,Sensitive,41.27
+wrinkles_0090.jpg,wrinkles,Sensitive,77.5
+wrinkles_0091.jpg,wrinkles,Sensitive,69.05
+wrinkles_0092.jpg,wrinkles,Sensitive,86.61
+wrinkles_0093.jpg,wrinkles,Sensitive,42.27
+wrinkles_0094.jpg,wrinkles,Sensitive,57.87
+wrinkles_0095.jpg,wrinkles,Sensitive,68.26
+wrinkles_0096.jpg,wrinkles,Sensitive,42.12
+wrinkles_0097.jpg,wrinkles,Sensitive,68.29
+wrinkles_0098.jpg,wrinkles,Sensitive,43.02
+wrinkles_0099.jpg,wrinkles,Sensitive,34.09
+wrinkles_0100.jpg,wrinkles,Sensitive,85.56
+wrinkles_0101.jpg,wrinkles,Sensitive,37.3
+wrinkles_0102.jpg,wrinkles,Sensitive,47.28
+wrinkles_0103.jpg,wrinkles,Sensitive,36.25
+wrinkles_0104.jpg,wrinkles,Sensitive,74.36
+wrinkles_0105.jpg,wrinkles,Sensitive,46.32
+wrinkles_0106.jpg,wrinkles,Sensitive,54.96
+wrinkles_0107.jpg,wrinkles,Sensitive,35.49
+wrinkles_0108.jpg,wrinkles,Sensitive,31.98
+wrinkles_0109.jpg,wrinkles,Sensitive,78.91
+wrinkles_0110.jpg,wrinkles,Sensitive,66.03
+wrinkles_0111.jpg,wrinkles,Sensitive,60.66
+wrinkles_0112.jpg,wrinkles,Sensitive,66.88
+wrinkles_0113.jpg,wrinkles,Sensitive,48.26
+wrinkles_0114.jpg,wrinkles,Oily,47.42
+wrinkles_0115.jpg,wrinkles,Sensitive,75.18
+wrinkles_0116.jpg,wrinkles,Sensitive,59.71
+wrinkles_0117.jpg,wrinkles,Sensitive,50.52
+wrinkles_0118.jpg,wrinkles,Sensitive,72.94
+wrinkles_0119.jpg,wrinkles,Acne,31.11
+wrinkles_0120.jpg,wrinkles,Sensitive,70.08
+wrinkles_0121.jpg,wrinkles,Sensitive,75.18
+wrinkles_0122.jpg,wrinkles,Sensitive,78.53
+wrinkles_0123.jpg,wrinkles,Sensitive,57.78
+wrinkles_0124.jpg,wrinkles,Sensitive,42.14
+wrinkles_0125.jpg,wrinkles,Dry,45.82
+wrinkles_0126.jpg,wrinkles,Sensitive,54.37
+wrinkles_0127.jpg,wrinkles,Oily,33.58
+wrinkles_0128.jpg,wrinkles,Sensitive,41.86
+wrinkles_0129.jpg,wrinkles,Sensitive,65.53
+wrinkles_0130.jpg,wrinkles,Sensitive,45.99
+wrinkles_0131.jpg,wrinkles,Oily,39.4
+wrinkles_0132.jpg,wrinkles,Sensitive,61.4
+wrinkles_0133.jpg,wrinkles,Sensitive,61.3
+wrinkles_0134.jpg,wrinkles,Dry,23.26
+wrinkles_0135.jpg,wrinkles,Sensitive,36.25
+wrinkles_0136.jpg,wrinkles,Sensitive,76.74
+wrinkles_0137.jpg,wrinkles,Sensitive,75.55
+wrinkles_0138.jpg,wrinkles,Oily,44.72
+wrinkles_0139.jpg,wrinkles,Sensitive,52.4
+wrinkles_0140.jpg,wrinkles,Sensitive,73.68
+wrinkles_0141.jpg,wrinkles,Sensitive,43.02
+wrinkles_0142.jpg,wrinkles,Sensitive,75.13
+wrinkles_0143.jpg,wrinkles,Sensitive,54.76
+wrinkles_0144.jpg,wrinkles,Sensitive,80.58
+wrinkles_0145.jpg,wrinkles,Sensitive,57.51
+wrinkles_0146.jpg,wrinkles,Sensitive,46.42
+wrinkles_0147.jpg,wrinkles,Sensitive,67.95
+wrinkles_0148.jpg,wrinkles,Sensitive,48.66
+wrinkles_0149.jpg,wrinkles,Sensitive,72.65
+wrinkles_0150.jpg,wrinkles,Sensitive,48.38
+wrinkles_0151.jpg,wrinkles,Sensitive,38.66
+wrinkles_0152.jpg,wrinkles,Sensitive,34.5
+wrinkles_0153.jpg,wrinkles,Sensitive,42.42
+wrinkles_0154.jpg,wrinkles,Sensitive,58.38
+wrinkles_0155.jpg,wrinkles,Sensitive,73.93
+wrinkles_0156.jpg,wrinkles,Dry,33.34
+wrinkles_0157.jpg,wrinkles,Acne,32.98
+wrinkles_0158.jpg,wrinkles,Sensitive,52.09
+wrinkles_0159.jpg,wrinkles,Sensitive,52.83
+wrinkles_0160.jpg,wrinkles,Sensitive,50.41
+wrinkles_0161.jpg,wrinkles,Sensitive,42.95
+wrinkles_0162.jpg,wrinkles,Sensitive,68.1
+wrinkles_0163.jpg,wrinkles,Sensitive,52.19
+wrinkles_0164.jpg,wrinkles,Acne,45.93
+wrinkles_0165.jpg,wrinkles,Sensitive,55.45
+wrinkles_0166.jpg,wrinkles,Sensitive,51.91
+wrinkles_0167.jpg,wrinkles,Dry,29.77
+wrinkles_0168.jpg,wrinkles,Dry,31.3
+wrinkles_0169.jpg,wrinkles,Dry,42.17
+wrinkles_0170.jpg,wrinkles,Sensitive,41.59
+wrinkles_0171.jpg,wrinkles,Sensitive,81.79
+wrinkles_0172.jpg,wrinkles,Sensitive,57.64
+wrinkles_0173.jpg,wrinkles,Dry,41.65
+wrinkles_0174.jpg,wrinkles,Sensitive,28.69
+wrinkles_0175.jpg,wrinkles,Sensitive,45.75
+wrinkles_0176.jpg,wrinkles,Sensitive,69.58
+wrinkles_0177.jpg,wrinkles,Oily,35.27
+wrinkles_0178.jpg,wrinkles,Sensitive,78.18
+wrinkles_0179.jpg,wrinkles,Sensitive,51.36
+wrinkles_0180.jpg,wrinkles,Sensitive,29.7
+wrinkles_0181.jpg,wrinkles,Normal,46.99
+wrinkles_0182.jpg,wrinkles,Acne,31.75
+wrinkles_0183.jpg,wrinkles,Sensitive,56.63
+wrinkles_0184.jpg,wrinkles,Sensitive,67.84
+wrinkles_0185.jpg,wrinkles,Sensitive,59.1
+wrinkles_0186.jpg,wrinkles,Sensitive,49.51
+wrinkles_0187.jpg,wrinkles,Sensitive,82.81
+wrinkles_0188.jpg,wrinkles,Sensitive,84.41
+wrinkles_0189.jpg,wrinkles,Sensitive,46.3
+wrinkles_0190.jpg,wrinkles,Sensitive,66.38
+wrinkles_0191.jpg,wrinkles,Sensitive,33.01
+wrinkles_0192.jpg,wrinkles,Sensitive,66.56
+wrinkles_0193.jpg,wrinkles,Normal,32.5
+wrinkles_0194.jpg,wrinkles,Sensitive,64.49
+wrinkles_0195.jpg,wrinkles,Oily,34.13
+wrinkles_0196.jpg,wrinkles,Sensitive,42.35
+wrinkles_0197.jpg,wrinkles,Sensitive,65.63
+wrinkles_0198.jpg,wrinkles,Sensitive,37.48
+wrinkles_0199.jpg,wrinkles,Sensitive,27.49
+wrinkles_0200.jpg,wrinkles,Sensitive,60.15
+wrinkles_0201.jpg,wrinkles,Sensitive,62.33
+wrinkles_0202.jpg,wrinkles,Sensitive,71.42
+wrinkles_0203.jpg,wrinkles,Sensitive,53.42
+wrinkles_0204.jpg,wrinkles,Normal,34.46
+wrinkles_0205.jpg,wrinkles,Sensitive,56.69
+wrinkles_0206.jpg,wrinkles,Sensitive,66.9
+wrinkles_0207.jpg,wrinkles,Sensitive,64.4
+wrinkles_0208.jpg,wrinkles,Sensitive,61.97
+wrinkles_0209.jpg,wrinkles,Sensitive,49.53
+wrinkles_0210.jpg,wrinkles,Sensitive,47.33
+wrinkles_0211.jpg,wrinkles,Combination,25.97
+wrinkles_0212.jpg,wrinkles,Sensitive,39.35
+wrinkles_0213.jpg,wrinkles,Sensitive,71.64
+wrinkles_0214.jpg,wrinkles,Sensitive,62.7
+wrinkles_0215.jpg,wrinkles,Sensitive,80.99
+wrinkles_0216.jpg,wrinkles,Sensitive,73.64
+wrinkles_0217.jpg,wrinkles,Sensitive,76.73
+wrinkles_0218.jpg,wrinkles,Sensitive,65.41
+wrinkles_0219.jpg,wrinkles,Sensitive,89.69
+wrinkles_0220.jpg,wrinkles,Sensitive,53.84
+wrinkles_0221.jpg,wrinkles,Sensitive,62.54
+wrinkles_0222.jpg,wrinkles,Sensitive,65.28
+wrinkles_0223.jpg,wrinkles,Sensitive,34.21
+wrinkles_0224.jpg,wrinkles,Sensitive,49.85
+wrinkles_0225.jpg,wrinkles,Sensitive,42.89
+wrinkles_0226.jpg,wrinkles,Sensitive,62.58
+wrinkles_0227.jpg,wrinkles,Sensitive,77.19
+wrinkles_0228.jpg,wrinkles,Sensitive,53.55
+wrinkles_0229.jpg,wrinkles,Sensitive,46.66
+wrinkles_0230.jpg,wrinkles,Sensitive,42.91
+wrinkles_0231.jpg,wrinkles,Sensitive,33.76
+wrinkles_0232.jpg,wrinkles,Sensitive,55.14
+wrinkles_0233.jpg,wrinkles,Sensitive,32.5
+wrinkles_0234.jpg,wrinkles,Sensitive,79.76
+wrinkles_0235.jpg,wrinkles,Sensitive,73.01
+wrinkles_0236.jpg,wrinkles,Sensitive,41.9
+wrinkles_0237.jpg,wrinkles,Sensitive,39.3
+wrinkles_0238.jpg,wrinkles,Sensitive,83.33
+wrinkles_0239.jpg,wrinkles,Sensitive,40.48
+wrinkles_0240.jpg,wrinkles,Sensitive,65.53
+wrinkles_0241.jpg,wrinkles,Acne,38.29
+wrinkles_0242.jpg,wrinkles,Sensitive,59.07
+wrinkles_0243.jpg,wrinkles,Sensitive,68.87
+wrinkles_0244.jpg,wrinkles,Sensitive,56.72
+wrinkles_0245.jpg,wrinkles,Sensitive,82.1
+wrinkles_0246.jpg,wrinkles,Sensitive,55.31
+wrinkles_0247.jpg,wrinkles,Sensitive,38.22
+wrinkles_0248.jpg,wrinkles,Sensitive,64.61
+wrinkles_0249.jpg,wrinkles,Sensitive,68.8
+wrinkles_0250.jpg,wrinkles,Normal,36.82
+wrinkles_0251.jpg,wrinkles,Oily,30.0
+wrinkles_0252.jpg,wrinkles,Sensitive,48.21
+wrinkles_0253.jpg,wrinkles,Sensitive,51.33
+wrinkles_0254.jpg,wrinkles,Sensitive,42.97
+wrinkles_0255.jpg,wrinkles,Sensitive,32.26
+wrinkles_0256.jpg,wrinkles,Sensitive,53.81
+wrinkles_0257.jpg,wrinkles,Sensitive,48.49
+wrinkles_0258.jpg,wrinkles,Sensitive,39.87
+wrinkles_0259.jpg,wrinkles,Sensitive,44.72
+wrinkles_0260.jpg,wrinkles,Sensitive,53.26
+wrinkles_0261.jpg,wrinkles,Sensitive,42.16
+wrinkles_0262.jpg,wrinkles,Sensitive,59.81
+wrinkles_0263.jpg,wrinkles,Sensitive,57.25
+wrinkles_0264.jpg,wrinkles,Oily,36.48
+wrinkles_0265.jpg,wrinkles,Sensitive,42.69
+wrinkles_0266.jpg,wrinkles,Sensitive,33.84
+wrinkles_0267.jpg,wrinkles,Sensitive,75.4
+wrinkles_0268.jpg,wrinkles,Sensitive,50.69
+wrinkles_0269.jpg,wrinkles,Sensitive,76.95
+wrinkles_0270.jpg,wrinkles,Sensitive,64.6
+wrinkles_0271.jpg,wrinkles,Sensitive,70.98
+wrinkles_0272.jpg,wrinkles,Sensitive,67.66
+wrinkles_0273.jpg,wrinkles,Oily,49.98
+wrinkles_0274.jpg,wrinkles,Sensitive,81.77
+wrinkles_0275.jpg,wrinkles,Sensitive,47.49
+wrinkles_0276.jpg,wrinkles,Sensitive,35.86
+wrinkles_0277.jpg,wrinkles,Sensitive,52.44
+wrinkles_0278.jpg,wrinkles,Sensitive,71.53
+wrinkles_0279.jpg,wrinkles,Sensitive,69.11
+wrinkles_0280.jpg,wrinkles,Sensitive,64.91
+wrinkles_0281.jpg,wrinkles,Sensitive,67.27
+wrinkles_0282.jpg,wrinkles,Sensitive,66.26
+wrinkles_0283.jpg,wrinkles,Sensitive,60.29
+wrinkles_0284.jpg,wrinkles,Sensitive,67.43
+wrinkles_0285.jpg,wrinkles,Sensitive,43.67
+wrinkles_0286.jpg,wrinkles,Sensitive,39.33
+wrinkles_0287.jpg,wrinkles,Sensitive,69.14
+wrinkles_0288.jpg,wrinkles,Sensitive,34.65
+wrinkles_0289.jpg,wrinkles,Sensitive,60.26
+wrinkles_0290.jpg,wrinkles,Sensitive,59.55
+wrinkles_0291.jpg,wrinkles,Sensitive,59.77
+wrinkles_0292.jpg,wrinkles,Sensitive,39.78
+wrinkles_0293.jpg,wrinkles,Sensitive,47.68
+wrinkles_0294.jpg,wrinkles,Sensitive,51.84
+wrinkles_0295.jpg,wrinkles,Sensitive,68.0
+wrinkles_0296.jpg,wrinkles,Sensitive,59.53
+wrinkles_0297.jpg,wrinkles,Sensitive,54.75
+wrinkles_0298.jpg,wrinkles,Sensitive,40.29
+wrinkles_0299.jpg,wrinkles,Sensitive,81.45
+wrinkles_0300.jpg,wrinkles,Sensitive,67.83
+wrinkles_0301.jpg,wrinkles,Sensitive,70.63
+wrinkles_0302.jpg,wrinkles,Sensitive,66.34
+wrinkles_0303.jpg,wrinkles,Sensitive,62.07
+wrinkles_0304.jpg,wrinkles,Sensitive,60.8
+wrinkles_0305.jpg,wrinkles,Dry,47.91
+wrinkles_0306.jpg,wrinkles,Sensitive,53.82
+wrinkles_0307.jpg,wrinkles,Sensitive,56.98
+wrinkles_0308.jpg,wrinkles,Sensitive,59.98
+wrinkles_0309.jpg,wrinkles,Sensitive,80.48
+wrinkles_0310.jpg,wrinkles,Sensitive,58.91
+wrinkles_0311.jpg,wrinkles,Oily,38.82
+wrinkles_0312.jpg,wrinkles,Oily,39.09
+wrinkles_0313.jpg,wrinkles,Sensitive,73.98
+wrinkles_0314.jpg,wrinkles,Sensitive,54.01
+wrinkles_0315.jpg,wrinkles,Sensitive,70.13
+wrinkles_0316.jpg,wrinkles,Sensitive,39.62
+wrinkles_0317.jpg,wrinkles,Sensitive,41.87
+wrinkles_0318.jpg,wrinkles,Sensitive,67.74
+wrinkles_0319.jpg,wrinkles,Sensitive,55.51
+wrinkles_0320.jpg,wrinkles,Sensitive,61.79
+wrinkles_0321.jpg,wrinkles,Oily,44.26
+wrinkles_0322.jpg,wrinkles,Sensitive,47.52
+wrinkles_0323.jpg,wrinkles,Normal,22.24
+wrinkles_0324.jpg,wrinkles,Sensitive,53.42
+wrinkles_0325.jpg,wrinkles,Sensitive,35.29
+wrinkles_0326.jpg,wrinkles,Sensitive,86.16
+wrinkles_0327.jpg,wrinkles,Sensitive,47.54
+wrinkles_0328.jpg,wrinkles,Oily,24.39
+wrinkles_0329.jpg,wrinkles,Sensitive,65.48
+wrinkles_0330.jpg,wrinkles,Sensitive,70.68
+wrinkles_0331.jpg,wrinkles,Sensitive,50.53
+wrinkles_0332.jpg,wrinkles,Sensitive,46.19
+wrinkles_0333.jpg,wrinkles,Sensitive,67.93
+wrinkles_0334.jpg,wrinkles,Sensitive,48.11
+wrinkles_0335.jpg,wrinkles,Sensitive,56.2
+wrinkles_0336.jpg,wrinkles,Sensitive,44.68
+wrinkles_0337.jpg,wrinkles,Oily,41.61
+wrinkles_0338.jpg,wrinkles,Acne,30.56
+wrinkles_0339.jpg,wrinkles,Sensitive,46.69
+wrinkles_0340.jpg,wrinkles,Sensitive,61.86
+wrinkles_0341.jpg,wrinkles,Sensitive,39.07
+wrinkles_0342.jpg,wrinkles,Sensitive,58.51
+wrinkles_0343.jpg,wrinkles,Sensitive,72.18
+wrinkles_0344.jpg,wrinkles,Sensitive,57.45
+wrinkles_0345.jpg,wrinkles,Sensitive,46.66
+wrinkles_0346.jpg,wrinkles,Acne,38.81
+wrinkles_0347.jpg,wrinkles,Sensitive,67.93
+wrinkles_0348.jpg,wrinkles,Sensitive,51.93
+wrinkles_0349.jpg,wrinkles,Sensitive,42.81
+wrinkles_0350.jpg,wrinkles,Sensitive,67.8
+wrinkles_0351.jpg,wrinkles,Sensitive,51.3
+wrinkles_0352.jpg,wrinkles,Sensitive,66.42
+wrinkles_0353.jpg,wrinkles,Sensitive,80.76
+wrinkles_0354.jpg,wrinkles,Sensitive,37.48
+wrinkles_0355.jpg,wrinkles,Sensitive,75.4
+wrinkles_0356.jpg,wrinkles,Sensitive,56.84
+wrinkles_0357.jpg,wrinkles,Sensitive,38.72
+wrinkles_0358.jpg,wrinkles,Dry,34.5
+wrinkles_0359.jpg,wrinkles,Sensitive,55.35
+wrinkles_0360.jpg,wrinkles,Sensitive,66.61
+wrinkles_0361.jpg,wrinkles,Sensitive,48.13
+wrinkles_0362.jpg,wrinkles,Sensitive,59.82
+wrinkles_0363.jpg,wrinkles,Sensitive,65.2
+wrinkles_0364.jpg,wrinkles,Sensitive,82.15
+wrinkles_0365.jpg,wrinkles,Sensitive,46.42
+wrinkles_0366.jpg,wrinkles,Sensitive,73.15
+wrinkles_0367.jpg,wrinkles,Sensitive,55.93
+wrinkles_0368.jpg,wrinkles,Sensitive,72.86
+wrinkles_0369.jpg,wrinkles,Sensitive,60.77
+wrinkles_0370.jpg,wrinkles,Sensitive,57.16
+wrinkles_0371.jpg,wrinkles,Sensitive,48.74
+wrinkles_0372.jpg,wrinkles,Sensitive,50.88
+wrinkles_0373.jpg,wrinkles,Dry,35.44
+wrinkles_0374.jpg,wrinkles,Acne,34.3
+wrinkles_0375.jpg,wrinkles,Sensitive,75.55
+wrinkles_0376.jpg,wrinkles,Sensitive,62.62
+wrinkles_0377.jpg,wrinkles,Sensitive,53.23
+wrinkles_0378.jpg,wrinkles,Sensitive,33.21
+wrinkles_0379.jpg,wrinkles,Sensitive,71.15
+wrinkles_0380.jpg,wrinkles,Sensitive,80.67
+wrinkles_0381.jpg,wrinkles,Sensitive,73.44
+wrinkles_0382.jpg,wrinkles,Sensitive,59.85
+wrinkles_0383.jpg,wrinkles,Sensitive,58.6
+wrinkles_0384.jpg,wrinkles,Sensitive,72.84
+wrinkles_0385.jpg,wrinkles,Sensitive,73.38
+wrinkles_0386.jpg,wrinkles,Dry,36.79
+wrinkles_0387.jpg,wrinkles,Sensitive,60.03
+wrinkles_0388.jpg,wrinkles,Sensitive,70.69
+wrinkles_0390.jpg,wrinkles,Sensitive,71.46
+wrinkles_0391.jpg,wrinkles,Sensitive,60.47
+wrinkles_0392.jpg,wrinkles,Sensitive,77.52
+wrinkles_0393.jpg,wrinkles,Sensitive,37.07
+wrinkles_0394.jpg,wrinkles,Sensitive,62.05
+wrinkles_0395.jpg,wrinkles,Sensitive,41.67
+wrinkles_0396.jpg,wrinkles,Sensitive,39.73
+wrinkles_0397.jpg,wrinkles,Oily,34.99
+wrinkles_0398.jpg,wrinkles,Sensitive,73.28
+wrinkles_0399.jpg,wrinkles,Sensitive,52.5
+wrinkles_0400.jpg,wrinkles,Sensitive,42.77
+wrinkles_replacement_0001.jpg,wrinkles,Sensitive,71.06

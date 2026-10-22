@@ -1,1319 +1,1037 @@
+
+# ============================================================
+# AI SKINCARE ANALYSIS SYSTEM
+# app.py - Python Flask AI Service
+# ============================================================
+
 import os
 import json
 import datetime
-import hashlib
+import traceback
+from pathlib import Path
 
 import numpy as np
+import jwt
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
+from bson import ObjectId
+from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
-import jwt
-
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
+from werkzeug.utils import secure_filename
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from PIL import Image
 
+# ============================================================
+# LOAD THE EXISTING NODE BACKEND .env
+# ============================================================
 
-# =========================================================
-# FLASK APP
-# =========================================================
+BASE_DIR = Path(__file__).resolve().parent
+
+ENV_CANDIDATES = [
+    BASE_DIR / "backend" / ".env",
+    BASE_DIR.parent / "backend" / ".env",
+    BASE_DIR / ".env",
+    BASE_DIR.parent.parent / "backend" / ".env",
+]
+
+ENV_FILE = next(
+    (candidate for candidate in ENV_CANDIDATES if candidate.is_file()),
+    None,
+)
+
+if ENV_FILE is None:
+    raise RuntimeError(
+        "Cannot find the existing backend/.env file. "
+        "Check the location of app.py."
+    )
+
+load_dotenv(ENV_FILE, override=True)
+
+SECRET_KEY = os.getenv("JWT_SECRET")
+
+if not SECRET_KEY:
+    raise RuntimeError(
+        "JWT_SECRET is missing from the existing backend/.env file."
+    )
+
+JWT_ALGORITHM = "HS256"
+
+print("JWT configuration loaded successfully.")
+print(f"Environment file found: {ENV_FILE}")
+
+# ============================================================
+# FLASK CONFIGURATION
+# ============================================================
 
 app = Flask(__name__)
-
-CORS(
-    app,
-    resources={r"/*": {"origins": "*"}},
-    allow_headers=["Content-Type", "Authorization"],
-    methods=["GET", "POST", "OPTIONS"]
-)
+CORS(app)
 
 bcrypt = Bcrypt(app)
 
-SECRET_KEY = "glowai_super_secret_jwt_key_2026"
+PORT = int(os.getenv("PYTHON_PORT", "5001"))
 
+MAX_IMAGE_SIZE = 10 * 1024 * 1024
 
-# =========================================================
-# MONGODB
-# =========================================================
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
+
+app.config["MAX_CONTENT_LENGTH"] = MAX_IMAGE_SIZE
+
+# ============================================================
+# MONGODB CONFIGURATION
+# ============================================================
+
+MONGO_URI = os.getenv(
+    "MONGO_URI",
+    "mongodb://127.0.0.1:27017/skin_analysis_db",
+)
+
+mongo_client = None
+db = None
+
+users_col = None
+scans_col = None
+reviews_col = None
 
 try:
-
-    client = MongoClient(
-        "mongodb://localhost:27017/",
-        serverSelectionTimeoutMS=2000
+    mongo_client = MongoClient(
+        MONGO_URI,
+        serverSelectionTimeoutMS=5000,
     )
 
-    client.admin.command("ping")
+    mongo_client.admin.command("ping")
 
-    db = client["skin_analysis_db"]
+    db = mongo_client["skin_analysis_db"]
 
     users_col = db["users"]
     scans_col = db["scans"]
     reviews_col = db["reviews"]
 
-    print("✅ Connected to MongoDB (skin_analysis_db).")
+    print("MongoDB connected successfully.")
+    print("Database: skin_analysis_db")
 
-except Exception as e:
-
-    print("❌ MongoDB connection error:", e)
-
-
-# =========================================================
-# MODEL PATH
-# =========================================================
-
-BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
-)
-
-MODEL_PATH = os.path.join(
-    BASE_DIR,
-    "model",
-    "skin_model.keras"
-)
-
-CLASS_INDICES_PATH = os.path.join(
-    BASE_DIR,
-    "model",
-    "class_indices.json"
-)
+except Exception as error:
+    print("MongoDB connection failed:", str(error))
+    print("Database operations will be unavailable until MongoDB connects.")
 
 
-# =========================================================
-# CLASSES
-# =========================================================
+def mongodb_ready():
+    """Check MongoDB availability before database operations."""
+    global mongo_client
 
-CLASSES = [
-    "Acne",
-    "Combination",
-    "Dry",
-    "Normal",
-    "Oily",
-    "Sensitive"
+    if mongo_client is None:
+        return False
+
+    try:
+        mongo_client.admin.command("ping")
+        return True
+    except Exception:
+        return False
+
+
+# ============================================================
+# MODEL CONFIGURATION
+# ============================================================
+
+MODEL_DIR = BASE_DIR / "model"
+
+MODEL_PATHS = [
+    MODEL_DIR / "skin_model.keras",
+    MODEL_DIR / "skin_model.h5",
+    BASE_DIR / "ai_model" / "skin_model.h5",
 ]
 
+CLASS_INDICES_PATHS = [
+    MODEL_DIR / "class_indices.json",
+    BASE_DIR / "ai_model" / "class_indices.json",
+]
 
-# =========================================================
-# LOAD MODEL
-# =========================================================
+IMAGE_SIZE = (224, 224)
 
-model = None
+skin_model = None
+class_indices = {}
 
-if os.path.exists(MODEL_PATH):
 
-    try:
+# ============================================================
+# LOAD TENSORFLOW MODEL
+# ============================================================
 
-        model = load_model(MODEL_PATH)
+try:
+    from tensorflow.keras.models import load_model
 
-        print(
-            f"✅ TensorFlow Model successfully loaded from {MODEL_PATH}."
-        )
-
-    except Exception as e:
-
-        print(
-            "❌ Failed to load TensorFlow model:",
-            e
-        )
-
-else:
-
-    print(
-        f"⚠️ Model not found at: {MODEL_PATH}"
+    model_path = next(
+        (path for path in MODEL_PATHS if path.is_file()),
+        None,
     )
 
+    if model_path is None:
+        print("WARNING: No trained skin model file was found.")
+        print("Model predictions will be unavailable until it is installed.")
 
-# =========================================================
-# CLASS INDICES
-# =========================================================
-
-if os.path.exists(CLASS_INDICES_PATH):
-
-    try:
-
-        with open(
-            CLASS_INDICES_PATH,
-            "r"
-        ) as f:
-
-            class_indices = json.load(f)
-
-        class_indices = {
-            str(k): v
-            for k, v in class_indices.items()
-        }
-
-        print("✅ Class indices loaded.")
-
-    except Exception as e:
-
-        print(
-            "⚠️ Could not load class_indices.json:",
-            e
+    else:
+        skin_model = load_model(
+            str(model_path),
+            custom_objects={
+                "preprocess_input": preprocess_input
+            },
+            compile=False,
         )
 
-        class_indices = {
-            str(i): name
-            for i, name in enumerate(CLASSES)
-        }
+        print("Skin model loaded successfully.")
+        print(f"Model file: {model_path}")
 
-else:
+except Exception as error:
+    print("Could not load TensorFlow model:", str(error))
+    skin_model = None
+    print("Could not load TensorFlow model:", str(error))
+    skin_model = None
+
+
+
+# ============================================================
+# LOAD CLASS INDICES
+# ============================================================
+
+for indices_path in CLASS_INDICES_PATHS:
+    if indices_path.is_file():
+        try:
+            with open(indices_path, "r", encoding="utf-8") as file:
+                loaded_indices = json.load(file)
+
+            # Format: {"acne": 0, "blackheads": 1, ...}
+            if (
+                isinstance(loaded_indices, dict)
+                and loaded_indices
+                and all(
+                    isinstance(value, (int, float))
+                    for value in loaded_indices.values()
+                )
+            ):
+                class_indices = {
+                    int(index): str(label)
+                    for label, index in loaded_indices.items()
+                }
+
+            # Format: {"0": "acne", "1": "blackheads", ...}
+            elif isinstance(loaded_indices, dict):
+                class_indices = {
+                    int(index): str(label)
+                    for index, label in loaded_indices.items()
+                }
+
+            print("Class indices loaded successfully.")
+            print(f"Class indices file: {indices_path}")
+            break
+
+        except Exception as error:
+            print("Could not load class indices:", str(error))
+
+
+# Fallback class names if the class-indices file is unavailable
+
+
+
+# DISPLAY CLASS NAMES
+# This changes displayed labels only. It does not retrain the model.
+DISPLAY_CLASS_NAMES = {
+    0: "acne",
+    1: "oily",
+    2: "dry",
+    3: "sensitive",
+    4: "combination",
+}
+
+if skin_model is not None:
+    output_count = int(skin_model.output_shape[-1])
 
     class_indices = {
-        str(i): name
-        for i, name in enumerate(CLASSES)
+        index: DISPLAY_CLASS_NAMES.get(
+            index,
+            class_indices.get(index, f"class_{index}"),
+        )
+        for index in range(output_count)
     }
+# ============================================================
+# GENERAL HELPERS
+# ============================================================
+
+def json_safe(value):
+    """Convert MongoDB and NumPy values into JSON-compatible values."""
+
+    if isinstance(value, ObjectId):
+        return str(value)
+
+    if isinstance(value, datetime.datetime):
+        return value.isoformat()
+
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+
+    if isinstance(value, np.generic):
+        return value.item()
+
+    if isinstance(value, dict):
+        return {
+            str(key): json_safe(item)
+            for key, item in value.items()
+        }
+
+    if isinstance(value, (list, tuple)):
+        return [json_safe(item) for item in value]
+
+    return value
 
 
-# =========================================================
-# JWT FUNCTION
-# =========================================================
+def allowed_file(filename):
+    if not filename or "." not in filename:
+        return False
+
+    extension = filename.rsplit(".", 1)[1].lower()
+
+    return extension in ALLOWED_EXTENSIONS
+
+
+def safe_object_id(value):
+    """Return ObjectId only for valid MongoDB IDs."""
+    try:
+        return ObjectId(str(value))
+    except Exception:
+        return None
+
+
+# ============================================================
+# JWT AUTHENTICATION
+# ============================================================
 
 def get_user_from_token():
+    """
+    Validate the JWT issued by Node.js.
 
-    auth_header = request.headers.get(
-        "Authorization"
-    )
+    Node and Python must use the same JWT_SECRET and HS256.
+    """
 
-    if not auth_header:
+    auth_header = request.headers.get("Authorization", "")
 
-        return None
+    if not auth_header.startswith("Bearer "):
+        return None, "Authorization token required."
 
-    if not auth_header.startswith(
-        "Bearer "
-    ):
-
-        return None
-
-    token = auth_header.split(
-        " ",
-        1
-    )[1].strip()
+    token = auth_header[7:].strip()
 
     if not token:
-
-        return None
+        return None, "Authorization token is empty."
 
     try:
-
         decoded = jwt.decode(
             token,
             SECRET_KEY,
-            algorithms=["HS256"]
+            algorithms=[JWT_ALGORITHM],
         )
 
-        return decoded.get("user_id")
+        user_id = (
+            decoded.get("user_id")
+            or decoded.get("userId")
+            or decoded.get("id")
+            or decoded.get("sub")
+        )
+
+        if not user_id:
+            return None, "JWT does not contain a user ID."
+
+        # The Node admin login uses a non-MongoDB user ID.
+        if decoded.get("role") == "admin":
+            return None, "Admin accounts cannot perform user skin scans."
+
+        # If a MongoDB ID is supplied, it must be valid.
+        if not safe_object_id(user_id):
+            return None, "JWT contains an invalid user ID."
+
+        return {
+            "user_id": str(user_id),
+            "email": decoded.get("email", ""),
+            "role": decoded.get("role", "user"),
+        }, None
 
     except jwt.ExpiredSignatureError:
-
-        print("⚠️ JWT token expired.")
-
-        return None
+        return None, "Token has expired. Please log in again."
 
     except jwt.InvalidTokenError:
+        return None, "Invalid token signature. Check that Node and Python use the same JWT_SECRET."
 
-        print("⚠️ Invalid JWT token.")
-
-        return None
-
-    except Exception as e:
-
-        print("⚠️ JWT error:", e)
-
-        return None
+    except Exception:
+        return None, "Unable to validate authentication token."
 
 
-# =========================================================
-# HOME
-# =========================================================
+# ============================================================
+# IMAGE PREPROCESSING
+# ============================================================
+
+# ============================================================
+# IMAGE PREPROCESSING
+# ============================================================
+
+def preprocess_image(file_storage):
+    """Prepare an uploaded image for the trained Keras model."""
+
+    image = Image.open(file_storage.stream).convert("RGB")
+    image = image.resize(IMAGE_SIZE)
+
+    image_array = np.asarray(image, dtype=np.float32)
+
+    # The saved model applies MobileNetV2 preprocess_input internally.
+    # Keep pixel values in the [0, 255] range here.
+    return np.expand_dims(image_array, axis=0)
+    """Prepare an uploaded image for the trained Keras model."""
+
+    image = Image.open(file_storage.stream).convert("RGB")
+    image = image.resize(IMAGE_SIZE)
+
+    image_array = np.asarray(image, dtype=np.float32)
+
+    # Keep preprocessing consistent with the training pipeline.
+    # This default assumes the model was trained with pixels / 255.
+    image_array = image_array / 255.0
+
+    return np.expand_dims(image_array, axis=0)
+
+
+# ============================================================
+# MODEL PREDICTION
+# ============================================================
+
+def predict_single_image(file_storage):
+    """Predict skin concern for one image."""
+
+    if skin_model is None:
+        raise RuntimeError(
+            "The trained AI model is unavailable. "
+            "Check the model file path and TensorFlow logs."
+        )
+
+    processed = preprocess_image(file_storage)
+
+    prediction_array = skin_model.predict(
+        processed,
+        verbose=0,
+    )
+
+    probabilities = np.asarray(prediction_array[0], dtype=float)
+
+    if probabilities.size == 0:
+        raise RuntimeError("The AI model returned no predictions.")
+
+    predicted_index = int(np.argmax(probabilities))
+
+    prediction_label = class_indices.get(
+        predicted_index,
+        f"class_{predicted_index}",
+    )
+
+    confidence = float(probabilities[predicted_index])
+
+    all_probabilities = {}
+
+    for index, probability in enumerate(probabilities):
+        label = class_indices.get(index, f"class_{index}")
+        all_probabilities[label] = float(probability)
+
+    return {
+        "prediction": prediction_label,
+        "label": prediction_label,
+        "confidence": confidence,
+        "probabilities": all_probabilities,
+    }
+
+
+# ============================================================
+# HEALTH CHECK
+# ============================================================
 
 @app.route("/", methods=["GET"])
 def home():
-
     return jsonify({
-
         "success": True,
-
-        "message":
-            "AI Skin Analysis Python Server is running!",
-
-        "model_loaded":
-            model is not None,
-
-        "port":
-            5001
-
+        "message": "AI Skincare Python AI Service is running!",
+        "service": "python",
+        "port": PORT,
     })
 
-
-# =========================================================
-# HEALTH
-# =========================================================
 
 @app.route("/health", methods=["GET"])
 def health():
-
     return jsonify({
-
-        "status": "running",
-
-        "model_loaded":
-            model is not None,
-
-        "classes":
-            list(class_indices.values())
-
+        "success": True,
+        "status": "online",
+        "python": "running",
+        "mongodb": "connected" if mongodb_ready() else "disconnected",
+        "model_loaded": skin_model is not None,
+        "class_count": len(class_indices),
     })
 
 
-# =========================================================
+# ============================================================
 # REGISTER
-# =========================================================
+# ============================================================
 
-@app.route(
-    "/api/register",
-    methods=["POST"]
-)
+@app.route("/register", methods=["POST"])
+@app.route("/api/register", methods=["POST"])
 def register():
+    if not mongodb_ready():
+        return jsonify({
+            "success": False,
+            "message": "MongoDB is not connected.",
+        }), 503
 
     try:
+        data = request.get_json(silent=True) or {}
 
-        data = request.get_json(
-            silent=True
-        )
-
-        if not data:
-
-            return jsonify({
-
-                "success": False,
-
-                "message":
-                    "Invalid request data."
-
-            }), 400
-
-        name = data.get(
-            "name",
-            ""
+        name = str(
+            data.get("name") or data.get("username") or "User"
         ).strip()
 
-        email = data.get(
-            "email",
-            ""
-        ).strip().lower()
+        email = str(data.get("email", "")).strip().lower()
+        password = str(data.get("password", ""))
 
-        password = data.get(
-            "password",
-            ""
-        )
-
-        if not name:
-
+        if not email or not password:
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Name is required."
-
-            }), 400
-
-        if not email:
-
-            return jsonify({
-
-                "success": False,
-
-                "message":
-                    "Email is required."
-
-            }), 400
-
-        if not password:
-
-            return jsonify({
-
-                "success": False,
-
-                "message":
-                    "Password is required."
-
+                "message": "Email and password are required.",
             }), 400
 
         if len(password) < 6:
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Password must contain at least 6 characters."
-
+                "message": "Password must contain at least 6 characters.",
             }), 400
 
-        existing_user = users_col.find_one({
-
-            "email": email
-
-        })
-
-        if existing_user:
-
+        if users_col.find_one({"email": email}):
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Email already registered."
-
+                "message": "User already exists.",
             }), 409
 
-        password_hash = (
-            bcrypt
-            .generate_password_hash(password)
-            .decode("utf-8")
-        )
+        hashed_password = bcrypt.generate_password_hash(
+            password
+        ).decode("utf-8")
 
-        result = users_col.insert_one({
-
+        user_document = {
             "name": name,
-
             "email": email,
+            "password": hashed_password,
+            "createdAt": datetime.datetime.now(datetime.timezone.utc),
+        }
 
-            "password": password_hash,
-
-            "createdAt":
-                datetime.datetime.utcnow()
-
-        })
-
-        user_id = str(
-            result.inserted_id
-        )
+        result = users_col.insert_one(user_document)
 
         token = jwt.encode(
-
             {
-                "user_id": user_id,
-
-                "email": email
+                "user_id": str(result.inserted_id),
+                "email": email,
+                "role": "user",
+                "exp": datetime.datetime.now(
+                    datetime.timezone.utc
+                ) + datetime.timedelta(days=7),
             },
-
             SECRET_KEY,
-
-            algorithm="HS256"
-
+            algorithm=JWT_ALGORITHM,
         )
 
         return jsonify({
-
             "success": True,
-
-            "message":
-                "Account created successfully.",
-
+            "message": "Registration successful.",
             "token": token,
-
             "user": {
-
-                "id": user_id,
-
+                "id": str(result.inserted_id),
+                "_id": str(result.inserted_id),
                 "name": name,
-
-                "email": email
-
-            }
-
+                "username": name,
+                "email": email,
+                "role": "user",
+                "isAdmin": False,
+            },
         }), 201
 
-    except Exception as e:
-
-        print(
-            "❌ REGISTER ERROR:",
-            e
-        )
+    except Exception as error:
+        print("Python registration error:", str(error))
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                "Registration failed.",
-
-            "error":
-                str(e)
-
+            "message": "Registration failed.",
         }), 500
 
 
-# =========================================================
+# ============================================================
 # LOGIN
-# =========================================================
+# ============================================================
 
-@app.route(
-    "/api/login",
-    methods=["POST"]
-)
+@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
+    if not mongodb_ready():
+        return jsonify({
+            "success": False,
+            "message": "MongoDB is not connected.",
+        }), 503
 
     try:
+        data = request.get_json(silent=True) or {}
 
-        data = request.get_json(
-            silent=True
-        )
-
-        if not data:
-
-            return jsonify({
-
-                "success": False,
-
-                "message":
-                    "Invalid request data."
-
-            }), 400
-
-        email = data.get(
-            "email",
-            ""
-        ).strip().lower()
-
-        password = data.get(
-            "password",
-            ""
-        )
+        email = str(data.get("email", "")).strip().lower()
+        password = str(data.get("password", ""))
 
         if not email or not password:
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Email and password are required."
-
+                "message": "Email and password are required.",
             }), 400
 
-        user = users_col.find_one({
-
-            "email": email
-
-        })
+        user = users_col.find_one({"email": email})
 
         if not user:
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Invalid email or password."
-
+                "message": "Invalid email or password.",
             }), 401
 
-        password_valid = (
-            bcrypt.check_password_hash(
-                user["password"],
-                password
-            )
-        )
+        stored_password = user.get("password", "")
 
-        if not password_valid:
-
+        if not bcrypt.check_password_hash(
+            stored_password,
+            password,
+        ):
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Invalid email or password."
-
+                "message": "Invalid email or password.",
             }), 401
 
-        user_id = str(
-            user["_id"]
-        )
+        user_id = str(user["_id"])
 
         token = jwt.encode(
-
             {
                 "user_id": user_id,
-
-                "email": user["email"]
-
+                "email": email,
+                "role": "user",
+                "exp": datetime.datetime.now(
+                    datetime.timezone.utc
+                ) + datetime.timedelta(days=7),
             },
-
             SECRET_KEY,
-
-            algorithm="HS256"
-
+            algorithm=JWT_ALGORITHM,
         )
 
         return jsonify({
-
             "success": True,
-
-            "message":
-                "Login successful.",
-
+            "message": "Login successful.",
             "token": token,
-
             "user": {
-
                 "id": user_id,
-
-                "name":
-                    user.get(
-                        "name",
-                        "User"
-                    ),
-
-                "email":
-                    user["email"]
-
-            }
-
+                "_id": user_id,
+                "name": user.get("name", "User"),
+                "username": user.get("name", "User"),
+                "email": email,
+                "role": "user",
+                "isAdmin": False,
+            },
         })
 
-    except Exception as e:
-
-        print(
-            "❌ LOGIN ERROR:",
-            e
-        )
+    except Exception as error:
+        print("Python login error:", str(error))
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                "Login failed.",
-
-            "error":
-                str(e)
-
+            "message": "Login failed.",
         }), 500
 
 
-# =========================================================
-# DYNAMIC FALLBACK PREDICTION
-# =========================================================
+# ============================================================
+# SKIN ANALYSIS / PREDICT
+# ============================================================
 
-def generate_dynamic_scan_predictions(
-    image_path,
-    num_classes=6
-):
-
-    try:
-
-        img = image.load_img(
-            image_path,
-            target_size=(64, 64)
-        )
-
-        img_arr = image.img_to_array(
-            img
-        )
-
-        r_mean = np.mean(
-            img_arr[:, :, 0]
-        )
-
-        g_mean = np.mean(
-            img_arr[:, :, 1]
-        )
-
-        b_mean = np.mean(
-            img_arr[:, :, 2]
-        )
-
-        std_dev = np.std(
-            img_arr
-        )
-
-        img_bytes = img_arr.tobytes()
-
-        hash_seed = (
-            int(
-                hashlib.md5(
-                    img_bytes
-                ).hexdigest(),
-                16
-            )
-            % (10 ** 6)
-        )
-
-        np.random.seed(
-
-            hash_seed
-            + int(
-                r_mean
-                + g_mean
-                + b_mean
-                + std_dev
-            )
-
-        )
-
-        return np.random.dirichlet(
-
-            np.ones(num_classes)
-            * 1.5
-
-        )
-
-    except Exception:
-
-        return np.random.dirichlet(
-
-            np.ones(num_classes)
-
-        )
-
-
-# =========================================================
-# PREDICT
-# =========================================================
-
-@app.route(
-    "/predict",
-    methods=["POST"]
-)
+@app.route("/predict", methods=["POST"])
 def predict():
+    # Verify the original JWT forwarded by Node.
+    authenticated_user, auth_error = get_user_from_token()
 
-    # -----------------------------------------
-    # CHECK LOGIN
-    # -----------------------------------------
-
-    user_id = get_user_from_token()
-
-    if not user_id:
-
+    if auth_error:
         return jsonify({
-
             "success": False,
-
-            "message":
-                "Unauthorized scan attempt. Please login."
-
+            "message": auth_error,
         }), 401
 
-
-    # -----------------------------------------
-    # GET IMAGES
-    # -----------------------------------------
-
-    uploaded_files = []
-
-    for key in [
-        "front",
-        "left",
-        "right",
-        "image"
-    ]:
-
-        if (
-
-            key in request.files
-
-            and
-
-            request.files[key].filename != ""
-
-        ):
-
-            uploaded_files.append(
-
-                (
-                    key,
-                    request.files[key]
-                )
-
-            )
-
-
-    if not uploaded_files:
-
+    if not mongodb_ready():
         return jsonify({
-
             "success": False,
+            "message": "MongoDB is not connected.",
+        }), 503
 
-            "message":
-                "No image files provided."
+    if skin_model is None:
+        return jsonify({
+            "success": False,
+            "message": (
+                "The trained skin model is not loaded. "
+                "Check the model file and restart the Python service."
+            ),
+        }), 503
 
-        }), 400
+    user_id = authenticated_user["user_id"]
+    mongo_user_id = safe_object_id(user_id)
 
-
-    predictions_list = []
-
-    temp_files = []
-
+    if mongo_user_id is None:
+        return jsonify({
+            "success": False,
+            "message": "Invalid authenticated user ID.",
+        }), 401
 
     try:
+        # Optional consistency check against the authenticated identity.
+        forwarded_user_id = request.headers.get("X-User-ID")
 
-        # -----------------------------------------
-        # PROCESS EACH IMAGE
-        # -----------------------------------------
+        if forwarded_user_id and forwarded_user_id != user_id:
+            return jsonify({
+                "success": False,
+                "message": "User ID does not match authenticated token.",
+            }), 403
 
-        for angle_key, file_obj in uploaded_files:
+        image_fields = ("front", "left", "right")
+        image_predictions = []
+        image_flags = {}
 
-            temp_path = os.path.join(
+        for field in image_fields:
+            uploaded = request.files.get(field)
 
-                BASE_DIR,
+            if not uploaded or not uploaded.filename:
+                image_flags[field] = False
+                continue
 
-                f"temp_{angle_key}_{os.getpid()}.jpg"
+            if not allowed_file(uploaded.filename):
+                return jsonify({
+                    "success": False,
+                    "message": (
+                        f"Unsupported image type for {field}. "
+                        "Use JPG, JPEG, PNG, or WEBP."
+                    ),
+                }), 400
 
+            image_flags[field] = True
+
+            prediction_result = predict_single_image(uploaded)
+
+            image_predictions.append({
+                "angle": field,
+                **prediction_result,
+            })
+
+        if not image_predictions:
+            return jsonify({
+                "success": False,
+                "message": "Please upload at least one image.",
+            }), 400
+
+        # Average probabilities across available angles.
+        probability_keys = set()
+
+        for item in image_predictions:
+            probability_keys.update(
+                item["probabilities"].keys()
             )
 
-            file_obj.save(
-                temp_path
+        averaged_probabilities = {}
+
+        for label in probability_keys:
+            values = [
+                item["probabilities"].get(label, 0.0)
+                for item in image_predictions
+            ]
+
+            averaged_probabilities[label] = float(
+                np.mean(values)
             )
 
-            temp_files.append(
-                temp_path
-            )
-
-
-            # -----------------------------------------
-            # MODEL PREDICTION
-            # -----------------------------------------
-
-            if model is not None:
-
-                img = image.load_img(
-
-                    temp_path,
-
-                    target_size=(
-                        224,
-                        224
-                    )
-
-                )
-
-                img_array = (
-                    image.img_to_array(img)
-                )
-
-                img_array = np.expand_dims(
-
-                    img_array,
-
-                    axis=0
-
-                )
-
-                img_array = preprocess_input(
-                    img_array
-                )
-
-                pred_probs = model.predict(
-
-                    img_array,
-
-                    verbose=0
-
-                )[0]
-
-            else:
-
-                pred_probs = (
-                    generate_dynamic_scan_predictions(
-
-                        temp_path,
-
-                        len(class_indices)
-
-                    )
-                )
-
-
-            predictions_list.append(
-                pred_probs
-            )
-
-
-        # -----------------------------------------
-        # AVERAGE PREDICTIONS
-        # -----------------------------------------
-
-        avg_predictions = np.mean(
-
-            predictions_list,
-
-            axis=0
-
-        )
-
-        predicted_idx = str(
-
-            np.argmax(
-                avg_predictions
-            )
-
-        )
-
-        predicted_class = (
-            class_indices.get(
-
-                predicted_idx,
-
-                "Normal"
-
-            )
+        best_label = max(
+            averaged_probabilities,
+            key=averaged_probabilities.get,
         )
 
         confidence = float(
-
-            np.max(
-                avg_predictions
-            )
-
+            averaged_probabilities[best_label]
         )
 
-
-        # -----------------------------------------
-        # PROBABILITIES
-        # -----------------------------------------
-
-        probabilities = {
-
-            class_name:
-                round(
-                    float(
-                        avg_predictions[
-                            int(k)
-                        ]
-                    ),
-                    4
-                )
-
-            for k, class_name
-            in class_indices.items()
-
+        user_data = {
+            "gender": request.form.get("gender", ""),
+            "age": request.form.get("age", ""),
+            "sleep": request.form.get("sleep", ""),
+            "concern": request.form.get("concern", ""),
+            "secondaryConcern": request.form.get(
+                "secondaryConcern", ""
+            ),
+            "sensitivity": request.form.get("sensitivity", ""),
+            "waterIntake": request.form.get("waterIntake", ""),
+            "climate": request.form.get("climate", ""),
+            "lighting": request.form.get("lighting", ""),
         }
 
-
-        # -----------------------------------------
-        # FORM DATA
-        # -----------------------------------------
-
-        form_data = {
-
-            "gender":
-                request.form.get(
-                    "gender",
-                    "Not Specified"
-                ),
-
-            "age":
-                request.form.get(
-                    "age",
-                    "N/A"
-                ),
-
-            "concern":
-                request.form.get(
-                    "concern",
-                    "General"
-                ),
-
-            "secondaryConcern":
-                request.form.get(
-                    "secondaryConcern",
-                    "None"
-                ),
-
-            "sensitivity":
-                request.form.get(
-                    "sensitivity",
-                    "Normal"
-                ),
-
-            "waterIntake":
-                request.form.get(
-                    "waterIntake",
-                    "2L-3L"
-                ),
-
-            "sleep":
-                request.form.get(
-                    "sleep",
-                    "7-9 hours"
-                ),
-
-            "climate":
-                request.form.get(
-                    "climate",
-                    "Moderate"
-                ),
-
-            "lighting":
-                request.form.get(
-                    "lighting",
-                    "Natural Daylight"
-                )
-
+        analysis_result = {
+            "prediction": best_label,
+            "label": best_label,
+            "concern": best_label,
+            "confidence": confidence,
+            "confidence_score": confidence,
+            "probabilities": averaged_probabilities,
+            "images": image_flags,
+            "individual_predictions": image_predictions,
+            "userData": user_data,
         }
 
-
-        # -----------------------------------------
-        # DATE
-        # -----------------------------------------
-
-        formatted_date = (
-            datetime.datetime.now().strftime(
-                "%d/%m/%Y %I:%M %p"
-            )
-        )
-
-
-        # -----------------------------------------
-        # SAVE SCAN
-        # -----------------------------------------
-
-        scan_doc = {
-
-            "userId":
-                user_id,
-
-            "prediction":
-                predicted_class,
-
-            "confidence":
-                round(
-                    confidence,
-                    4
-                ),
-
-            "probabilities":
-                probabilities,
-
-            "formData":
-                form_data,
-
-            "date":
-                formatted_date,
-
-            "createdAt":
-                datetime.datetime.utcnow()
-
+        # Save one scan record. Node also saves the returned result
+        # in its own upload route; avoid depending on Python history
+        # for the Node application's /api/history endpoint.
+        scan_document = {
+            "userId": mongo_user_id,
+            "userEmail": authenticated_user.get("email", ""),
+            "prediction": best_label,
+            "label": best_label,
+            "concern": best_label,
+            "confidence": confidence,
+            "analysis": analysis_result,
+            "result": analysis_result,
+            "userData": user_data,
+            "images": image_flags,
+            "createdAt": datetime.datetime.now(
+                datetime.timezone.utc
+            ),
         }
 
-        scans_col.insert_one(
-            scan_doc
-        )
-
-
-        # -----------------------------------------
-        # RESPONSE
-        # -----------------------------------------
+        saved_scan = scans_col.insert_one(scan_document)
 
         return jsonify({
-
             "success": True,
-
-            "prediction":
-                predicted_class,
-
-            "confidence":
-                round(
-                    confidence,
-                    4
-                ),
-
-            "probabilities":
-                probabilities,
-
-            "views_analyzed":
-                len(uploaded_files),
-
-            "date":
-                formatted_date,
-
-            "metadata":
-                form_data
-
+            "message": "Skin analysis completed successfully.",
+            "scan_id": str(saved_scan.inserted_id),
+            "prediction": best_label,
+            "label": best_label,
+            "concern": best_label,
+            "confidence": confidence,
+            "confidence_score": confidence,
+            "probability": confidence,
+            "probabilities": averaged_probabilities,
+            "images": image_flags,
+            "individual_predictions": image_predictions,
+            "userData": user_data,
+            "analysis": analysis_result,
+            "result": analysis_result,
         })
 
-
-    except Exception as e:
-
-        print(
-            "❌ PREDICTION ERROR:",
-            e
-        )
+    except Exception as error:
+        print("Skin prediction error:", str(error))
+        traceback.print_exc()
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                "Prediction failed.",
-
-            "error":
-                str(e)
-
+            "message": "Failed to process skin analysis.",
         }), 500
 
 
-    finally:
+# ============================================================
+# USER SCAN HISTORY
+# ============================================================
 
-        # -----------------------------------------
-        # DELETE TEMP FILES
-        # -----------------------------------------
+@app.route("/history", methods=["GET"])
+@app.route("/api/history", methods=["GET"])
+def history():
+    authenticated_user, auth_error = get_user_from_token()
 
-        for temp_file in temp_files:
-
-            if os.path.exists(
-                temp_file
-            ):
-
-                try:
-
-                    os.remove(
-                        temp_file
-                    )
-
-                except Exception:
-
-                    pass
-
-
-# =========================================================
-# REVIEWS - GET
-# =========================================================
-
-@app.route(
-    "/api/reviews",
-    methods=["GET"]
-)
-def get_reviews():
-
-    try:
-
-        reviews = list(
-
-            reviews_col.find(
-
-                {},
-
-                {
-                    "_id": 0
-                }
-
-            ).sort(
-
-                "createdAt",
-
-                -1
-
-            ).limit(20)
-
-        )
-
+    if auth_error:
         return jsonify({
-
-            "success": True,
-
-            "reviews":
-                reviews
-
-        })
-
-    except Exception as e:
-
-        return jsonify({
-
             "success": False,
-
-            "reviews": [],
-
-            "error":
-                str(e)
-
-        }), 500
-
-
-# =========================================================
-# REVIEWS - POST
-# =========================================================
-
-@app.route(
-    "/api/reviews",
-    methods=["POST"]
-)
-def add_review():
-
-    user_id = get_user_from_token()
-
-    if not user_id:
-
-        return jsonify({
-
-            "success": False,
-
-            "message":
-                "Please login first."
-
+            "message": auth_error,
         }), 401
 
+    if not mongodb_ready():
+        return jsonify({
+            "success": False,
+            "message": "MongoDB is not connected.",
+        }), 503
+
     try:
-
-        data = request.get_json(
-            silent=True
-        ) or {}
-
-        review = {
-
-            "userId":
-                user_id,
-
-            "name":
-                data.get(
-                    "name",
-                    "User"
-                ),
-
-            "rating":
-                data.get(
-                    "rating",
-                    5
-                ),
-
-            "comment":
-                data.get(
-                    "comment",
-                    ""
-                ),
-
-            "createdAt":
-                datetime.datetime.utcnow()
-
-        }
-
-        reviews_col.insert_one(
-            review
+        user_object_id = safe_object_id(
+            authenticated_user["user_id"]
         )
-
-        return jsonify({
-
-            "success": True,
-
-            "message":
-                "Review added successfully."
-
-        })
-
-    except Exception as e:
-
-        return jsonify({
-
-            "success": False,
-
-            "message":
-                str(e)
-
-        }), 500
-
-
-# =========================================================
-# HISTORY
-# =========================================================
-
-@app.route(
-    "/api/history",
-    methods=["GET"]
-)
-def get_history():
-
-    user_id = get_user_from_token()
-
-    if not user_id:
-
-        return jsonify({
-
-            "success": False,
-
-            "message":
-                "Unauthorized."
-
-        }), 401
-
-    try:
 
         scans = list(
-
-            scans_col.find(
-
-                {
-                    "userId":
-                        user_id
-                },
-
-                {
-                    "_id": 0
-                }
-
-            ).sort(
-
-                "createdAt",
-
-                -1
-
-            )
-
+            scans_col.find({
+                "userId": user_object_id,
+            })
+            .sort("createdAt", -1)
+            .limit(100)
         )
 
         return jsonify({
-
             "success": True,
-
-            "history":
-                scans
-
+            "count": len(scans),
+            "history": json_safe(scans),
         })
 
-    except Exception as e:
+    except Exception as error:
+        print("History error:", str(error))
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                str(e)
-
+            "message": "Unable to fetch scan history.",
         }), 500
 
 
-# =========================================================
-# START SERVER
-# =========================================================
+# ============================================================
+# PUBLIC REVIEWS
+# ============================================================
+
+@app.route("/reviews", methods=["GET"])
+@app.route("/api/reviews", methods=["GET"])
+def get_reviews():
+    if not mongodb_ready():
+        return jsonify({
+            "success": False,
+            "message": "MongoDB is not connected.",
+        }), 503
+
+    try:
+        reviews = list(
+            reviews_col.find({})
+            .sort("createdAt", -1)
+            .limit(100)
+        )
+
+        return jsonify({
+            "success": True,
+            "reviews": json_safe(reviews),
+        })
+
+    except Exception as error:
+        print("Reviews error:", str(error))
+
+        return jsonify({
+            "success": False,
+            "message": "Unable to fetch reviews.",
+        }), 500
+
+
+# ============================================================
+# ADD REVIEW
+# ============================================================
+
+@app.route("/reviews", methods=["POST"])
+@app.route("/api/reviews", methods=["POST"])
+def add_review():
+    authenticated_user, auth_error = get_user_from_token()
+
+    if auth_error:
+        return jsonify({
+            "success": False,
+            "message": auth_error,
+        }), 401
+
+    if not mongodb_ready():
+        return jsonify({
+            "success": False,
+            "message": "MongoDB is not connected.",
+        }), 503
+
+    try:
+        data = request.get_json(silent=True) or {}
+
+        review_text = str(data.get("text", "")).strip()
+
+        if not review_text:
+            return jsonify({
+                "success": False,
+                "message": "Review text is required.",
+            }), 400
+
+        try:
+            rating = int(data.get("rating", 5))
+        except (TypeError, ValueError):
+            rating = 5
+
+        rating = min(max(rating, 1), 5)
+
+        review_document = {
+            "userId": safe_object_id(
+                authenticated_user["user_id"]
+            ),
+            "user": authenticated_user.get("email", "Anonymous"),
+            "text": review_text,
+            "rating": rating,
+            "createdAt": datetime.datetime.now(
+                datetime.timezone.utc
+            ),
+        }
+
+        result = reviews_col.insert_one(review_document)
+        review_document["_id"] = result.inserted_id
+
+        return jsonify({
+            "success": True,
+            "message": "Review submitted successfully.",
+            "review": json_safe(review_document),
+        }), 201
+
+    except Exception as error:
+        print("Add review error:", str(error))
+
+        return jsonify({
+            "success": False,
+            "message": "Unable to submit review.",
+        }), 500
+
+
+# ============================================================
+# ERROR HANDLERS
+# ============================================================
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return jsonify({
+        "success": False,
+        "message": "Image upload exceeds the 10 MB limit.",
+    }), 413
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "message": "Python AI endpoint not found.",
+    }), 404
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_error(error):
+    print("Unexpected Flask error:", str(error))
+
+    return jsonify({
+        "success": False,
+        "message": "Internal Python AI service error.",
+    }), 500
+
+
+# ============================================================
+# START PYTHON AI SERVER
+# ============================================================
 
 if __name__ == "__main__":
-
     print("")
-    print("========================================")
-    print("   AI SKIN ANALYSIS PYTHON SERVER")
-    print("========================================")
-    print("Model:", MODEL_PATH)
-    print(
-        "Model Loaded:",
-        model is not None
-    )
-    print("Port: 5001")
-    print("========================================")
+    print("=" * 55)
+    print("       AI SKINCARE PYTHON AI SERVICE")
+    print("=" * 55)
+    print(f"Python service: http://127.0.0.1:{PORT}")
+    print(f"MongoDB status: {'connected' if mongodb_ready() else 'disconnected'}")
+    print(f"AI model loaded: {'yes' if skin_model is not None else 'no'}")
+    print(f"Class count: {len(class_indices)}")
+    print("=" * 55)
     print("")
 
     app.run(
-
         host="127.0.0.1",
-
-        port=5001,
-
-        debug=True
-
+        port=PORT,
+        debug=False,
+        use_reloader=False,
     )

@@ -1,37 +1,129 @@
-import React, { useState, useRef, useEffect } from "react";
 
-export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth }) {
+import React, { useState, useRef, useEffect, useCallback } from "react";
+
+export default function SkinImageInput({
+  onImagesUpdated = () => {},
+  isLoggedIn = false,
+  onOpenAuth,
+}) {
   const [activeTab, setActiveTab] = useState("front");
-  const [images, setImages] = useState({ front: null, left: null, right: null });
+  const [images, setImages] = useState({
+    front: null,
+    left: null,
+    right: null,
+  });
   const [isCameraActive, setIsCameraActive] = useState(false);
-  const [stream, setStream] = useState(null);
-  const [cameraError, setCameraError] = useState(null);
+  const [cameraError, setCameraError] = useState("");
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+  const imagesRef = useRef(images);
 
-  // Attach stream once video element mounts in DOM
-  useEffect(() => {
-    if (isCameraActive && videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
-      videoRef.current
-        .play()
-        .catch((err) => console.error("Video playback error:", err));
+  // Safely open the login modal.
+  const requestLogin = useCallback(() => {
+  if (typeof onOpenAuth === "function") {
+    onOpenAuth("login");
+    return;
+  }
+
+  console.error(
+    "Missing onOpenAuth callback. Check App.js and AnalyzerWorkspace.jsx."
+  );
+}, [onOpenAuth]);
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
-  }, [isCameraActive, stream]);
 
-  // Cleanup media tracks on unmount
-  useEffect(() => {
-    return () => stopCamera();
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+
+    setIsCameraActive(false);
   }, []);
 
-  const startCamera = async () => {
-    if (!isLoggedIn) {
-      if (onOpenAuth) onOpenAuth();
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
+
+  useEffect(() => {
+    if (!isCameraActive || !streamRef.current || !videoRef.current) {
       return;
     }
 
-    setCameraError(null);
+    const video = videoRef.current;
+    video.srcObject = streamRef.current;
+
+    video.play().catch((error) => {
+      console.error("Video playback error:", error);
+      setCameraError("Unable to start video playback. Check camera permissions.");
+    });
+  }, [isCameraActive]);
+
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
+
+      Object.values(imagesRef.current).forEach((image) => {
+        if (image?.previewUrl) {
+          URL.revokeObjectURL(image.previewUrl);
+        }
+      });
+    };
+  }, []);
+
+  const notifyParent = (updatedImages) => {
+    onImagesUpdated({
+      front: updatedImages.front?.file || null,
+      left: updatedImages.left?.file || null,
+      right: updatedImages.right?.file || null,
+    });
+  };
+
+  const updateImage = (angle, file) => {
+    const previousImage = imagesRef.current[angle];
+
+    if (previousImage?.previewUrl) {
+      URL.revokeObjectURL(previousImage.previewUrl);
+    }
+
+    const updatedImages = {
+      ...imagesRef.current,
+      [angle]: file
+        ? {
+            file,
+            previewUrl: URL.createObjectURL(file),
+          }
+        : null,
+    };
+
+    imagesRef.current = updatedImages;
+    setImages(updatedImages);
+    notifyParent(updatedImages);
+  };
+
+  const startCamera = async () => {
+    if (!isLoggedIn) {
+      requestLogin();
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraError(
+        "Camera access is unavailable. Use HTTPS or http://localhost and check your browser."
+      );
+      return;
+    }
+
+    stopCamera();
+    setCameraError("");
+
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -42,99 +134,90 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
         audio: false,
       });
 
-      setStream(mediaStream);
+      streamRef.current = mediaStream;
       setIsCameraActive(true);
-    } catch (err) {
+    } catch (error) {
+      console.error("Camera access error:", error);
       setCameraError(
-        "Camera access denied or unreadable. Ensure camera permissions are allowed in your browser."
+        "Camera could not start. Allow camera permission in your browser and close other apps using the camera."
       );
     }
-  };
-
-  const stopCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
-    }
-    setIsCameraActive(false);
   };
 
   const capturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    if (!video || !canvas) return;
+    if (!video || !canvas || !video.videoWidth || !video.videoHeight) {
+      setCameraError("Camera is not ready yet. Wait for the video to appear.");
+      return;
+    }
 
-    const width = video.videoWidth || 640;
-    const height = video.videoHeight || 480;
+    const width = video.videoWidth;
+    const height = video.videoHeight;
 
     canvas.width = width;
     canvas.height = height;
 
-    const ctx = canvas.getContext("2d");
+    const context = canvas.getContext("2d");
 
-    ctx.translate(width, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(video, 0, 0, width, height);
+    if (!context) {
+      setCameraError("Unable to access the image canvas.");
+      return;
+    }
+
+    // Mirror the captured image to match the front-facing preview.
+    context.save();
+    context.translate(width, 0);
+    context.scale(-1, 1);
+    context.drawImage(video, 0, 0, width, height);
+    context.restore();
 
     canvas.toBlob(
       (blob) => {
         if (!blob) {
-          setCameraError("Failed to capture photo frame.");
+          setCameraError("Failed to capture the photo. Please try again.");
           return;
         }
 
         const file = new File([blob], `${activeTab}_scan.jpg`, {
           type: "image/jpeg",
         });
-        const previewUrl = URL.createObjectURL(file);
 
-        const updated = {
-          ...images,
-          [activeTab]: { file, previewUrl },
-        };
-
-        setImages(updated);
-        notifyParent(updated);
+        updateImage(activeTab, file);
         stopCamera();
+        setCameraError("");
       },
       "image/jpeg",
       0.95
     );
   };
 
-  const handleFileUpload = (e, angle) => {
+  const handleFileUpload = (event, angle) => {
     if (!isLoggedIn) {
-      e.target.value = "";
-      if (onOpenAuth) onOpenAuth();
+      event.target.value = "";
+      requestLogin();
       return;
     }
 
-    const file = e.target.files[0];
+    const file = event.target.files?.[0];
+
     if (!file) return;
 
-    const previewUrl = URL.createObjectURL(file);
-    const updated = {
-      ...images,
-      [angle]: { file, previewUrl },
-    };
+    if (!file.type.startsWith("image/")) {
+      setCameraError("Please select a valid image file.");
+      event.target.value = "";
+      return;
+    }
 
-    setImages(updated);
-    notifyParent(updated);
+    updateImage(angle, file);
+    setCameraError("");
+    event.target.value = "";
   };
 
   const removeImage = (angle) => {
-    const updated = { ...images, [angle]: null };
-    setImages(updated);
-    notifyParent(updated);
-  };
-
-  const notifyParent = (updatedImages) => {
-    onImagesUpdated({
-      front: updatedImages.front ? updatedImages.front.file : null,
-      left: updatedImages.left ? updatedImages.left.file : null,
-      right: updatedImages.right ? updatedImages.right.file : null,
-    });
+    updateImage(angle, null);
+    setCameraError("");
   };
 
   const getGuideText = () => {
@@ -142,9 +225,9 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
       case "front":
         return "Center face inside oval";
       case "left":
-        return "Turn head 45° RIGHT (Left Profile)";
+        return "Turn head 45° RIGHT";
       case "right":
-        return "Turn head 45° LEFT (Right Profile)";
+        return "Turn head 45° LEFT";
       default:
         return "";
     }
@@ -152,7 +235,6 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
 
   return (
     <div className="skin-image-input-container">
-      {/* SCAN ANGLE SELECTOR */}
       <div className="angle-tabs">
         {["front", "left", "right"].map((angle) => (
           <button
@@ -171,7 +253,6 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
         ))}
       </div>
 
-      {/* WEBCAM & PREVIEW BOX */}
       <div className="webcam-box">
         {isCameraActive ? (
           <div className="camera-viewport">
@@ -184,17 +265,7 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
             />
 
             <div className={`oval-guide-overlay ${activeTab}`}>
-              {/* Increased size using width, height, and max limits */}
-              <div
-                className="oval-ring"
-                style={{
-                  width: "320px",
-                  height: "440px",
-                  maxWidth: "85%",
-                  maxHeight: "85%",
-                  borderRadius: "50%",
-                }}
-              >
+              <div className="oval-ring">
                 <span className="guide-text">{getGuideText()}</span>
               </div>
             </div>
@@ -213,7 +284,7 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
               <div className="preview-active-tab">
                 <img
                   src={images[activeTab].previewUrl}
-                  alt={`${activeTab} scan`}
+                  alt={`${activeTab} skin scan`}
                 />
                 <button
                   type="button"
@@ -225,39 +296,45 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
               </div>
             ) : (
               <div className="no-camera-state">
-                <span className="pink-icon">🔒</span>
+                <span className="pink-icon">📷</span>
                 <p>
-                  Position camera for <strong>{activeTab.toUpperCase()}</strong> angle
+                  Position camera for{" "}
+                  <strong>{activeTab.toUpperCase()}</strong> angle
                 </p>
+
                 <div className="cam-actions">
                   <button
                     type="button"
                     className="start-cam-btn"
-                    onClick={() => {
-                      if (!isLoggedIn) {
-                        onOpenAuth();
-                      } else {
-                        startCamera();
-                      }
-                    }}
+                    onClick={startCamera}
                   >
-                    {isLoggedIn ? "Start Live Camera" : "🔑 Login to Start Camera"}
+                    {isLoggedIn
+                      ? "Start Live Camera"
+                      : "🔑 Login to Start Camera"}
                   </button>
+
                   <label className="upload-file-label">
                     Upload File
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={(e) => handleFileUpload(e, activeTab)}
-                      onClick={(e) => {
-                        if (!isLoggedIn) {
-                          e.preventDefault();
-                          onOpenAuth();
-                        }
-                      }}
+                      disabled={!isLoggedIn}
+                      onChange={(event) =>
+                        handleFileUpload(event, activeTab)
+                      }
                       style={{ display: "none" }}
                     />
                   </label>
+
+                  {!isLoggedIn && (
+                    <button
+                      type="button"
+                      className="start-cam-btn"
+                      onClick={requestLogin}
+                    >
+                      Login to Upload
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -265,15 +342,22 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
         )}
 
         {isCameraActive && (
-          <button type="button" className="stop-cam-btn" onClick={stopCamera}>
+          <button
+            type="button"
+            className="stop-cam-btn"
+            onClick={stopCamera}
+          >
             Stop Camera
           </button>
         )}
       </div>
 
-      {cameraError && <div className="camera-err-msg">{cameraError}</div>}
+      {cameraError && (
+        <div className="camera-err-msg" role="alert">
+          {cameraError}
+        </div>
+      )}
 
-      {/* 3 THUMBNAILS ROW */}
       <div className="scans-thumbnail-row">
         {["front", "left", "right"].map((angle) => (
           <div
@@ -281,31 +365,38 @@ export default function SkinImageInput({ onImagesUpdated, isLoggedIn, onOpenAuth
             className={`thumb-card ${images[angle] ? "has-img" : ""}`}
           >
             <span className="thumb-label">{angle.toUpperCase()}</span>
+
             {images[angle] ? (
               <div className="thumb-img-wrapper">
-                <img src={images[angle].previewUrl} alt={angle} />
+                <img
+                  src={images[angle].previewUrl}
+                  alt={`${angle} scan thumbnail`}
+                />
                 <button
                   type="button"
                   className="remove-thumb-btn"
+                  aria-label={`Remove ${angle} scan`}
                   onClick={() => removeImage(angle)}
                 >
                   ×
                 </button>
               </div>
             ) : (
-              <div
+              <button
+                type="button"
                 className="empty-thumb"
                 onClick={() => {
-                  if (!isLoggedIn) {
-                    onOpenAuth();
-                    return;
-                  }
                   setActiveTab(angle);
-                  if (!isCameraActive) startCamera();
+
+                  if (!isLoggedIn) {
+                    requestLogin();
+                  } else {
+                    startCamera();
+                  }
                 }}
               >
                 + Add Scan
-              </div>
+              </button>
             )}
           </div>
         ))}

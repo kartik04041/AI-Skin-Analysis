@@ -1,8 +1,7 @@
 {
-  "0": "Acne",
-  "1": "Combination",
-  "2": "Dry",
-  "3": "Normal",
-  "4": "Oily",
-  "5": "Sensitive"
+  "0": "acne",
+  "1": "blackheads",
+  "2": "dark spots",
+  "3": "pores",
+  "4": "wrinkles"
 }

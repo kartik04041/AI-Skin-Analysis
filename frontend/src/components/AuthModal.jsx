@@ -1,12 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 
 const API_BASE_URL = "http://localhost:5000";
 
 const ADMIN_EMAIL = "email-admin@gmail.com";
 const ADMIN_PASSWORD = "admin123";
-
-// Old email accepted only so an old saved/admin UI does not cause confusion.
-const OLD_ADMIN_EMAIL = "admin@gmail.com";
 
 export default function AuthModal({
   authModal,
@@ -20,19 +18,18 @@ export default function AuthModal({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Automatically prepare the admin login form
   useEffect(() => {
     if (authModal === "admin") {
       setEmail(ADMIN_EMAIL);
       setPassword(ADMIN_PASSWORD);
-      setName("");
-      setError("");
     } else {
       setEmail("");
       setPassword("");
-      setName("");
-      setError("");
     }
+
+    setName("");
+    setError("");
+    setLoading(false);
   }, [authModal]);
 
   const switchMode = (mode) => {
@@ -46,98 +43,11 @@ export default function AuthModal({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (loading) {
-      return;
-    }
+    if (loading) return;
 
     setError("");
 
-    // =====================================================
-    // ADMIN LOGIN
-    // =====================================================
-
-    if (authModal === "admin") {
-      const enteredEmail = email.trim().toLowerCase();
-      const enteredPassword = password;
-
-      const validAdminEmail =
-        enteredEmail === ADMIN_EMAIL ||
-        enteredEmail === OLD_ADMIN_EMAIL;
-
-      const validAdminPassword =
-        enteredPassword === ADMIN_PASSWORD;
-
-      if (!validAdminEmail || !validAdminPassword) {
-        setError("Invalid admin email or password.");
-        return;
-      }
-
-      setLoading(true);
-
-      const adminUser = {
-        username: "admin",
-        name: "Administrator",
-        email: ADMIN_EMAIL,
-        role: "admin",
-        isAdmin: true,
-      };
-
-      /*
-       * Frontend admin session.
-       * AdminDashboard can use this to identify the admin.
-       */
-      const adminToken = "admin-fixed-token";
-
-      // Clear old session
-      localStorage.removeItem("glow_user");
-      localStorage.removeItem("glow_token");
-      localStorage.removeItem("isAdmin");
-
-      // Save admin session
-      localStorage.setItem(
-        "glow_user",
-        JSON.stringify(adminUser)
-      );
-
-      localStorage.setItem(
-        "glow_token",
-        adminToken
-      );
-
-      localStorage.setItem(
-        "isAdmin",
-        "true"
-      );
-
-      console.log("=================================");
-      console.log("ADMIN LOGIN SUCCESS");
-      console.log("EMAIL:", ADMIN_EMAIL);
-      console.log("ROLE: admin");
-      console.log("=================================");
-
-      setEmail("");
-      setPassword("");
-      setError("");
-      setLoading(false);
-
-      if (onAuthSuccess) {
-        onAuthSuccess(
-          adminUser,
-          adminToken
-        );
-      }
-
-      if (onClose) {
-        onClose();
-      }
-
-      return;
-    }
-
-    // =====================================================
-    // NORMAL USER LOGIN / SIGNUP
-    // =====================================================
-
+    const isAdminLogin = authModal === "admin";
     const cleanEmail = email.trim().toLowerCase();
     const cleanName = name.trim();
 
@@ -151,183 +61,175 @@ export default function AuthModal({
       return;
     }
 
-    if (authModal === "signup" && !cleanName) {
-      setError("Please enter your full name.");
-      return;
+    if (isAdminLogin) {
+      if (cleanEmail !== ADMIN_EMAIL) {
+        setError("Invalid admin email.");
+        return;
+      }
+
+      if (password !== ADMIN_PASSWORD) {
+        setError("Invalid admin password.");
+        return;
+      }
     }
-
-    if (password.length < 6) {
-      setError(
-        "Password must contain at least 6 characters."
-      );
-      return;
-    }
-
-    let endpoint = "/api/login";
-
-    let payload = {
-      email: cleanEmail,
-      password: password,
-    };
 
     if (authModal === "signup") {
-      endpoint = "/api/register";
+      if (!cleanName) {
+        setError("Please enter your full name.");
+        return;
+      }
 
-      payload = {
-        name: cleanName,
-        email: cleanEmail,
-        password: password,
-      };
+      if (password.length < 6) {
+        setError("Password must contain at least 6 characters.");
+        return;
+      }
     }
+
+const endpoint =
+  authModal === "signup"
+    ? "/api/register"
+    : authModal === "admin"
+      ? "/api/admin/login"
+      : "/api/login";
+
+    const payload =
+      authModal === "signup"
+        ? {
+            name: cleanName,
+            email: cleanEmail,
+            password,
+          }
+        : {
+            email: cleanEmail,
+            password,
+          };
 
     setLoading(true);
 
     try {
-      const response = await fetch(
-        API_BASE_URL + endpoint,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       let data = {};
 
       try {
         data = await response.json();
-      } catch (jsonError) {
-        console.error(
-          "JSON parsing error:",
-          jsonError
-        );
+      } catch {
+        throw new Error("The server returned an invalid response.");
       }
 
       if (!response.ok) {
         throw new Error(
           data.message ||
-          data.error ||
-          "Authentication failed."
+            data.error ||
+            `Authentication failed (${response.status}).`
         );
       }
 
-      // ===================================================
-      // SIGNUP
-      // ===================================================
-
+      // Signup: return to normal login.
       if (authModal === "signup") {
         setEmail("");
         setPassword("");
         setName("");
-        setError("");
-        setLoading(false);
-
-        alert(
-          data.message ||
-          "Account created successfully. Please login."
-        );
-
         setAuthModal("login");
+
+        alert(data.message || "Account created successfully. Please log in.");
         return;
       }
 
-      // ===================================================
-      // NORMAL USER LOGIN
-      // ===================================================
-
+      // Accept common JWT response property names.
       const token =
         data.token ||
+        data.accessToken ||
         data.access_token ||
         data.jwt;
 
       const serverUser =
         data.user ||
-        data.data;
+        data.admin ||
+        (data.data && typeof data.data === "object"
+          ? data.data
+          : null);
 
-      if (!token) {
+      // Never create a fake token.
+      if (typeof token !== "string" || !token.trim()) {
         throw new Error(
-          "Login failed: server did not return a token."
+          "The server did not return a JWT token. Check the backend /api/login response."
         );
       }
 
-      if (
-        !serverUser ||
-        typeof serverUser !== "object"
-      ) {
+      const adminFromServer =
+        isAdminLogin ||
+        serverUser?.role === "admin" ||
+        serverUser?.isAdmin === true;
+
+      if (isAdminLogin && !adminFromServer) {
         throw new Error(
-          "Login failed: user information was not received."
+          "The server did not identify this account as an administrator."
         );
       }
 
-      const normalUser = {
-        ...serverUser,
-        email:
-          serverUser.email ||
-          cleanEmail,
+      if (!isAdminLogin && !serverUser) {
+        throw new Error("The server did not return user information.");
+      }
+
+      const authenticatedUser = {
+        ...(serverUser || {}),
+        email: serverUser?.email || cleanEmail,
         name:
-          serverUser.name ||
-          serverUser.username ||
-          "User",
-        role: "user",
-        isAdmin: false,
+          serverUser?.name ||
+          serverUser?.username ||
+          (isAdminLogin ? "Administrator" : "User"),
+        role: adminFromServer ? "admin" : "user",
+        isAdmin: adminFromServer,
       };
 
+      // Persist the real server-issued JWT and user session.
       localStorage.setItem(
         "glow_user",
-        JSON.stringify(normalUser)
+        JSON.stringify(authenticatedUser)
       );
-
-      localStorage.setItem(
-        "glow_token",
-        token
-      );
-
+      localStorage.setItem("glow_token", token);
       localStorage.setItem(
         "isAdmin",
-        "false"
+        adminFromServer ? "true" : "false"
       );
 
       console.log(
-        "NORMAL USER LOGIN SUCCESS"
+        adminFromServer ? "ADMIN LOGIN SUCCESS" : "NORMAL USER LOGIN SUCCESS",
+        {
+          email: authenticatedUser.email,
+          role: authenticatedUser.role,
+          tokenReceived: true,
+        }
       );
 
-      if (onAuthSuccess) {
-        onAuthSuccess(
-          normalUser,
-          token
-        );
+      // App.js should accept (user, token).
+      if (typeof onAuthSuccess === "function") {
+        onAuthSuccess(authenticatedUser, token);
       }
 
       setEmail("");
       setPassword("");
       setName("");
       setError("");
-      setLoading(false);
 
-      if (onClose) {
+      if (typeof onClose === "function") {
         onClose();
       }
     } catch (err) {
-      console.error(
-        "Authentication error:",
-        err
-      );
-
-      setError(
-        err.message ||
-        "Unable to connect to server."
-      );
-
+      console.error("Authentication error:", err);
+      setError(err.message || "Unable to connect to the server.");
+    } finally {
       setLoading(false);
     }
   };
-
-  // =====================================================
-  // TEXT
-  // =====================================================
 
   let title = "Welcome Back";
   let buttonText = "Login";
@@ -335,9 +237,7 @@ export default function AuthModal({
   if (authModal === "signup") {
     title = "Create Account";
     buttonText = "Create Account";
-  }
-
-  if (authModal === "admin") {
+  } else if (authModal === "admin") {
     title = "Admin Login";
     buttonText = "Admin Login";
   }
@@ -346,33 +246,24 @@ export default function AuthModal({
     buttonText = "Please wait...";
   }
 
-  // =====================================================
-  // UI
-  // =====================================================
-
   return (
-    <div
-      className="modal-overlay"
-      onClick={onClose}
-    >
+    <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal-card"
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
+        onClick={(event) => event.stopPropagation()}
       >
         <button
           className="close-btn"
           type="button"
           onClick={onClose}
+          disabled={loading}
+          aria-label="Close login modal"
         >
           X
         </button>
 
         <span className="brand-logo">
-          {authModal === "admin"
-            ? "LOCK"
-            : "SKIN"}
+          {authModal === "admin" ? "LOCK" : "SKIN"}
         </span>
 
         <h3>{title}</h3>
@@ -380,6 +271,7 @@ export default function AuthModal({
         {error && (
           <div
             className="auth-error-msg"
+            role="alert"
             style={{
               color: "#d9534f",
               background: "#fff1f0",
@@ -394,32 +286,11 @@ export default function AuthModal({
         )}
 
         <form onSubmit={handleSubmit}>
-
-          {/* ADMIN EMAIL */}
-          {authModal === "admin" && (
-            <div className="form-group">
-              <label>Admin Email</label>
-
-              <input
-                type="email"
-                value={email}
-                placeholder={ADMIN_EMAIL}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  setError("");
-                }}
-                required
-                disabled={loading}
-              />
-            </div>
-          )}
-
-          {/* USER NAME */}
           {authModal === "signup" && (
             <div className="form-group">
-              <label>Full Name</label>
-
+              <label htmlFor="auth-name">Full Name</label>
               <input
+                id="auth-name"
                 type="text"
                 value={name}
                 placeholder="Enter your full name"
@@ -429,34 +300,38 @@ export default function AuthModal({
                 }}
                 required
                 disabled={loading}
+                autoComplete="name"
               />
             </div>
           )}
 
-          {/* USER EMAIL */}
-          {authModal !== "admin" && (
-            <div className="form-group">
-              <label>Email</label>
-
-              <input
-                type="email"
-                value={email}
-                placeholder="yourname@example.com"
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  setError("");
-                }}
-                required
-                disabled={loading}
-              />
-            </div>
-          )}
-
-          {/* PASSWORD */}
           <div className="form-group">
-            <label>Password</label>
-
+            <label htmlFor="auth-email">
+              {authModal === "admin" ? "Admin Email" : "Email"}
+            </label>
             <input
+              id="auth-email"
+              type="email"
+              value={email}
+              placeholder={
+                authModal === "admin"
+                  ? ADMIN_EMAIL
+                  : "yourname@example.com"
+              }
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setError("");
+              }}
+              required
+              disabled={loading}
+              autoComplete="email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="auth-password">Password</label>
+            <input
+              id="auth-password"
               type="password"
               value={password}
               placeholder="Enter password"
@@ -467,6 +342,11 @@ export default function AuthModal({
               required
               minLength={6}
               disabled={loading}
+              autoComplete={
+                authModal === "signup"
+                  ? "new-password"
+                  : "current-password"
+              }
             />
           </div>
 
@@ -477,20 +357,15 @@ export default function AuthModal({
           >
             {buttonText}
           </button>
-
         </form>
 
-        {/* FOOTER */}
         <div className="auth-footer">
-
           {authModal === "login" && (
             <>
               <p>
                 Don't have an account?{" "}
                 <span
-                  onClick={() =>
-                    switchMode("signup")
-                  }
+                  onClick={() => switchMode("signup")}
                   style={{
                     cursor: "pointer",
                     color: "#6c63ff",
@@ -503,9 +378,7 @@ export default function AuthModal({
 
               <p>
                 <span
-                  onClick={() =>
-                    switchMode("admin")
-                  }
+                  onClick={() => switchMode("admin")}
                   style={{
                     cursor: "pointer",
                     color: "#6c63ff",
@@ -523,9 +396,7 @@ export default function AuthModal({
               <p>
                 Already have an account?{" "}
                 <span
-                  onClick={() =>
-                    switchMode("login")
-                  }
+                  onClick={() => switchMode("login")}
                   style={{
                     cursor: "pointer",
                     color: "#6c63ff",
@@ -538,9 +409,7 @@ export default function AuthModal({
 
               <p>
                 <span
-                  onClick={() =>
-                    switchMode("admin")
-                  }
+                  onClick={() => switchMode("admin")}
                   style={{
                     cursor: "pointer",
                     color: "#6c63ff",
@@ -557,9 +426,7 @@ export default function AuthModal({
             <p>
               Regular user?{" "}
               <span
-                onClick={() =>
-                  switchMode("login")
-                }
+                onClick={() => switchMode("login")}
                 style={{
                   cursor: "pointer",
                   color: "#6c63ff",
@@ -570,7 +437,6 @@ export default function AuthModal({
               </span>
             </p>
           )}
-
         </div>
       </div>
     </div>

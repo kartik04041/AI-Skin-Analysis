@@ -1,0 +1,8 @@
+
+{
+  "python.defaultInterpreterPath": "C:\\Users\\KARTIK\\anaconda3\\envs\\skin-ai\\python.exe",
+  "python.analysis.extraPaths": [
+    "C:\\Users\\KARTIK\\anaconda3\\envs\\skin-ai\\Lib\\site-packages"
+  ],
+  "python.analysis.diagnosticMode": "workspace"
+}

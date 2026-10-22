@@ -1,388 +1,482 @@
+
 import React, { useState } from "react";
 import SkinImageInput from "./SkinImageInput";
+import "./AnalyzerWorkspace.css";
 
-// Configuration for Affiliate Tag
-const AFFILIATE_TAG = "yourtag-21"; // Replace with your actual affiliate tag
+const SHOP_EVENT = "skin-shop-action";
 
-export const RECOMMENDATIONS = {
+// These IDs must match the products returned by GET /api/shop/products.
+
+const SHOP_PRODUCTS = {
+  cleanser: {
+    id: "skin-001",
+    name: "Gentle Foaming Cleanser",
+    price: 499,
+    rating: "4.5 ⭐",
+    category: "Cleanser",
+    image:
+      "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?w=600&auto=format&fit=crop&q=80",
+  },
+
+  treatment: {
+    id: "skin-002",
+    name: "Salicylic Acid Serum",
+    price: 599,
+    rating: "4.5 ⭐",
+    category: "Treatment",
+    image:
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&auto=format&fit=crop&q=80",
+  },
+
+  niacinamide: {
+    id: "skin-003",
+    name: "Niacinamide Serum",
+    price: 549,
+    rating: "4.5 ⭐",
+    category: "Treatment",
+    image:
+      "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=600&auto=format&fit=crop&q=80",
+  },
+
+  moisturizer: {
+    id: "skin-004",
+    name: "Hydrating Moisturizer",
+    price: 450,
+    rating: "4.4 ⭐",
+    category: "Moisturizer",
+    image:
+      "https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=600&auto=format&fit=crop&q=80",
+  },
+
+  sunscreen: {
+    id: "skin-005",
+    name: "Daily Sunscreen SPF 50",
+    price: 699,
+    rating: "4.5 ⭐",
+    category: "Sunscreen",
+    image:
+      "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80",
+  },
+
+  hydratingSerum: {
+    id: "rec-004",
+    name: "Hyaluronic Acid Serum",
+    price: 399,
+    rating: "4.4 ⭐",
+    category: "Treatment",
+    image:
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80",
+  },
+
+  barrierCream: {
+    id: "rec-005",
+    name: "Ceramide Moisturizer",
+    price: 449,
+    rating: "4.5 ⭐",
+    category: "Moisturizer",
+    image:
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&auto=format&fit=crop&q=80",
+  },
+
+  oilFree: {
+    id: "rec-002",
+    name: "Oil-Free Moisturizer",
+    price: 349,
+    rating: "4.3 ⭐",
+    category: "Moisturizer",
+    image:
+      "https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=600&auto=format&fit=crop&q=80",
+  },
+
+  soothingSerum: {
+    id: "rec-009",
+    name: "Panthenol Soothing Serum",
+    price: 399,
+    rating: "4.4 ⭐",
+    category: "Treatment",
+    image:
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80",
+  },
+};
+
+
+const PRODUCT_IMAGES = {
+  cleanser:
+    "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?w=600&auto=format&fit=crop&q=80",
+  serum:
+    "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&auto=format&fit=crop&q=80",
+  niacinamide:
+    "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=600&auto=format&fit=crop&q=80",
+  moisturizer:
+    "https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=600&auto=format&fit=crop&q=80",
+  sunscreen:
+    "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80",
+  hydratingSerum:
+    "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80",
+};
+
+const RECOMMENDATIONS = {
   acne: {
     title: "Acne-Prone Skin Plan",
-    ingredients: ["Salicylic Acid (BHA)", "Niacinamide (5%)", "Zinc PCA"],
-    amRoutine: ["Gel Cleanser", "5% Niacinamide Serum", "Matte SPF 50"],
-    pmRoutine: ["Gentle Cleanser", "2% Salicylic Acid Liquid", "Oil-Free Hydrator"],
-    avoid: "Heavy mineral oils, physical scrubs, and high-alcohol toners.",
+    ingredients: ["Salicylic Acid", "Niacinamide", "Zinc PCA"],
+    avoid: "Harsh scrubs, excessive exfoliation, and products that irritate your skin.",
+    amRoutine: [
+      "Cleanse with a gentle cleanser",
+      "Use a suitable niacinamide serum",
+      "Apply a non-comedogenic moisturizer",
+      "Finish with broad-spectrum SPF 50",
+    ],
+    pmRoutine: [
+      "Cleanse gently",
+      "Use salicylic acid gradually if tolerated",
+      "Apply a lightweight moisturizer",
+    ],
     products: [
-      {
-        option: 1,
-        cleanser: { name: "CeraVe Acne Foaming Cream Cleanser", price: "₹1,250", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=CeraVe+Acne+Foaming+Cream+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Paula's Choice 2% BHA Liquid Exfoliant", price: "₹2,700", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=Paula%27s+Choice+2%25+BHA+Liquid+Exfoliant&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Neutrogena Hydro Boost Oil-Free Water Gel", price: "₹950", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=Neutrogena+Hydro+Boost+Oil-Free+Water+Gel&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 2,
-        cleanser: { name: "La Roche-Posay Effaclar Clarifying Cleansing Gel", price: "₹1,850", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Effaclar+Clarifying+Cleansing+Gel&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "The Ordinary Niacinamide 10% + Zinc 1%", price: "₹600", rating: "4.3 ⭐", link: `https://www.amazon.in/s?k=The+Ordinary+Niacinamide+10%25+%2B+Zinc+1%25&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Cetaphil Gentle Clear Oil-Free Acne Moisturizer", price: "₹890", rating: "4.2 ⭐", link: `https://www.amazon.in/s?k=Cetaphil+Gentle+Clear+Oil-Free+Acne+Moisturizer&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 3,
-        cleanser: { name: "COSRX Good Morning Low pH Gel Cleanser", price: "₹750", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=COSRX+Good+Morning+Low+pH+Gel+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "PanOxyl Acne Foaming Wash (10% Benzoyl Peroxide)", price: "₹1,450", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=PanOxyl+Acne+Foaming+Wash&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Sebamed Clear Face Care Gel", price: "₹580", rating: "4.1 ⭐", link: `https://www.amazon.in/s?k=Sebamed+Clear+Face+Care+Gel&tag=${AFFILIATE_TAG}` }
-      }
-    ]
-  },
-  combination: {
-    title: "Combination Skin Plan",
-    ingredients: ["Hyaluronic Acid", "Niacinamide", "Lactic Acid (AHA)"],
-    amRoutine: ["Balancing Gel Cleanser", "Hyaluronic Acid Serum", "Broad-Spectrum SPF 50"],
-    pmRoutine: ["Mild Cleanser", "Lactic Acid Exfoliant (2x/wk)", "Lightweight Moisturizer"],
-    avoid: "Extremely heavy butter creams applied over the entire face.",
-    products: [
-      {
-        option: 1,
-        cleanser: { name: "CeraVe Foaming Facial Cleanser", price: "₹1,100", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=CeraVe+Foaming+Facial+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "The Ordinary Lactic Acid 10% + HA", price: "₹750", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=The+Ordinary+Lactic+Acid+10%25+%2B+HA&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "La Roche-Posay Toleriane Double Repair Face Moisturizer", price: "₹2,100", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Toleriane+Double+Repair+Face+Moisturizer&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 2,
-        cleanser: { name: "Cetaphil Daily Facial Cleanser", price: "₹550", rating: "4.3 ⭐", link: `https://www.amazon.in/s?k=Cetaphil+Daily+Facial+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Paula's Choice 10% Niacinamide Booster", price: "₹3,100", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Paula%27s+Choice+10%25+Niacinamide+Booster&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Clinique Moisture Surge 100H Auto-Replenishing Hydrator", price: "₹2,950", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=Clinique+Moisture+Surge+100H&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 3,
-        cleanser: { name: "Youth To The People Superfood Antioxidant Cleanser", price: "₹3,400", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=Youth+To+The+People+Superfood+Antioxidant+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "COSRX BHA Blackhead Power Liquid", price: "₹1,290", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=COSRX+BHA+Blackhead+Power+Liquid&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Belif The True Cream Aqua Bomb", price: "₹1,800", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=Belif+The+True+Cream+Aqua+Bomb&tag=${AFFILIATE_TAG}` }
-      }
-    ]
-  },
-  dry: {
-    title: "Dry Skin Plan",
-    ingredients: ["Ceramides", "Squalane", "Glycerin"],
-    amRoutine: ["Hydrating Cream Cleanser", "Hyaluronic Acid Serum", "Dewy SPF 50"],
-    pmRoutine: ["Milk Cleanser", "Squalane Facial Oil", "Barrier Repair Cream"],
-    avoid: "Foaming sulfate cleansers and hot water washing.",
-    products: [
-      {
-        option: 1,
-        cleanser: { name: "CeraVe Hydrating Facial Cleanser", price: "₹1,200", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=CeraVe+Hydrating+Facial+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "The Ordinary 100% Plant-Derived Squalane", price: "₹850", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=The+Ordinary+100%25+Plant-Derived+Squalane&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "First Aid Beauty Ultra Repair Cream", price: "₹2,600", rating: "4.8 ⭐", link: `https://www.amazon.in/s?k=First+Aid+Beauty+Ultra+Repair+Cream&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 2,
-        cleanser: { name: "La Roche-Posay Toleriane Hydrating Gentle Cleanser", price: "₹1,750", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Toleriane+Hydrating+Gentle+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "The Inkey List Hyaluronic Acid Serum", price: "₹900", rating: "4.3 ⭐", link: `https://www.amazon.in/s?k=The+Inkey+List+Hyaluronic+Acid+Serum&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "CeraVe Moisturizing Cream (in the tub)", price: "₹1,400", rating: "4.8 ⭐", link: `https://www.amazon.in/s?k=CeraVe+Moisturizing+Cream&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 3,
-        cleanser: { name: "Cetaphil Gentle Skin Cleanser", price: "₹399", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Cetaphil+Gentle+Skin+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Hada Labo Gokujyun Premium Hyaluronic Acid Lotion", price: "₹1,650", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=Hada+Labo+Gokujyun+Premium+Hyaluronic+Acid+Lotion&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Avene XeraCalm A.D Lipid-Replenishing Cream", price: "₹2,200", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=Avene+XeraCalm+A.D+Lipid-Replenishing+Cream&tag=${AFFILIATE_TAG}` }
-      }
-    ]
-  },
-  normal: {
-    title: "Normal / Balanced Plan",
-    ingredients: ["Vitamin C", "Peptides", "Antioxidants"],
-    amRoutine: ["Gentle Cleanser", "Vitamin C Serum", "Daily Lotion SPF 50"],
-    pmRoutine: ["Gentle Wash", "Peptide Serum", "Night Repair Cream"],
-    avoid: "Over-exfoliating or constantly switching core products.",
-    products: [
-      {
-        option: 1,
-        cleanser: { name: "CeraVe Foaming Facial Cleanser", price: "₹1,100", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=CeraVe+Foaming+Facial+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Maelove The Glow Maker Vitamin C Serum", price: "₹2,800", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=Maelove+The+Glow+Maker&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "La Roche-Posay Lipikar Daily Repair Lotion", price: "₹1,950", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Lipikar+Daily+Repair+Lotion&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 2,
-        cleanser: { name: "Kiehl's Ultra Facial Cleanser", price: "₹2,100", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Kiehl%27s+Ultra+Facial+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "The Ordinary Multi-Peptide + HA Serum ('Buffet')", price: "₹1,600", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=The+Ordinary+Multi-Peptide+%2B+HA+Serum&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Kiehl's Ultra Facial Cream", price: "₹1,750", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=Kiehl%27s+Ultra+Facial+Cream&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 3,
-        cleanser: { name: "Fresh Soy Face Cleanser", price: "₹1,500", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Fresh+Soy+Face+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Timeless 20% Vitamin C + E Ferulic Acid Serum", price: "₹2,300", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Timeless+20%25+Vitamin+C&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Olay Regenerist Micro-Sculpting Cream", price: "₹1,699", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=Olay+Regenerist+Micro-Sculpting+Cream&tag=${AFFILIATE_TAG}` }
-      }
-    ]
+      { ...SHOP_PRODUCTS.cleanser, key: "cleanser" },
+      { ...SHOP_PRODUCTS.treatment, key: "treatment" },
+      { ...SHOP_PRODUCTS.oilFree, key: "moisturizer" },
+      { ...SHOP_PRODUCTS.sunscreen, key: "sunscreen" },
+    ],
   },
   oily: {
     title: "Oily Skin Plan",
-    ingredients: ["Salicylic Acid (2%)", "Zinc PCA", "Niacinamide (10%)"],
-    amRoutine: ["Clarifying Gel Cleanser", "10% Niacinamide + Zinc", "Oil-Control SPF 50"],
-    pmRoutine: ["Foaming Cleanser", "2% BHA Liquid", "Water Gel Moisturizer"],
-    avoid: "Pore-clogging heavy oils and harsh alcohol strips.",
+    ingredients: ["Salicylic Acid", "Niacinamide", "Lightweight Hydrators"],
+    avoid: "Harsh alcohol-based products and overly aggressive cleansing.",
+    amRoutine: [
+      "Use a gentle foaming cleanser",
+      "Apply niacinamide serum if tolerated",
+      "Use an oil-free moisturizer",
+      "Apply broad-spectrum SPF 50",
+    ],
+    pmRoutine: [
+      "Cleanse to remove sunscreen and impurities",
+      "Use a suitable treatment gradually",
+      "Apply a lightweight moisturizer",
+    ],
     products: [
-      {
-        option: 1,
-        cleanser: { name: "La Roche-Posay Effaclar Foaming Gel Cleanser", price: "₹1,850", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Effaclar+Foaming+Gel+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "The Ordinary Niacinamide 10% + Zinc 1%", price: "₹600", rating: "4.3 ⭐", link: `https://www.amazon.in/s?k=The+Ordinary+Niacinamide+10%25+%2B+Zinc+1%25&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Neutrogena Hydro Boost Water Gel", price: "₹950", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=Neutrogena+Hydro+Boost+Water+Gel&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 2,
-        cleanser: { name: "CeraVe Renewing SA Cleanser", price: "₹1,350", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=CeraVe+Renewing+SA+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Paula's Choice Skin Balancing Pore-Reducing Toner", price: "₹2,200", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Paula%27s+Choice+Skin+Balancing+Pore-Reducing+Toner&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Paula's Choice Invisible Finish Moisture Gel", price: "₹2,600", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=Paula%27s+Choice+Invisible+Finish+Moisture+Gel&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 3,
-        cleanser: { name: "Cetaphil Oily Skin Cleanser", price: "₹590", rating: "4.3 ⭐", link: `https://www.amazon.in/s?k=Cetaphil+Oily+Skin+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Minimalist 2% Salicylic Acid Serum", price: "₹599", rating: "4.2 ⭐", link: `https://www.amazon.in/s?k=Minimalist+2%25+Salicylic+Acid+Serum&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "La Roche-Posay Effaclar Mat Oil-Free Moisturizer", price: "₹1,950", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Effaclar+Mat+Oil-Free+Moisturizer&tag=${AFFILIATE_TAG}` }
-      }
-    ]
+      { ...SHOP_PRODUCTS.cleanser, key: "cleanser" },
+      { ...SHOP_PRODUCTS.niacinamide, key: "treatment" },
+      { ...SHOP_PRODUCTS.oilFree, key: "moisturizer" },
+      { ...SHOP_PRODUCTS.sunscreen, key: "sunscreen" },
+    ],
+  },
+  dry: {
+    title: "Dry Skin Plan",
+    ingredients: ["Ceramides", "Hyaluronic Acid", "Glycerin"],
+    avoid: "Over-cleansing, very hot water, and products that leave skin feeling tight.",
+    amRoutine: [
+      "Cleanse gently without stripping the skin",
+      "Apply a hydrating serum",
+      "Use a ceramide-rich moisturizer",
+      "Finish with broad-spectrum SPF 50",
+    ],
+    pmRoutine: [
+      "Use a gentle cleanser",
+      "Apply a hydrating serum to slightly damp skin",
+      "Apply a barrier-supporting moisturizer",
+    ],
+    products: [
+      { ...SHOP_PRODUCTS.cleanser, key: "cleanser" },
+      { ...SHOP_PRODUCTS.hydratingSerum, key: "treatment" },
+      { ...SHOP_PRODUCTS.barrierCream, key: "moisturizer" },
+      { ...SHOP_PRODUCTS.sunscreen, key: "sunscreen" },
+    ],
   },
   sensitive: {
     title: "Sensitive Skin Plan",
-    ingredients: ["Centella Asiatica (Cica)", "Colloidal Oatmeal", "Ceramides"],
-    amRoutine: ["Fragrance-Free Cleanser", "Cica Soothing Serum", "100% Mineral SPF 50"],
-    pmRoutine: ["Ultra-Mild Cleanser", "Calming Oatmeal Cream"],
-    avoid: "Added fragrances, essential oils, and high-strength acids.",
+    ingredients: ["Ceramides", "Panthenol", "Gentle Hydrators"],
+    avoid: "Fragrances and introducing several new active ingredients at once.",
+    amRoutine: [
+      "Use a gentle fragrance-free cleanser",
+      "Apply a soothing product if tolerated",
+      "Moisturize to support the skin barrier",
+      "Use broad-spectrum SPF 50",
+    ],
+    pmRoutine: [
+      "Cleanse with lukewarm water",
+      "Apply a soothing hydrating serum",
+      "Use a barrier-supporting moisturizer",
+    ],
     products: [
-      {
-        option: 1,
-        cleanser: { name: "Vanicream Gentle Facial Cleanser", price: "₹1,450", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=Vanicream+Gentle+Facial+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Skin1004 Madagascar Centella Ampoule", price: "₹1,350", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=Skin1004+Madagascar+Centella+Ampoule&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Aveeno Calm + Restore Oat Gel Moisturizer", price: "₹1,800", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Aveeno+Calm+%2B+Restore+Oat+Gel+Moisturizer&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 2,
-        cleanser: { name: "La Roche-Posay Toleriane Dermo-Cleanser", price: "₹1,600", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Toleriane+Dermo-Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "Purito Wonder Re-leaf Centella Serum Unscented", price: "₹1,250", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Purito+Wonder+Re-leaf+Centella+Serum&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "La Roche-Posay Cicaplast Baume B5+", price: "₹1,150", rating: "4.7 ⭐", link: `https://www.amazon.in/s?k=La+Roche-Posay+Cicaplast+Baume+B5%2B&tag=${AFFILIATE_TAG}` }
-      },
-      {
-        option: 3,
-        cleanser: { name: "Cetaphil Gentle Skin Cleanser", price: "₹399", rating: "4.5 ⭐", link: `https://www.amazon.in/s?k=Cetaphil+Gentle+Skin+Cleanser&tag=${AFFILIATE_TAG}` },
-        treatment: { name: "COSRX Advanced Snail 96 Mucin Power Essence", price: "₹1,450", rating: "4.6 ⭐", link: `https://www.amazon.in/s?k=COSRX+Advanced+Snail+96+Mucin+Power+Essence&tag=${AFFILIATE_TAG}` },
-        moisturizer: { name: "Bioderma Sensibio Defensive Cream", price: "₹1,200", rating: "4.4 ⭐", link: `https://www.amazon.in/s?k=Bioderma+Sensibio+Defensive+Cream&tag=${AFFILIATE_TAG}` }
-      }
-    ]
-  }
+      { ...SHOP_PRODUCTS.cleanser, key: "cleanser" },
+      { ...SHOP_PRODUCTS.soothingSerum, key: "treatment" },
+      { ...SHOP_PRODUCTS.barrierCream, key: "moisturizer" },
+      { ...SHOP_PRODUCTS.sunscreen, key: "sunscreen" },
+    ],
+  },
+  combination: {
+    title: "Combination Skin Plan",
+    ingredients: ["Niacinamide", "Hyaluronic Acid", "Ceramides"],
+    avoid: "Using excessively heavy or drying products across the entire face.",
+    amRoutine: [
+      "Use a balanced gentle cleanser",
+      "Apply a lightweight hydrating serum",
+      "Moisturize according to your skin's needs",
+      "Finish with broad-spectrum SPF 50",
+    ],
+    pmRoutine: [
+      "Cleanse gently",
+      "Apply a suitable serum",
+      "Use a lightweight moisturizer",
+    ],
+    products: [
+      { ...SHOP_PRODUCTS.cleanser, key: "cleanser" },
+      { ...SHOP_PRODUCTS.niacinamide, key: "treatment" },
+      { ...SHOP_PRODUCTS.moisturizer, key: "moisturizer" },
+      { ...SHOP_PRODUCTS.sunscreen, key: "sunscreen" },
+    ],
+  },
+  normal: {
+    title: "Normal / Balanced Skin Plan",
+    ingredients: ["Antioxidants", "Niacinamide", "Ceramides"],
+    avoid: "Over-exfoliating or changing your entire routine too frequently.",
+    amRoutine: [
+      "Cleanse with a gentle cleanser",
+      "Apply a serum if needed",
+      "Use a comfortable moisturizer",
+      "Finish with broad-spectrum SPF 50",
+    ],
+    pmRoutine: [
+      "Cleanse gently",
+      "Apply a suitable hydrating serum",
+      "Use a moisturizer",
+    ],
+    products: [
+      { ...SHOP_PRODUCTS.cleanser, key: "cleanser" },
+      { ...SHOP_PRODUCTS.niacinamide, key: "treatment" },
+      { ...SHOP_PRODUCTS.moisturizer, key: "moisturizer" },
+      { ...SHOP_PRODUCTS.sunscreen, key: "sunscreen" },
+    ],
+  },
 };
 
+const normalize = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+function getSkinType(prediction) {
+  const value = normalize(prediction);
+
+  if (value.includes("acne")) return "acne";
+  if (value.includes("oily")) return "oily";
+  if (value.includes("dry")) return "dry";
+  if (value.includes("sensitive")) return "sensitive";
+  if (value.includes("combination")) return "combination";
+
+  return "normal";
+}
+
+export { RECOMMENDATIONS };
+
 export default function AnalyzerWorkspace({
-  userData,
-  onUserDataChange,
-  onImagesUpdated,
-  onAnalyze,
-  loading,
-  analysis,
-  error,
-  isLoggedIn,
-  onOpenAuth,
+  userData = {},
+  onUserDataChange = () => {},
+  onImagesUpdated = () => {},
+  onAnalyze = () => {},
+  loading = false,
+  analysis = null,
+  error = "",
+  isLoggedIn = false,
+  onOpenAuth = () => {},
 }) {
   const [savedProducts, setSavedProducts] = useState([]);
 
-  const toggleSaveProduct = (productName) => {
-    setSavedProducts((prev) =>
-      prev.includes(productName)
-        ? prev.filter((item) => item !== productName)
-        : [...prev, productName]
+  const skinType = getSkinType(analysis?.prediction);
+  const activePlan = RECOMMENDATIONS[skinType];
+
+  function updateField(field, value) {
+    onUserDataChange(field, value);
+  }
+
+  function toggleSaveProduct(productName) {
+    setSavedProducts((previous) =>
+      previous.includes(productName)
+        ? previous.filter((name) => name !== productName)
+        : [...previous, productName]
     );
-  };
+  }
 
-  const key = analysis?.prediction?.toLowerCase();
-  const activePlan = key && RECOMMENDATIONS[key] ? RECOMMENDATIONS[key] : RECOMMENDATIONS.normal;
+  function handleBuyNow(product) {
+    if (!isLoggedIn) {
+      onOpenAuth("login");
+      return;
+    }
 
-  const renderProductItem = (typeLabel, item, emoji) => {
-    const isSaved = savedProducts.includes(item.name);
+    if (!product?.id) {
+      window.alert("This product is missing its shop product ID.");
+      return;
+    }
+
+    // Send the actual backend catalogue ID, not a recommendation name.
+    window.dispatchEvent(
+      new CustomEvent(SHOP_EVENT, {
+        detail: {
+          type: "buy",
+          productId: product.id,
+          productName: product.name,
+          price: product.price,
+          category: product.category,
+        },
+      })
+    );
+  }
+
+  function renderSelect({
+    label,
+    field,
+    defaultValue,
+    options,
+  }) {
+    const value = userData[field] || defaultValue;
+
     return (
-      <li style={{ marginBottom: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div>
-          <span>{emoji} <strong>{typeLabel}:</strong> {item.name}</span>
-          <div style={{ fontSize: "12px", color: "#666", marginTop: "2px" }}>
-            <span style={{ color: "#d63384", fontWeight: "bold", marginRight: "10px" }}>{item.price}</span>
-            <span>{item.rating}</span>
-          </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <button
-            type="button"
-            onClick={() => toggleSaveProduct(item.name)}
-            title={isSaved ? "Remove from Wishlist" : "Save to Wishlist"}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "18px"
-            }}
-          >
-            {isSaved ? "❤️" : "🤍"}
-          </button>
-          <a
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              padding: "6px 12px",
-              backgroundColor: "#e83e8c",
-              color: "#fff",
-              textDecoration: "none",
-              borderRadius: "4px",
-              fontSize: "12px",
-              whiteSpace: "nowrap"
-            }}
-          >
-            Buy Now ↗
-          </a>
-        </div>
-      </li>
+      <div className="form-group" key={field}>
+        <label htmlFor={`skin-field-${field}`}>{label}</label>
+        <select
+          id={`skin-field-${field}`}
+          className="pink-input"
+          value={value}
+          onChange={(event) => updateField(field, event.target.value)}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
     );
-  };
+  }
 
   return (
     <div className="four-containers-wrapper">
-      {/* CONTAINER 1: USER DETAILS */}
-      <div className="pink-container container-details">
+      {/* 01 — USER PROFILE AND SKIN QUESTIONNAIRE */}
+      <section className="pink-container container-details">
         <div className="container-header">
           <span className="container-num">01</span>
-          <h3>User Profile & Skin Intake 📋</h3>
+          <h3>User Profile &amp; Skin Intake 📋</h3>
         </div>
 
         <div className="quiz-grid">
-          <div className="form-group">
-            <label>Gender</label>
-            <select
-              value={userData.gender}
-              onChange={(e) => onUserDataChange("gender", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Female">Female</option>
-              <option value="Male">Male</option>
-              <option value="Other">Other / Non-Binary</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Gender",
+            field: "gender",
+            defaultValue: "Female",
+            options: [
+              { value: "Female", label: "Female" },
+              { value: "Male", label: "Male" },
+              { value: "Other", label: "Other / Non-Binary" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Age Group</label>
-            <select
-              value={userData.age}
-              onChange={(e) => onUserDataChange("age", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Under 18">Under 18</option>
-              <option value="18-24">18–24</option>
-              <option value="25-34">25–34</option>
-              <option value="35-44">35–44</option>
-              <option value="45+">45+</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Age Group",
+            field: "age",
+            defaultValue: "18-24",
+            options: [
+              { value: "Under 18", label: "Under 18" },
+              { value: "18-24", label: "18–24" },
+              { value: "25-34", label: "25–34" },
+              { value: "35-44", label: "35–44" },
+              { value: "45+", label: "45+" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Primary Skin Concern</label>
-            <select
-              value={userData.concern}
-              onChange={(e) => onUserDataChange("concern", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Acne & Breakouts">Acne & Breakouts</option>
-              <option value="Dryness & Flakiness">Dryness & Flakiness</option>
-              <option value="Excess Oil & Shine">Excess Oil & Shine</option>
-              <option value="Sensitivity & Redness">Sensitivity & Redness</option>
-              <option value="Hyperpigmentation">Hyperpigmentation & Dark Spots</option>
-              <option value="Fine Lines & Aging">Fine Lines & Aging</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Primary Skin Concern",
+            field: "concern",
+            defaultValue: "Acne & Breakouts",
+            options: [
+              { value: "Acne & Breakouts", label: "Acne & Breakouts" },
+              { value: "Dryness & Flakiness", label: "Dryness & Flakiness" },
+              { value: "Excess Oil & Shine", label: "Excess Oil & Shine" },
+              { value: "Sensitivity & Redness", label: "Sensitivity & Redness" },
+              { value: "Hyperpigmentation", label: "Hyperpigmentation & Dark Spots" },
+              { value: "Fine Lines & Aging", label: "Fine Lines & Aging" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Secondary Concern</label>
-            <select
-              value={userData.secondaryConcern || "Enlarged Pores"}
-              onChange={(e) => onUserDataChange("secondaryConcern", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Enlarged Pores">Enlarged Pores</option>
-              <option value="Dark Circles">Dark Circles & Puffiness</option>
-              <option value="Uneven Texture">Uneven Texture</option>
-              <option value="Dehydration">Dehydration / Dullness</option>
-              <option value="None">None</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Secondary Concern",
+            field: "secondaryConcern",
+            defaultValue: "Enlarged Pores",
+            options: [
+              { value: "Enlarged Pores", label: "Enlarged Pores" },
+              { value: "Dark Circles", label: "Dark Circles & Puffiness" },
+              { value: "Uneven Texture", label: "Uneven Texture" },
+              { value: "Dehydration", label: "Dehydration / Dullness" },
+              { value: "None", label: "None" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Skin Sensitivity Level</label>
-            <select
-              value={userData.sensitivity || "Slightly Sensitive"}
-              onChange={(e) => onUserDataChange("sensitivity", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Not Sensitive">Not Sensitive</option>
-              <option value="Slightly Sensitive">Slightly Sensitive</option>
-              <option value="Highly Sensitive">Highly Sensitive / Rosacea Prone</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Skin Sensitivity Level",
+            field: "sensitivity",
+            defaultValue: "Slightly Sensitive",
+            options: [
+              { value: "Not Sensitive", label: "Not Sensitive" },
+              { value: "Slightly Sensitive", label: "Slightly Sensitive" },
+              { value: "Highly Sensitive", label: "Highly Sensitive" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Daily Water Intake</label>
-            <select
-              value={userData.waterIntake || "2L-3L"}
-              onChange={(e) => onUserDataChange("waterIntake", e.target.value)}
-              className="pink-input"
-            >
-              <option value="<1L">Less than 1L / day</option>
-              <option value="1L-2L">1L – 2L / day</option>
-              <option value="2L-3L">2L – 3L / day</option>
-              <option value="3L+">3L+ / day</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Daily Water Intake",
+            field: "waterIntake",
+            defaultValue: "2L-3L",
+            options: [
+              { value: "<1L", label: "Less than 1L" },
+              { value: "1L-2L", label: "1L–2L" },
+              { value: "2L-3L", label: "2L–3L" },
+              { value: "3L+", label: "3L+" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Sleep & Lifestyle</label>
-            <select
-              value={userData.sleep || "7-9 hours"}
-              onChange={(e) => onUserDataChange("sleep", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Under 5 hours">Under 5 hours</option>
-              <option value="5-7 hours">5–7 hours</option>
-              <option value="7-9 hours">7–9 hours</option>
-              <option value="9+ hours">9+ hours</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Sleep & Lifestyle",
+            field: "sleep",
+            defaultValue: "7-9 hours",
+            options: [
+              { value: "Under 5 hours", label: "Under 5 hours" },
+              { value: "5-7 hours", label: "5–7 hours" },
+              { value: "7-9 hours", label: "7–9 hours" },
+              { value: "9+ hours", label: "9+ hours" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Climate / Environment</label>
-            <select
-              value={userData.climate || "Moderate"}
-              onChange={(e) => onUserDataChange("climate", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Hot & Humid">Hot & Humid</option>
-              <option value="Dry & Arid">Dry & Arid</option>
-              <option value="Cold & Windy">Cold & Windy</option>
-              <option value="Moderate">Moderate / Seasonal</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Climate / Environment",
+            field: "climate",
+            defaultValue: "Moderate",
+            options: [
+              { value: "Hot & Humid", label: "Hot & Humid" },
+              { value: "Dry & Arid", label: "Dry & Arid" },
+              { value: "Cold & Windy", label: "Cold & Windy" },
+              { value: "Moderate", label: "Moderate / Seasonal" },
+            ],
+          })}
 
-          <div className="form-group">
-            <label>Lighting Parameter</label>
-            <select
-              value={userData.lighting || "Natural Daylight"}
-              onChange={(e) => onUserDataChange("lighting", e.target.value)}
-              className="pink-input"
-            >
-              <option value="Natural Daylight">☀️ Natural Daylight</option>
-              <option value="Indoor Warm/Yellow">💡 Indoor Warm Light</option>
-              <option value="Cool White/Ring Light">⚪ Ring Light / White LED</option>
-            </select>
-          </div>
+          {renderSelect({
+            label: "Lighting Parameter",
+            field: "lighting",
+            defaultValue: "Natural Daylight",
+            options: [
+              { value: "Natural Daylight", label: "☀️ Natural Daylight" },
+              { value: "Indoor Warm/Yellow", label: "💡 Indoor Warm Light" },
+              { value: "Cool White/Ring Light", label: "⚪ Ring Light / White LED" },
+            ],
+          })}
         </div>
-      </div>
+      </section>
 
-      {/* CONTAINER 2: MULTI-ANGLE CAMERA CAPTURE */}
-      <div className="pink-container container-capture">
+      {/* 02 — MULTI-ANGLE IMAGE CAPTURE */}
+      <section className="pink-container container-capture">
         <div className="container-header">
           <span className="container-num">02</span>
-          <h3>Facial Capture & Image Scan 📸</h3>
+          <h3>Facial Capture &amp; Image Scan 📸</h3>
         </div>
 
         <SkinImageInput
@@ -396,139 +490,340 @@ export default function AnalyzerWorkspace({
           className="pink-action-btn"
           onClick={() => {
             if (!isLoggedIn) {
-              if (onOpenAuth) onOpenAuth();
-            } else {
-              onAnalyze();
+              onOpenAuth("login");
+              return;
             }
+
+            onAnalyze();
           }}
           disabled={loading}
         >
           {loading
-            ? "✨ Running Ensemble AI Analysis..."
+            ? "✨ Running AI Analysis..."
             : isLoggedIn
-            ? "💖 Run Diagnostic Scan"
-            : "🔑 Login to Run Diagnostic Scan"}
+              ? "💖 Run Diagnostic Scan"
+              : "🔑 Login to Run Diagnostic Scan"}
         </button>
 
-        {error && <div className="pink-error-banner">⚠️ {error}</div>}
-      </div>
+        {error ? (
+          <div className="pink-error-banner" role="alert">
+            ⚠️ {error}
+          </div>
+        ) : null}
+      </section>
 
-      {/* CONTAINER 3: AI DIAGNOSTIC ANALYSIS */}
-      <div className="pink-container container-analysis">
+      {/* 03 — AI ANALYSIS RESULTS */}
+      <section className="pink-container container-analysis">
         <div className="container-header">
           <span className="container-num">03</span>
-          <h3>AI Diagnostic Analysis 🧬</h3>
+          <h3>AI Skin Analysis 🧬</h3>
         </div>
 
         {analysis ? (
           <div className="analysis-results">
             <div className="result-hero-badge">
-              <span className="badge-title">{analysis.prediction} Skin</span>
+              <span className="badge-title">
+                {analysis.prediction || "Skin"} Skin
+              </span>
               <span className="badge-conf">
-                {(analysis.confidence * 100).toFixed(1)}% Match
+                {Number(analysis.confidence || 0) <= 1
+                  ? `${(Number(analysis.confidence || 0) * 100).toFixed(1)}% Match`
+                  : `${Number(analysis.confidence).toFixed(1)}% Match`}
               </span>
             </div>
 
-            <div className="prob-bars-stack">
-              <h4>Probability Breakdown</h4>
-              {analysis.probabilities &&
-                Object.entries(analysis.probabilities).map(([stype, prob]) => (
-                  <div key={stype} className="prob-item">
-                    <span className="prob-name">{stype}</span>
-                    <div className="prob-track">
-                      <div
-                        className="prob-fill"
-                        style={{ width: `${(prob * 100).toFixed(1)}%` }}
-                      ></div>
+            {analysis.probabilities &&
+            Object.keys(analysis.probabilities).length > 0 ? (
+              <div className="prob-bars-stack">
+                <h4>Probability Breakdown</h4>
+
+                {Object.entries(analysis.probabilities).map(([type, rawValue]) => {
+                  const probability = Math.max(
+                    0,
+                    Math.min(
+                      100,
+                      Number(rawValue) <= 1
+                        ? Number(rawValue) * 100
+                        : Number(rawValue)
+                    )
+                  );
+
+                  return (
+                    <div className="prob-item" key={type}>
+                      <span className="prob-name">{type}</span>
+                      <div className="prob-track">
+                        <div
+                          className="prob-fill"
+                          style={{ width: `${probability}%` }}
+                        />
+                      </div>
+                      <span className="prob-num">
+                        {probability.toFixed(0)}%
+                      </span>
                     </div>
-                    <span className="prob-num">{(prob * 100).toFixed(0)}%</span>
-                  </div>
-                ))}
-            </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p>
+                Your analysis is complete. A probability breakdown was not
+                provided by the analysis service.
+              </p>
+            )}
+
+            <p className="skin-analysis-disclaimer">
+              This result provides skincare guidance, not a medical diagnosis.
+              Lighting, image quality, and the model can affect predictions.
+            </p>
           </div>
         ) : (
           <div className="placeholder-state">
             <div className="placeholder-icon">🔬</div>
-            <p>Complete steps #1 & #2 to view AI analysis results.</p>
+            <p>Complete the questionnaire and image capture, then run your scan.</p>
           </div>
         )}
-      </div>
+      </section>
 
-      {/* CONTAINER 4: RECOMMENDATIONS & ROUTINE */}
-      <div className="pink-container container-recommendations">
+      {/* 04 — PERSONALIZED ROUTINE AND SHOP PRODUCTS */}
+      <section className="pink-container container-recommendations">
         <div className="container-header">
           <span className="container-num">04</span>
-          <h3>Clinical Recommendations & Routine 🧴</h3>
+          <h3>Skincare Recommendations &amp; Routine 🧴</h3>
         </div>
 
         {analysis ? (
           <div className="recommendations-content">
             <div className="recs-box">
               <h4>{activePlan.title}</h4>
+
               <div className="rec-group">
-                <strong>🌸 Key Ingredients:</strong>
+                <strong>🌸 Suggested Ingredients:</strong>
                 <p>{activePlan.ingredients.join(", ")}</p>
               </div>
+
               <div className="rec-group">
-                <strong>🚫 Ingredients to Avoid:</strong>
+                <strong>🚫 Use Caution With:</strong>
                 <p>{activePlan.avoid}</p>
               </div>
             </div>
 
-            <div className="routine-tables" style={{ marginTop: "20px" }}>
+            <div className="routine-tables" style={{ marginTop: 20 }}>
               <div className="routine-card am-card">
-                <h4>☀️ Morning Routine (AM)</h4>
+                <h4>☀️ Morning Routine</h4>
                 <ul>
-                  {activePlan.amRoutine.map((step, idx) => (
-                    <li key={idx}>
-                      <span className="step-num">{idx + 1}</span> {step}
+                  {activePlan.amRoutine.map((step, index) => (
+                    <li key={`${skinType}-am-${index}`}>
+                      <span className="step-num">{index + 1}</span> {step}
                     </li>
                   ))}
                 </ul>
               </div>
 
               <div className="routine-card pm-card">
-                <h4>🌙 Evening Routine (PM)</h4>
+                <h4>🌙 Evening Routine</h4>
                 <ul>
-                  {activePlan.pmRoutine.map((step, idx) => (
-                    <li key={idx}>
-                      <span className="step-num">{idx + 1}</span> {step}
+                  {activePlan.pmRoutine.map((step, index) => (
+                    <li key={`${skinType}-pm-${index}`}>
+                      <span className="step-num">{index + 1}</span> {step}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            <div className="product-suggestions" style={{ marginTop: "25px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h4>🛍️ Curated Product Sets (Direct Buy)</h4>
-                {savedProducts.length > 0 && (
-                  <span style={{ fontSize: "12px", color: "#e83e8c", fontWeight: "bold" }}>
-                    ❤️ {savedProducts.length} Saved to Wishlist
+            <div className="product-suggestions" style={{ marginTop: 25 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 12,
+                  flexWrap: "wrap",
+                }}
+              >
+                <h4>🛍️ Recommended Products</h4>
+                {savedProducts.length > 0 ? (
+                  <span
+                    style={{
+                      fontSize: 12,
+                      color: "#e83e8c",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ❤️ {savedProducts.length} saved
                   </span>
-                )}
+                ) : null}
               </div>
-              <div className="product-options-grid">
-                {activePlan.products.map((p) => (
-                  <div key={p.option} className="product-card" style={{ border: "1px solid #f2c9d8", padding: "14px", borderRadius: "8px", marginBottom: "12px", backgroundColor: "#fff" }}>
-                    <strong style={{ color: "#d63384" }}>Option {p.option}</strong>
-                    <ul style={{ listStyleType: "none", paddingLeft: "0", marginTop: "10px" }}>
-                      {renderProductItem("Cleanser", p.cleanser, "🧴")}
-                      {renderProductItem("Treatment", p.treatment, "🧪")}
-                      {renderProductItem("Moisturizer", p.moisturizer, "💧")}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+
+              
+<div className="product-options-grid">
+  {activePlan.products.map((product) => {
+    const isSaved = savedProducts.includes(product.name);
+
+    return (
+      <article
+        key={`${skinType}-${product.id}`}
+        className="product-card"
+        style={{
+          border: "1px solid rgba(109, 40, 217, 0.25)",
+          padding: 16,
+          borderRadius: 14,
+          marginBottom: 12,
+          background:
+            "linear-gradient(145deg, rgba(255,255,255,0.98), rgba(241,232,255,0.96))",
+          boxShadow: "0 8px 22px rgba(66, 30, 105, 0.12)",
+          backdropFilter: "blur(12px)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 10,
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <span
+              style={{
+                display: "inline-block",
+                fontSize: 11,
+                color: "#5b21b6",
+                fontWeight: 800,
+                textTransform: "uppercase",
+                letterSpacing: "0.8px",
+                background: "rgba(221, 204, 255, 0.65)",
+                padding: "5px 9px",
+                borderRadius: 20,
+                border: "1px solid rgba(109, 40, 217, 0.18)",
+              }}
+            >
+              {product.category}
+            </span>
+
+            <img
+              className="recommended-product-image"
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+
+            <h4
+              style={{
+                margin: "10px 0 12px",
+                color: "#32104f",
+                fontSize: 17,
+                fontWeight: 850,
+                lineHeight: 1.45,
+                opacity: 1,
+                textShadow: "none",
+                overflowWrap: "anywhere",
+                WebkitTextFillColor: "#32104f",
+              }}
+            >
+              {product.name}
+            </h4>
+
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
+              <strong
+                style={{
+                  color: "#4c1d75",
+                  fontSize: 16,
+                  fontWeight: 850,
+                }}
+              >
+                ₹{product.price}
+              </strong>
+
+              <span
+                style={{
+                  color: "#6b4b80",
+                  fontSize: 13,
+                  fontWeight: 700,
+                }}
+              >
+                ⭐ {product.rating}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => toggleSaveProduct(product.name)}
+            title={
+              isSaved
+                ? "Remove from saved products"
+                : "Save product"
+            }
+            aria-label={
+              isSaved
+                ? `Remove ${product.name} from saved products`
+                : `Save ${product.name}`
+            }
+            style={{
+              flexShrink: 0,
+              background: "rgba(231, 218, 255, 0.8)",
+              border: "1px solid rgba(109, 40, 217, 0.18)",
+              borderRadius: 10,
+              cursor: "pointer",
+              fontSize: 20,
+              width: 40,
+              height: 40,
+            }}
+          >
+            {isSaved ? "❤️" : "🤍"}
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => handleBuyNow(product)}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "12px 14px",
+            background: "linear-gradient(135deg, #6d28d9, #3b0764)",
+            color: "#ffffff",
+            border: "1px solid rgba(109, 40, 217, 0.35)",
+            borderRadius: 9,
+            cursor: "pointer",
+            fontSize: 14,
+            fontWeight: 800,
+            boxShadow: "0 5px 14px rgba(76, 29, 117, 0.2)",
+          }}
+        >
+          Buy Now 🛒
+        </button>
+      </article>
+    );
+  })}
+</div>
+
+
+              <p style={{ fontSize: 12, color: "#666666", marginTop: 12 }}>
+                Product suggestions are general skincare guidance. Check
+                ingredient lists and patch-test new products, especially if
+                your skin is sensitive.
+              </p>
             </div>
           </div>
         ) : (
           <div className="placeholder-state">
             <div className="placeholder-icon">🌸</div>
-            <p>Run diagnostic scan to unlock custom ingredients & daily routine.</p>
+            <p>Run your analysis to see a personalized routine and products.</p>
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

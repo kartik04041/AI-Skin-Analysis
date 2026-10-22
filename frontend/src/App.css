@@ -1,11 +1,12 @@
+
 /* =========================================================
    AI SKINCARE ANALYSIS SYSTEM
    COMPLETE APP.CSS
-   Theme: Baby Pink + Futuristic Glass / Neon
-   Layout: ONE CONTAINER PER ROW
-   Camera / Upload: CLICK-STABLE
+   THEME: BLACK + NEON PINK + PURPLE
+   DESIGN: FUTURISTIC GLASSMORPHISM / NEON GLOW
+   LAYOUT: ONE CONTAINER PER ROW
+   CAMERA: CLICK-STABLE
    ========================================================= */
-
 
 /* =========================================================
    1. GLOBAL RESET
@@ -19,9 +20,14 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -30,26 +36,26 @@ body {
     Arial,
     sans-serif;
 
-  background:
-    radial-gradient(
-      circle at 10% 10%,
-      rgba(244, 114, 182, 0.08),
-      transparent 25%
-    ),
-    radial-gradient(
-      circle at 90% 30%,
-      rgba(236, 72, 153, 0.07),
-      transparent 25%
-    ),
-    #fff7fb;
-
-  color: #831843;
-
+  color: #f8f2ff;
   line-height: 1.6;
 
-  min-height: 100vh;
-
-  overflow-x: hidden;
+  background:
+    radial-gradient(
+      ellipse at 10% 5%,
+      rgba(236, 72, 153, 0.13),
+      transparent 32%
+    ),
+    radial-gradient(
+      ellipse at 90% 25%,
+      rgba(139, 92, 246, 0.14),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(168, 85, 247, 0.08),
+      transparent 35%
+    ),
+    #050508;
 }
 
 button,
@@ -67,860 +73,728 @@ input {
   -webkit-tap-highlight-color: transparent;
 }
 
+button {
+  color: inherit;
+}
+
+a {
+  color: #f472d0;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+::selection {
+  color: #fff;
+  background: rgba(219, 39, 119, 0.65);
+}
+
+:focus-visible {
+  outline: 2px solid #f472d0;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 
 /* =========================================================
-   2. APP
+   2. APP LAYOUT AND BACKGROUND GLOW
    ========================================================= */
 
 .app-container {
-  min-height: 100vh;
-
+  position: relative;
   display: flex;
   flex-direction: column;
-
-  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 100vh;
 }
 
-
-/* =========================================================
-   3. BACKGROUND FUTURISTIC GLOW
-   ========================================================= */
+.app-container::before,
+.app-container::after {
+  position: fixed;
+  z-index: -1;
+  content: "";
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
 
 .app-container::before {
-  content: "";
-
-  position: fixed;
-
-  width: 350px;
-  height: 350px;
-
-  top: 120px;
-  left: -180px;
-
-  background: rgba(244, 114, 182, 0.12);
-
-  border-radius: 50%;
-
-  filter: blur(80px);
-
-  pointer-events: none;
-
-  z-index: 0;
+  top: 100px;
+  left: -220px;
+  background: rgba(236, 72, 153, 0.16);
 }
 
 .app-container::after {
-  content: "";
-
-  position: fixed;
-
-  width: 350px;
-  height: 350px;
-
-  bottom: 50px;
-  right: -180px;
-
-  background: rgba(236, 72, 153, 0.09);
-
-  border-radius: 50%;
-
-  filter: blur(80px);
-
-  pointer-events: none;
-
-  z-index: 0;
+  right: -220px;
+  bottom: 30px;
+  background: rgba(139, 92, 246, 0.17);
 }
 
-
 /* =========================================================
-   4. NAVBAR
+   3. NAVBAR
    ========================================================= */
 
 .navbar {
   position: sticky;
-
   top: 0;
-
   z-index: 1000;
 
   display: flex;
-
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
 
+  width: 100%;
   padding: 14px 35px;
 
-  background:
-    rgba(255, 255, 255, 0.82);
+  background: rgba(8, 7, 14, 0.84);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 
-  backdrop-filter: blur(18px);
-
-  -webkit-backdrop-filter: blur(18px);
-
-  border-bottom:
-    1px solid rgba(244, 114, 182, 0.25);
+  border-bottom: 1px solid rgba(236, 72, 153, 0.25);
 
   box-shadow:
-    0 5px 25px rgba(219, 39, 119, 0.08);
+    0 8px 30px rgba(0, 0, 0, 0.28),
+    0 1px 18px rgba(217, 70, 239, 0.04);
 
-  transition:
-    box-shadow 0.3s ease,
-    background-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar:hover {
-  box-shadow:
-    0 8px 30px rgba(219, 39, 119, 0.13);
+  border-bottom-color: rgba(217, 70, 239, 0.4);
+  box-shadow: 0 8px 35px rgba(139, 92, 246, 0.09);
 }
 
-
-/* =========================================================
-   5. LOGO
-   ========================================================= */
+/* LOGO */
 
 .nav-logo {
+  max-width: 100%;
+  white-space: nowrap;
+
   font-size: 1.35rem;
-
   font-weight: 900;
-
   letter-spacing: -0.5px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f472b6,
-      #ec4899,
-      #be185d
-    );
+  background: linear-gradient(
+    100deg,
+    #ff71c6,
+    #e879f9,
+    #a78bfa
+  );
 
   -webkit-background-clip: text;
-
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 
   cursor: pointer;
-
-  transition: transform 0.3s ease;
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
 .nav-logo:hover {
-  transform: scale(1.04);
+  filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.65));
+  transform: scale(1.025);
 }
 
-
-/* =========================================================
-   6. NAVIGATION LINKS
-   ========================================================= */
+/* NAVIGATION LINKS */
 
 .nav-links {
   display: flex;
-
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 15px;
 
-  gap: 28px;
-
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
-.nav-links a {
-  position: relative;
-
-  color: #9d174d;
-
-  text-decoration: none;
-
-  font-size: 0.9rem;
-
-  font-weight: 700;
-
-  transition:
-    color 0.25s ease;
+.nav-links li {
+  display: flex;
+  align-items: center;
 }
 
-.nav-links a:hover {
-  color: #ec4899;
+.nav-links a,
+.nav-links button {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 9px 12px;
+
+  border: 1px solid transparent;
+  border-radius: 10px;
+
+  color: #d9cde8;
+  background: transparent;
+
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links button:hover {
+  color: #fff;
+  background: linear-gradient(
+    120deg,
+    rgba(236, 72, 153, 0.13),
+    rgba(139, 92, 246, 0.15)
+  );
+
+  border-color: rgba(217, 70, 239, 0.3);
+  box-shadow: 0 0 18px rgba(217, 70, 239, 0.09);
+  transform: translateY(-1px);
 }
 
 .nav-links a::after {
-  content: "";
-
   position: absolute;
-
+  bottom: 2px;
   left: 50%;
 
-  bottom: -7px;
-
   width: 0;
-
   height: 2px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #f472b6,
-      #db2777
-    );
-
-  transform: translateX(-50%);
-
+  content: "";
   border-radius: 5px;
 
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #f472b6, #a78bfa);
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
+
+  transform: translateX(-50%);
+  transition: width 0.25s ease;
 }
 
 .nav-links a:hover::after {
-  width: 100%;
+  width: 60%;
 }
 
+/* LOGIN AND ACCOUNT AREA */
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
 /* =========================================================
-   7. LOGIN BUTTON
+   4. NEON BUTTONS
    ========================================================= */
+
+.pink-login-btn,
+.cta-btn,
+.pink-action-btn,
+.recommendation-buy-button {
+  color: #fff;
+  background: linear-gradient(
+    115deg,
+    #ec4899 0%,
+    #d946ef 48%,
+    #8b5cf6 100%
+  );
+
+  border: 1px solid rgba(255, 255, 255, 0.17);
+
+  box-shadow:
+    0 0 12px rgba(236, 72, 153, 0.28),
+    0 0 28px rgba(139, 92, 246, 0.12);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
 
 .pink-login-btn {
-  border: 0;
-
   padding: 9px 20px;
-
   border-radius: 25px;
-
-  color: white;
-
   font-size: 0.85rem;
-
   font-weight: 800;
-
   cursor: pointer;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f472b6,
-      #ec4899,
-      #db2777
-    );
-
-  box-shadow:
-    0 6px 20px rgba(219, 39, 119, 0.25);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
 }
 
-.pink-login-btn:hover {
+.pink-login-btn:hover,
+.cta-btn:hover,
+.pink-action-btn:hover:not(:disabled),
+.recommendation-buy-button:hover {
+  filter: brightness(1.12);
+  box-shadow:
+    0 0 16px rgba(236, 72, 153, 0.48),
+    0 0 35px rgba(139, 92, 246, 0.27);
+}
+
+.pink-login-btn:hover,
+.cta-btn:hover {
   transform: translateY(-3px);
-
-  box-shadow:
-    0 10px 25px rgba(219, 39, 119, 0.35);
 }
 
-
-/* =========================================================
-   8. PROFILE BUTTON
-   ========================================================= */
-
-.profile-btn {
+.profile-btn,
+.logout-btn {
   padding: 8px 15px;
-
   border-radius: 20px;
 
-  background: #fce7f3;
-
-  border: 1px solid #fbcfe8;
-
-  color: #db2777;
+  color: #f5c7ff;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(192, 132, 252, 0.35);
 
   font-weight: 700;
-
   cursor: pointer;
 
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  transition: all 0.25s ease;
 }
 
-.profile-btn:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 6px 15px rgba(236, 72, 153, 0.15);
+.profile-btn:hover,
+.logout-btn:hover {
+  color: #fff;
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #c084fc;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.22);
 }
-
 
 /* =========================================================
-   9. HERO SECTION
+   5. HERO SECTION
    ========================================================= */
 
 .hero-section {
   position: relative;
-
   z-index: 1;
 
-  max-width: 900px;
-
+  width: 100%;
+  max-width: 1050px;
   margin: 0 auto;
+  padding: 85px 25px 60px;
 
   text-align: center;
-
-  padding:
-    75px 25px 55px;
 }
 
 .hero-badge {
   display: inline-block;
-
+  margin-bottom: 20px;
   padding: 7px 16px;
 
+  border: 1px solid rgba(236, 72, 153, 0.4);
   border-radius: 25px;
 
-  background:
-    rgba(252, 231, 243, 0.8);
-
-  border:
-    1px solid rgba(244, 114, 182, 0.35);
-
-  color: #db2777;
+  color: #f9a8d4;
+  background: rgba(236, 72, 153, 0.09);
 
   font-size: 0.82rem;
-
   font-weight: 800;
 
-  margin-bottom: 18px;
-
-  box-shadow:
-    0 5px 18px rgba(236, 72, 153, 0.08);
-
-  animation:
-    softFloat 3s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.08);
+  animation: softFloat 3s ease-in-out infinite;
 }
 
 .hero-section h1 {
-  font-size: clamp(2rem, 5vw, 3.3rem);
-
-  font-weight: 900;
-
-  line-height: 1.15;
-
   margin-bottom: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #831843,
-      #ec4899,
-      #be185d
-    );
+  color: #fff;
+  font-size: clamp(2.1rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -1px;
+
+  background: linear-gradient(
+    110deg,
+    #fff 5%,
+    #f9a8d4 35%,
+    #e879f9 65%,
+    #a78bfa 95%
+  );
 
   -webkit-background-clip: text;
-
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  filter: drop-shadow(0 0 20px rgba(217, 70, 239, 0.12));
 }
 
 .hero-section p {
-  max-width: 680px;
+  max-width: 700px;
+  margin: 0 auto 30px;
 
-  margin: 0 auto 28px;
-
-  color: #9d174d;
-
+  color: #b9adc9;
   font-size: 1rem;
 }
 
-
-/* =========================================================
-   10. CTA BUTTON
-   ========================================================= */
-
 .cta-btn {
   display: inline-block;
-
   padding: 13px 30px;
 
   border-radius: 30px;
-
-  color: white;
-
-  text-decoration: none;
-
   font-weight: 800;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f472b6,
-      #ec4899,
-      #db2777
-    );
-
-  box-shadow:
-    0 8px 25px rgba(219, 39, 119, 0.3);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  text-decoration: none;
 }
-
-.cta-btn:hover {
-  transform: translateY(-4px);
-
-  box-shadow:
-    0 13px 30px rgba(219, 39, 119, 0.4);
-}
-
 
 /* =========================================================
-   11. WORKSPACE
+   6. WORKSPACE AND SECTION TITLES
    ========================================================= */
 
 .workspace-section {
   position: relative;
-
   z-index: 1;
 
   width: 100%;
-
-  max-width: 1050px;
-
+  max-width: 1150px;
   margin: 0 auto;
-
-  padding:
-    25px 25px 80px;
+  padding: 25px 25px 80px;
 }
 
-
-/* =========================================================
-   12. SECTION TITLE
-   ========================================================= */
-
 .section-title {
-  text-align: center;
-
-  font-size: 2rem;
-
-  font-weight: 900;
-
-  color: #831843;
-
-  margin-bottom: 45px;
-
   position: relative;
+  margin-bottom: 42px;
+
+  color: #fff;
+  font-size: clamp(1.65rem, 4vw, 2.15rem);
+  font-weight: 900;
+  text-align: center;
 }
 
 .section-title::after {
-  content: "";
-
   display: block;
-
-  width: 90px;
-
+  width: 100px;
   height: 3px;
-
   margin: 13px auto 0;
 
+  content: "";
   border-radius: 10px;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #ec4899,
-      transparent
-    );
-
-  box-shadow:
-    0 0 15px rgba(236, 72, 153, 0.5);
+  background: linear-gradient(90deg, #ec4899, #d946ef, #8b5cf6);
+  box-shadow: 0 0 15px rgba(217, 70, 239, 0.55);
 }
 
-
 /* =========================================================
-   13. ONE CONTAINER PER ROW
+   7. CONTAINER LAYOUT
    ========================================================= */
 
 .three-containers-wrapper,
 .four-containers-wrapper {
-  width: 100%;
-
-  max-width: 900px;
-
-  margin: 0 auto;
-
   display: flex;
-
   flex-direction: column;
+  gap: 28px;
 
-  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
+.workspace-section > *,
+.section-block > *,
+.three-containers-wrapper > *,
+.four-containers-wrapper > * {
+  min-width: 0;
+}
 
 /* =========================================================
-   14. MAIN FUTURISTIC CONTAINER
+   8. GLASSMORPHISM CONTAINERS
    ========================================================= */
 
-.pink-container {
+.pink-container,
+.pink-card,
+.history-card,
+.metrics-comparison-card {
   position: relative;
 
-  width: 100%;
+  color: #f5edff;
+  background: linear-gradient(
+    145deg,
+    rgba(23, 18, 35, 0.88),
+    rgba(12, 10, 20, 0.94)
+  );
 
-  min-height: 300px;
-
-  padding: 30px;
-
-  overflow: hidden;
-
-  border-radius: 28px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.96),
-      rgba(255, 245, 248, 0.92)
-    );
-
-  border:
-    1px solid rgba(244, 114, 182, 0.35);
-
+  border: 1px solid rgba(217, 70, 239, 0.23);
   box-shadow:
-    0 15px 45px rgba(219, 39, 119, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 16px 45px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 
-  backdrop-filter: blur(15px);
-
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
   transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.pink-container:hover {
-  transform: translateY(-5px);
+.pink-container {
+  width: 100%;
+  min-height: 300px;
+  padding: 30px;
+  overflow: hidden;
+  border-radius: 25px;
+}
 
-  border-color:
-    rgba(236, 72, 153, 0.65);
-
+.pink-container:hover,
+.pink-card:hover,
+.history-card:hover,
+.metrics-comparison-card:hover {
+  border-color: rgba(236, 72, 153, 0.48);
   box-shadow:
-    0 25px 65px rgba(219, 39, 119, 0.14),
-    0 0 35px rgba(236, 72, 153, 0.07);
+    0 18px 45px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(217, 70, 239, 0.07);
 }
 
-
-/* =========================================================
-   15. CONTAINER GLOW
-   ========================================================= */
+.pink-container::before,
+.pink-container::after {
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  filter: blur(65px);
+  pointer-events: none;
+}
 
 .pink-container::before {
-  content: "";
-
-  position: absolute;
-
-  width: 220px;
-
-  height: 220px;
-
-  top: -120px;
-
-  right: -80px;
-
-  background:
-    rgba(244, 114, 182, 0.17);
-
-  border-radius: 50%;
-
-  filter: blur(45px);
-
-  pointer-events: none;
+  top: -140px;
+  right: -100px;
+  width: 240px;
+  height: 240px;
+  background: rgba(217, 70, 239, 0.11);
 }
 
 .pink-container::after {
-  content: "";
-
-  position: absolute;
-
-  width: 160px;
-
-  height: 160px;
-
-  bottom: -90px;
-
-  left: -60px;
-
-  background:
-    rgba(236, 72, 153, 0.12);
-
-  border-radius: 50%;
-
-  filter: blur(40px);
-
-  pointer-events: none;
+  bottom: -120px;
+  left: -80px;
+  width: 200px;
+  height: 200px;
+  background: rgba(236, 72, 153, 0.09);
 }
-
-
-/* =========================================================
-   16. KEEP CONTENT ABOVE GLOW
-   ========================================================= */
 
 .pink-container > * {
   position: relative;
-
   z-index: 2;
 }
 
+.pink-card {
+  padding: 25px;
+  border-radius: 22px;
+}
+
+.history-card {
+  width: 100%;
+  margin-top: 35px;
+  padding: 25px;
+  border-radius: 22px;
+}
+
+.metrics-comparison-card {
+  max-width: 650px;
+  margin: auto;
+  padding: 22px;
+  border-radius: 18px;
+}
 
 /* =========================================================
-   17. CONTAINER HEADER
+   9. CONTAINER HEADERS
    ========================================================= */
 
 .container-header {
   position: relative;
 
   display: flex;
-
   align-items: center;
-
   gap: 14px;
 
+  margin-bottom: 25px;
   padding-bottom: 16px;
 
-  margin-bottom: 25px;
-
-  border-bottom:
-    1px solid rgba(244, 114, 182, 0.25);
+  border-bottom: 1px solid rgba(217, 70, 239, 0.2);
 }
 
 .container-header::after {
-  content: "";
-
   position: absolute;
-
+  bottom: -1px;
   left: 0;
 
-  bottom: -1px;
-
-  width: 90px;
-
+  width: 100px;
   height: 2px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #ec4899,
-      transparent
-    );
+  content: "";
+  background: linear-gradient(90deg, #ec4899, #8b5cf6, transparent);
 }
 
 .container-header h3 {
-  font-size: 1.25rem;
-
+  color: #f9a8d4;
+  font-size: 1.2rem;
   font-weight: 800;
-
-  color: #831843;
 }
-
-
-/* =========================================================
-   18. CONTAINER NUMBER
-   ========================================================= */
 
 .container-num {
-  width: 40px;
-
-  height: 40px;
-
-  flex-shrink: 0;
-
   display: flex;
-
+  flex-shrink: 0;
+  align-items: center;
   justify-content: center;
 
-  align-items: center;
+  width: 40px;
+  height: 40px;
 
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 13px;
 
-  color: white;
+  color: #fff;
+  background: linear-gradient(135deg, #ec4899, #a855f7);
 
   font-size: 0.85rem;
-
   font-weight: 900;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f472b6,
-      #ec4899,
-      #db2777
-    );
-
-  box-shadow:
-    0 6px 18px rgba(219, 39, 119, 0.25);
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
 }
 
-
 /* =========================================================
-   19. FORM GRID
+   10. FORM GRID AND INPUTS
    ========================================================= */
 
 .quiz-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 15px;
-
   margin-bottom: 20px;
+}
+
+.form-group {
+  min-width: 0;
 }
 
 .form-group label {
   display: block;
+  margin-bottom: 7px;
 
-  margin-bottom: 6px;
-
-  color: #9d174d;
-
-  font-size: 0.8rem;
-
-  font-weight: 800;
+  color: #d8b4fe;
+  font-size: 0.82rem;
+  font-weight: 750;
 }
 
-
-/* =========================================================
-   20. INPUTS
-   ========================================================= */
-
-.pink-input {
+.pink-input,
+.modal-card .form-group input {
   width: 100%;
-
+  min-width: 0;
   padding: 11px 13px;
 
+  border: 1px solid rgba(192, 132, 252, 0.25);
   border-radius: 11px;
-
   outline: none;
 
-  color: #831843;
-
-  background:
-    rgba(255, 245, 248, 0.8);
-
-  border:
-    1px solid rgba(244, 114, 182, 0.35);
+  color: #fff;
+  background: rgba(5, 5, 12, 0.72);
 
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
-    background-color 0.25s ease;
+    background 0.25s ease;
 }
 
-.pink-input:hover {
-  border-color: #f472b6;
+.pink-input::placeholder,
+.admin-note-input::placeholder {
+  color: #8f829e;
 }
 
-.pink-input:focus {
-  background: white;
+.pink-input:hover,
+.modal-card .form-group input:hover {
+  border-color: rgba(236, 72, 153, 0.55);
+}
 
-  border-color: #ec4899;
+.pink-input:focus,
+.modal-card .form-group input:focus {
+  border-color: #e879f9;
+  background: rgba(13, 8, 23, 0.95);
 
   box-shadow:
-    0 0 0 3px rgba(236, 72, 153, 0.08),
-    0 0 18px rgba(236, 72, 153, 0.07);
+    0 0 0 3px rgba(217, 70, 239, 0.1),
+    0 0 18px rgba(236, 72, 153, 0.1);
 }
 
+.pink-input option,
+select option {
+  color: #fff;
+  background: #15101f;
+}
 
 /* =========================================================
-   21. ACTION BUTTON
+   11. PRIMARY ACTION BUTTON
    ========================================================= */
 
 .pink-action-btn {
   position: relative;
+  overflow: hidden;
 
   width: 100%;
-
   padding: 13px 20px;
 
-  border: 0;
-
   border-radius: 13px;
-
-  color: white;
-
   font-size: 0.95rem;
-
   font-weight: 800;
 
   cursor: pointer;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f472b6,
-      #ec4899,
-      #db2777
-    );
-
-  box-shadow:
-    0 8px 22px rgba(219, 39, 119, 0.25);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
 }
 
 .pink-action-btn::before {
-  content: "";
-
   position: absolute;
-
   top: 0;
-
-  left: -120%;
+  left: -130%;
 
   width: 80%;
-
   height: 100%;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.35),
-      transparent
-    );
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
 
   transform: skewX(-20deg);
-
   transition: left 0.6s ease;
+  pointer-events: none;
 }
 
 .pink-action-btn:hover::before {
-  left: 130%;
-}
-
-.pink-action-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 12px 30px rgba(219, 39, 119, 0.35),
-    0 0 20px rgba(236, 72, 153, 0.12);
+  left: 140%;
 }
 
 .pink-action-btn:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: scale(0.99);
 }
-
-.pink-action-btn:disabled {
-  cursor: not-allowed;
-
-  background: #cbd5e1;
-
-  box-shadow: none;
-}
-
 
 /* =========================================================
-   22. CAMERA CONTAINER
-   IMPORTANT:
-   DO NOT MOVE THIS CONTAINER ON HOVER
+   12. CAMERA CONTAINER
+   Keep camera and video stable for reliable interaction.
    ========================================================= */
 
 .container-capture,
@@ -928,611 +802,399 @@ input {
   transform: none !important;
 }
 
-
-/* =========================================================
-   23. CAMERA BOX
-   ========================================================= */
-
-.webcam-box {
+.webcam-box,
+.webcam-box:hover {
   position: relative;
 
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  width: 100%;
   height: 320px;
 
   overflow: hidden;
+  isolation: isolate;
 
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background: #050505;
-
+  border: 1px solid rgba(217, 70, 239, 0.5);
   border-radius: 20px;
-
-  border:
-    1px solid rgba(244, 114, 182, 0.5);
-
-  box-shadow:
-    inset 0 0 35px rgba(236, 72, 153, 0.08),
-    0 10px 30px rgba(219, 39, 119, 0.08);
-
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-
-  z-index: 5;
-}
-
-.webcam-box:hover {
-  transform: none !important;
-
-  border-color: #ec4899;
-
-  box-shadow:
-    inset 0 0 40px rgba(236, 72, 153, 0.1),
-    0 15px 35px rgba(236, 72, 153, 0.15);
-}
-
-
-/* =========================================================
-   24. CAMERA VIEWPORT
-   ========================================================= */
-
-.camera-viewport {
-  position: relative;
-
-  width: 100%;
-
-  height: 100%;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
 
   background: #000;
 
-  z-index: 1;
+  box-shadow:
+    inset 0 0 35px rgba(217, 70, 239, 0.09),
+    0 0 22px rgba(236, 72, 153, 0.06);
+
+  transform: none !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+.webcam-box:hover {
+  border-color: rgba(244, 114, 182, 0.8);
+  box-shadow:
+    inset 0 0 40px rgba(217, 70, 239, 0.1),
+    0 0 25px rgba(236, 72, 153, 0.12);
+}
 
-/* =========================================================
-   25. VIDEO
-   ========================================================= */
+.camera-viewport {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
 
 .video-stream {
   position: relative;
+  z-index: 1;
 
   width: 100%;
-
   height: 100%;
-
   object-fit: cover;
 
-  transform:
-    scaleX(-1) !important;
-
+  transform: scaleX(-1) !important;
   transition: none !important;
-
   pointer-events: none !important;
-
-  z-index: 1;
 }
 
-
-/* =========================================================
-   26. FACE GUIDE
-   ========================================================= */
+/* FACE GUIDE */
 
 .oval-guide-overlay {
   position: absolute;
-
+  z-index: 10;
   inset: 0;
 
   display: flex;
-
+  align-items: center;
   justify-content: center;
 
-  align-items: center;
-
   pointer-events: none !important;
-
-  z-index: 10;
 }
 
 .oval-ring,
 .face-oval-guide {
   width: 52%;
-
   height: 82%;
-
   max-width: 300px;
 
-  border:
-    2px dashed rgba(255, 105, 180, 0.9);
-
+  border: 2px dashed rgba(244, 114, 182, 0.9);
   border-radius: 50%;
 
   box-shadow:
-    0 0 20px rgba(236, 72, 153, 0.15),
-    inset 0 0 20px rgba(236, 72, 153, 0.04);
+    0 0 20px rgba(236, 72, 153, 0.2),
+    inset 0 0 20px rgba(168, 85, 247, 0.08);
 
   pointer-events: none !important;
-
-  animation:
-    facePulse 2.5s ease-in-out infinite;
+  animation: facePulse 2.5s ease-in-out infinite;
 }
 
-@keyframes facePulse {
-  0%,
-  100% {
-    opacity: 0.65;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-
-/* =========================================================
-   27. CAPTURE BUTTON
-   ========================================================= */
+/* CAPTURE BUTTON */
 
 .capture-snap-btn {
   position: absolute;
-
-  left: 50% !important;
-
-  bottom: 12px;
-
-  transform:
-    translateX(-50%) !important;
-
   z-index: 100;
-
-  pointer-events: auto !important;
-
-  border: 0;
+  bottom: 12px;
+  left: 50% !important;
 
   padding: 10px 22px;
 
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 25px;
 
-  color: white;
+  color: #fff;
+  background: linear-gradient(135deg, #ec4899, #a855f7);
 
   font-size: 0.82rem;
-
   font-weight: 800;
-
-  cursor: pointer;
-
   white-space: nowrap;
 
-  background:
-    linear-gradient(
-      135deg,
-      #ec4899,
-      #db2777
-    );
+  cursor: pointer;
+  pointer-events: auto !important;
+
+  transform: translateX(-50%) !important;
 
   box-shadow:
-    0 6px 20px rgba(219, 39, 119, 0.4);
-
-  transition:
-    box-shadow 0.25s ease,
-    background-color 0.25s ease !important;
+    0 0 12px rgba(236, 72, 153, 0.4),
+    0 0 25px rgba(139, 92, 246, 0.18);
 }
 
 .capture-snap-btn:hover,
 .capture-snap-btn:active {
-  transform:
-    translateX(-50%) !important;
-
-  box-shadow:
-    0 10px 28px rgba(219, 39, 119, 0.5);
+  transform: translateX(-50%) !important;
+  box-shadow: 0 0 24px rgba(236, 72, 153, 0.55);
 }
 
-
-/* =========================================================
-   28. CAMERA CONTROLS
-   ========================================================= */
+/* CAMERA CONTROL BUTTONS */
 
 .stop-cam-btn,
 .retake-btn {
   position: absolute;
-
-  top: 10px;
-
-  right: 10px;
-
   z-index: 100;
-
-  pointer-events: auto !important;
-
-  border: 0;
-
-  cursor: pointer;
-
-  border-radius: 8px;
+  top: 10px;
+  right: 10px;
 
   padding: 6px 10px;
 
-  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+
+  font-weight: 750;
+  cursor: pointer;
+  pointer-events: auto !important;
 }
 
 .stop-cam-btn {
-  background:
-    rgba(255, 255, 255, 0.9);
-
-  color: #be123c;
+  color: #fff;
+  background: rgba(24, 16, 36, 0.9);
 }
 
 .retake-btn {
-  background:
-    rgba(225, 29, 72, 0.9);
-
-  color: white;
+  color: #fff;
+  background: linear-gradient(135deg, #be185d, #7c3aed);
 }
 
-
-/* =========================================================
-   29. START CAMERA BUTTON
-   ========================================================= */
+/* START CAMERA */
 
 .start-cam-btn {
   position: relative;
-
   z-index: 100;
-
-  pointer-events: auto !important;
 
   padding: 9px 16px;
 
-  border: 0;
-
+  border: 1px solid rgba(217, 70, 239, 0.3);
   border-radius: 10px;
 
-  color: white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ec4899,
-      #db2777
-    );
+  color: #fff;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
 
   font-size: 0.82rem;
-
   font-weight: 800;
 
   cursor: pointer;
+  pointer-events: auto !important;
 
-  box-shadow:
-    0 5px 15px rgba(219, 39, 119, 0.25);
-
-  transition:
-    box-shadow 0.25s ease,
-    background-color 0.25s ease;
+  box-shadow: 0 0 15px rgba(217, 70, 239, 0.16);
+  transition: box-shadow 0.25s ease;
 }
 
 .start-cam-btn:hover {
-  background: #be185d;
-
-  box-shadow:
-    0 8px 20px rgba(219, 39, 119, 0.3);
+  box-shadow: 0 0 23px rgba(217, 70, 239, 0.35);
 }
 
 .start-cam-btn:active {
   transform: none !important;
 }
 
-
-/* =========================================================
-   30. UPLOAD BUTTON
-   ========================================================= */
+/* UPLOAD FILE */
 
 .upload-file-label {
   position: relative;
-
   z-index: 100;
 
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
-  pointer-events: auto !important;
 
   padding: 9px 16px;
 
+  border: 1px solid rgba(192, 132, 252, 0.4);
   border-radius: 10px;
 
-  background: white;
-
-  color: #db2777;
-
-  border:
-    1px solid #fbcfe8;
+  color: #f0abfc;
+  background: rgba(139, 92, 246, 0.1);
 
   font-size: 0.82rem;
-
   font-weight: 800;
 
   cursor: pointer;
+  pointer-events: auto !important;
 
-  box-shadow:
-    0 4px 12px rgba(236, 72, 153, 0.08);
-
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 .upload-file-label:hover {
-  background: #fff5f8;
-
-  border-color: #ec4899;
-
-  box-shadow:
-    0 8px 20px rgba(236, 72, 153, 0.15);
+  color: #fff;
+  background: rgba(139, 92, 246, 0.22);
+  border-color: #d946ef;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.17);
 }
 
 .upload-file-label:active {
   transform: none !important;
 }
 
-
-/* =========================================================
-   31. HIDDEN FILE INPUT
-   ========================================================= */
-
 .upload-file-label input[type="file"] {
   position: absolute;
-
   width: 1px;
-
   height: 1px;
-
   opacity: 0;
-
   pointer-events: none;
 }
 
-
-/* =========================================================
-   32. CAMERA ACTION AREA
-   ========================================================= */
-
 .cam-actions {
   position: relative;
-
   z-index: 100;
 
   display: flex;
-
-  justify-content: center;
-
   align-items: center;
-
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 10px;
 
   margin-top: 12px;
 }
 
-
-/* =========================================================
-   33. NO CAMERA STATE
-   ========================================================= */
-
 .no-camera-state {
-  text-align: center;
-
-  color: #9d174d;
-
   padding: 25px;
+  color: #c4b5d6;
+  text-align: center;
 }
 
 .pink-icon {
   display: block;
-
-  font-size: 2.5rem;
-
   margin-bottom: 10px;
+  color: #f0abfc;
+  font-size: 2.5rem;
 }
 
 .no-camera-state p {
-  font-size: 0.85rem;
-
   margin-bottom: 14px;
+  font-size: 0.85rem;
 }
 
-
 /* =========================================================
-   34. THUMBNAILS
+   13. CAMERA THUMBNAILS
    ========================================================= */
 
 .scans-thumbnail-row {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-
   margin-top: 15px;
 }
 
 .thumb-card {
   position: relative;
-
+  min-width: 0;
   padding: 7px;
 
+  border: 1px solid rgba(217, 70, 239, 0.23);
   border-radius: 12px;
 
-  background: #fff5f8;
-
-  border:
-    1px solid #fbcfe8;
-
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+  background: rgba(19, 13, 30, 0.85);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .thumb-card:hover {
-  border-color: #ec4899;
-
-  box-shadow:
-    0 8px 18px rgba(236, 72, 153, 0.12);
+  border-color: rgba(236, 72, 153, 0.7);
+  box-shadow: 0 0 16px rgba(217, 70, 239, 0.1);
 }
 
 .thumb-label {
   display: block;
-
   margin-bottom: 5px;
 
-  color: #9d174d;
-
+  color: #f0abfc;
   font-size: 0.7rem;
-
   font-weight: 800;
-
   text-align: center;
 }
 
 .thumb-img-wrapper,
 .empty-thumb {
   width: 100%;
-
   height: 65px;
-
-  border-radius: 8px;
-
   overflow: hidden;
+  border-radius: 8px;
 }
 
 .thumb-img-wrapper img {
   width: 100%;
-
   height: 100%;
-
   object-fit: cover;
 }
 
 .empty-thumb {
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
-  border:
-    1px dashed #fbcfe8;
-
-  color: #db2777;
+  border: 1px dashed rgba(192, 132, 252, 0.4);
+  color: #d8b4fe;
+  background: rgba(0, 0, 0, 0.25);
 
   font-size: 0.7rem;
 }
 
 .remove-thumb-btn {
   position: absolute;
-
   top: 3px;
-
   right: 3px;
-
   z-index: 30;
 
-  width: 18px;
+  width: 20px;
+  height: 20px;
 
-  height: 18px;
-
-  border: 0;
-
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
 
-  background:
-    rgba(0, 0, 0, 0.65);
-
-  color: white;
-
+  color: #fff;
+  background: rgba(0, 0, 0, 0.85);
   cursor: pointer;
 }
 
-
 /* =========================================================
-   35. ANALYSIS RESULT
+   14. ANALYSIS RESULTS
    ========================================================= */
 
 .result-hero-badge {
   display: flex;
-
-  justify-content: space-between;
-
   align-items: center;
-
-  padding: 15px 18px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 
   margin-bottom: 20px;
+  padding: 15px 18px;
 
+  border: 1px solid rgba(217, 70, 239, 0.28);
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(252, 231, 243, 0.9),
-      rgba(255, 245, 248, 0.9)
-    );
-
-  border:
-    1px solid rgba(244, 114, 182, 0.35);
-
-  box-shadow:
-    0 8px 20px rgba(236, 72, 153, 0.07);
+  background: linear-gradient(
+    120deg,
+    rgba(236, 72, 153, 0.1),
+    rgba(139, 92, 246, 0.1)
+  );
 }
 
 .badge-title {
   font-size: 1.3rem;
-
   font-weight: 900;
 
-  background:
-    linear-gradient(
-      135deg,
-      #ec4899,
-      #be185d
-    );
-
+  background: linear-gradient(110deg, #f9a8d4, #e879f9, #a78bfa);
   -webkit-background-clip: text;
-
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .badge-conf {
   padding: 5px 12px;
-
+  border: 1px solid rgba(236, 72, 153, 0.3);
   border-radius: 20px;
 
-  background: white;
-
-  color: #db2777;
+  color: #f9a8d4;
+  background: rgba(236, 72, 153, 0.1);
 
   font-size: 0.8rem;
-
   font-weight: 800;
 }
 
-
-/* =========================================================
-   36. PROBABILITY BARS
-   ========================================================= */
+/* PROBABILITY BARS */
 
 .prob-bars-stack {
   margin-bottom: 20px;
@@ -1540,63 +1202,42 @@ input {
 
 .prob-bars-stack h4 {
   margin-bottom: 10px;
-
-  color: #9d174d;
-
+  color: #e9d5ff;
   font-size: 0.85rem;
 }
 
 .prob-item {
   display: grid;
-
-  grid-template-columns:
-    90px 1fr 45px;
-
+  grid-template-columns: 90px minmax(0, 1fr) 45px;
   align-items: center;
-
   gap: 10px;
 
   margin-bottom: 9px;
-
+  color: #d7cce5;
   font-size: 0.8rem;
 }
 
-.prob-track {
+.prob-track,
+.bar-track {
   height: 9px;
-
   overflow: hidden;
-
   border-radius: 10px;
-
-  background: #fce7f3;
-
-  box-shadow:
-    inset 0 1px 3px rgba(131, 24, 67, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.prob-fill {
+.prob-fill,
+.bar-fill {
   height: 100%;
-
   border-radius: 10px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #f9a8d4,
-      #ec4899,
-      #db2777
-    );
+  background: linear-gradient(90deg, #ec4899, #d946ef, #8b5cf6);
+  box-shadow: 0 0 12px rgba(217, 70, 239, 0.25);
 
-  box-shadow:
-    0 0 10px rgba(236, 72, 153, 0.25);
-
-  transition:
-    width 0.8s ease;
+  transition: width 0.8s ease;
 }
-
 
 /* =========================================================
-   37. RECOMMENDATION BOXES
+   15. RECOMMENDATIONS AND ROUTINE CARDS
    ========================================================= */
 
 .recs-box,
@@ -1604,36 +1245,25 @@ input {
 .summary-box {
   padding: 17px;
 
+  border: 1px solid rgba(217, 70, 239, 0.23);
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,0.95),
-      rgba(255,245,248,0.95)
-    );
+  color: #e8def5;
+  background: linear-gradient(
+    145deg,
+    rgba(26, 17, 39, 0.92),
+    rgba(12, 10, 20, 0.95)
+  );
 
-  border:
-    1px solid rgba(244, 114, 182, 0.3);
-
-  box-shadow:
-    0 8px 25px rgba(236, 72, 153, 0.05);
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .recs-box:hover,
 .routine-card:hover,
 .summary-box:hover {
-  transform: translateY(-4px);
-
-  border-color: #f472b6;
-
-  box-shadow:
-    0 15px 30px rgba(236, 72, 153, 0.12);
+  border-color: rgba(236, 72, 153, 0.5);
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.08);
 }
 
 .rec-group {
@@ -1642,378 +1272,408 @@ input {
 
 .rec-group strong,
 .routine-card h4 {
-  color: #db2777;
+  color: #f0abfc;
 }
 
-
-/* =========================================================
-   38. ROUTINE LIST
-   ========================================================= */
-
 .routine-card ul {
-  list-style: none;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 9px;
+  list-style: none;
 }
 
 .routine-card li {
   display: flex;
-
-  align-items: center;
-
+  align-items: flex-start;
   gap: 9px;
-
+  color: #d8cde5;
   font-size: 0.84rem;
 }
 
 .step-num {
-  width: 24px;
-
-  height: 24px;
-
-  flex-shrink: 0;
-
   display: flex;
-
+  flex-shrink: 0;
   align-items: center;
-
   justify-content: center;
 
+  width: 24px;
+  height: 24px;
+
+  border: 1px solid rgba(217, 70, 239, 0.35);
   border-radius: 50%;
 
-  background: #fce7f3;
-
-  color: #db2777;
+  color: #f9a8d4;
+  background: rgba(217, 70, 239, 0.12);
 
   font-weight: 900;
 }
 
-
 /* =========================================================
-   39. GENERIC PINK CARD
+   16. PRODUCT RECOMMENDATIONS
    ========================================================= */
 
-.pink-card {
-  padding: 25px;
-
-  border-radius: 22px;
-
-  background:
-    rgba(255,255,255,0.9);
-
-  border:
-    1px solid rgba(244, 114, 182, 0.3);
-
-  box-shadow:
-    0 10px 30px rgba(236, 72, 153, 0.07);
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+.product-suggestions {
+  width: 100%;
+  margin-top: 20px;
 }
-
-.pink-card:hover {
-  transform: translateY(-5px);
-
-  border-color: #f472b6;
-
-  box-shadow:
-    0 15px 35px rgba(236, 72, 153, 0.13);
-}
-
-
-/* =========================================================
-   40. PRODUCT CARDS
-   ========================================================= */
 
 .product-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  width: 100%;
+}
+
+.recommendation-product-item {
   display: flex;
-
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  padding: 14px;
 
-  gap: 12px;
+  border: 1px solid rgba(217, 70, 239, 0.25);
+  border-radius: 18px;
+
+  color: #f5edff;
+  background: linear-gradient(
+    145deg,
+    rgba(24, 17, 36, 0.95),
+    rgba(10, 9, 17, 0.98)
+  );
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  list-style: none;
 }
 
-.product-card {
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.product-card:hover {
-  border-color: #ec4899 !important;
-
+.recommendation-product-item:hover {
+  border-color: rgba(236, 72, 153, 0.6);
   box-shadow:
-    0 8px 20px rgba(236, 72, 153, 0.12);
+    0 12px 28px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(217, 70, 239, 0.09);
 }
 
+.recommendation-product-image-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+
+  border: 1px solid rgba(217, 70, 239, 0.15);
+  border-radius: 13px;
+
+  background: linear-gradient(145deg, #17101f, #09080f);
+}
+
+.recommendation-product-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  margin: 0 auto 14px;
+  object-fit: contain;
+
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+
+  transition: transform 0.25s ease;
+}
+
+.recommendation-product-image-link:hover .recommendation-product-image {
+  transform: scale(1.04);
+}
+
+.recommendation-product-details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 2px;
+}
+
+.recommendation-product-name {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  color: #f5edff;
+  overflow-wrap: anywhere;
+}
+
+.recommendation-product-name strong {
+  color: #e879f9;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.recommendation-product-name span {
+  color: #e5d9f2;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.recommendation-product-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  color: #b8a9ca;
+  font-size: 13px;
+}
+
+.recommendation-product-meta strong {
+  color: #f9a8d4;
+  font-size: 17px;
+}
+
+.recommendation-product-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.recommendation-wishlist-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  border-radius: 12px;
+
+  color: #f9a8d4;
+  background: rgba(236, 72, 153, 0.08);
+
+  font-size: 19px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recommendation-wishlist-button:hover,
+.recommendation-wishlist-button.is-saved {
+  color: #fff;
+  background: rgba(236, 72, 153, 0.22);
+  box-shadow: 0 0 14px rgba(236, 72, 153, 0.15);
+}
+
+.recommendation-buy-button {
+  flex: 1;
+  min-height: 44px;
+  padding: 10px 14px;
+
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.recommendation-buy-button:hover {
+  transform: translateY(-1px);
+}
+
+.recommendation-buy-button:focus-visible,
+.recommendation-wishlist-button:focus-visible {
+  outline: 2px solid #e879f9;
+  outline-offset: 3px;
+}
 
 /* =========================================================
-   41. HISTORY
+   17. HISTORY TABLE
    ========================================================= */
-
-.history-card {
-  width: 100%;
-
-  padding: 25px;
-
-  margin-top: 35px;
-
-  border-radius: 22px;
-
-  background: white;
-
-  border:
-    1px solid #fbcfe8;
-
-  box-shadow:
-    0 10px 30px rgba(236, 72, 153, 0.07);
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.history-card:hover {
-  transform: translateY(-4px);
-
-  box-shadow:
-    0 18px 35px rgba(236, 72, 153, 0.12);
-}
 
 .history-table {
   width: 100%;
-
   border-collapse: collapse;
-
+  color: #e5d9f2;
   font-size: 0.85rem;
 }
 
 .history-table th,
 .history-table td {
-  padding: 10px;
-
-  border-bottom:
-    1px solid #fbcfe8;
-
+  padding: 11px;
+  border-bottom: 1px solid rgba(217, 70, 239, 0.16);
   text-align: left;
 }
 
 .history-table th {
-  color: #db2777;
+  color: #f0abfc;
+  background: rgba(217, 70, 239, 0.06);
+  font-weight: 800;
 }
 
+.history-table tbody tr:hover {
+  background: rgba(217, 70, 239, 0.045);
+}
 
 /* =========================================================
-   42. MODEL / ABOUT SECTIONS
+   18. ABOUT, MODEL AND REVIEW SECTIONS
    ========================================================= */
 
 .section-block {
   position: relative;
-
   z-index: 1;
 
-  max-width: 1000px;
-
+  width: 100%;
+  max-width: 1100px;
   margin: 0 auto 60px;
-
   padding: 0 25px;
 }
 
 .section-block h2 {
-  text-align: center;
-
   margin-bottom: 25px;
 
-  color: #831843;
+  color: #fff;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+  text-align: center;
 }
 
 .model-details-grid,
 .reviews-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(280px, 1fr));
-
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
 }
 
+.review-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 22px;
 
-/* =========================================================
-   43. REVIEW CARDS
-   ========================================================= */
+  border: 1px solid rgba(217, 70, 239, 0.22);
+  border-radius: 18px;
 
-.review-card p {
-  font-size: 0.9rem;
+  color: #e4d9ef;
+  background: linear-gradient(
+    145deg,
+    rgba(24, 17, 36, 0.9),
+    rgba(10, 9, 17, 0.96)
+  );
 
-  font-style: italic;
-
-  margin-bottom: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
-.review-card h4 {
-  color: #db2777;
+.review-card p {
+  margin-bottom: 12px;
+  color: #c9bbd8;
+  font-size: 0.9rem;
+  font-style: italic;
+}
 
-  text-align: right;
-
+.review-card h4,
+.review-meta h4 {
+  color: #f0abfc;
   font-size: 0.82rem;
+  text-align: right;
 }
 
 .stars-row {
+  color: #fbbf24;
   font-size: 0.9rem;
 }
 
 .review-meta {
   display: flex;
-
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 
   margin-top: 10px;
-
   padding-top: 8px;
 
-  border-top:
-    1px dashed #fbcfe8;
+  border-top: 1px dashed rgba(217, 70, 239, 0.22);
 }
 
+.review-meta small {
+  color: #a99ab9;
+}
+
+.no-reviews-text {
+  padding: 25px 10px;
+  color: #b9adc9;
+  text-align: center;
+}
 
 /* =========================================================
-   44. METRICS CARD
+   19. METRICS
    ========================================================= */
-
-.metrics-comparison-card {
-  max-width: 650px;
-
-  margin: auto;
-
-  padding: 22px;
-
-  border-radius: 18px;
-
-  background: white;
-
-  border:
-    1px solid #fbcfe8;
-
-  box-shadow:
-    0 10px 30px rgba(236, 72, 153, 0.07);
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.metrics-comparison-card:hover {
-  transform: translateY(-4px);
-
-  box-shadow:
-    0 15px 35px rgba(236, 72, 153, 0.12);
-}
 
 .metric-row {
   margin-bottom: 18px;
-
   padding-bottom: 12px;
-
-  border-bottom:
-    1px dashed #fbcfe8;
+  border-bottom: 1px dashed rgba(217, 70, 239, 0.2);
 }
 
 .metric-info {
   display: flex;
-
   justify-content: space-between;
-
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
 .metric-name {
+  color: #d8b4fe;
   font-weight: 700;
-
-  color: #334155;
 }
-
-.bar-track {
-  height: 10px;
-
-  flex: 1;
-
-  overflow: hidden;
-
-  border-radius: 10px;
-
-  background: #f1f5f9;
-}
-
-.bar-fill {
-  height: 100%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #f9a8d4,
-      #ec4899,
-      #db2777
-    );
-
-  border-radius: 10px;
-}
-
 
 /* =========================================================
-   45. AUTH MODAL
+   20. AUTHENTICATION MODAL
    ========================================================= */
 
 .modal-overlay {
   position: fixed;
-
   inset: 0;
-
   z-index: 5000;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   padding: 20px;
 
-  background:
-    rgba(131, 24, 67, 0.35);
-
-  backdrop-filter: blur(8px);
-
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .modal-card {
   position: relative;
 
   width: 100%;
-
   max-width: 420px;
+  max-height: min(90vh, 850px);
+  overflow-y: auto;
 
   padding: 30px;
 
-  border-radius: 25px;
+  border: 1px solid rgba(217, 70, 239, 0.35);
+  border-radius: 24px;
 
-  background:
-    rgba(255,255,255,0.96);
-
-  border:
-    1px solid #fbcfe8;
+  color: #f5edff;
+  background: linear-gradient(
+    145deg,
+    rgba(26, 17, 40, 0.98),
+    rgba(8, 7, 14, 0.99)
+  );
 
   box-shadow:
-    0 25px 70px rgba(219, 39, 119, 0.2);
+    0 25px 80px rgba(0, 0, 0, 0.65),
+    0 0 30px rgba(217, 70, 239, 0.1);
 
-  animation:
-    modalIn 0.35s ease;
+  animation: modalIn 0.3s ease;
 }
 
 .modal-card.wide-card {
@@ -2022,280 +1682,220 @@ input {
 
 .close-btn {
   position: absolute;
-
   top: 15px;
-
   right: 15px;
 
   width: 32px;
-
   height: 32px;
 
-  border: 0;
-
+  border: 1px solid rgba(217, 70, 239, 0.2);
   border-radius: 50%;
 
-  background: #fce7f3;
-
-  color: #db2777;
+  color: #f9a8d4;
+  background: rgba(217, 70, 239, 0.1);
 
   cursor: pointer;
-
-  transition:
-    transform 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .close-btn:hover {
   transform: rotate(90deg);
+  box-shadow: 0 0 14px rgba(236, 72, 153, 0.2);
 }
-
-
-/* =========================================================
-   46. AUTH FORM
-   ========================================================= */
 
 .modal-card form {
   display: flex;
-
   flex-direction: column;
-
   gap: 15px;
 }
 
-.modal-card .form-group input {
-  width: 100%;
-
-  padding: 11px;
-
-  border-radius: 10px;
-
-  border: 1px solid #fbcfe8;
-
-  outline: none;
-}
-
-.modal-card .form-group input:focus {
-  border-color: #ec4899;
-
-  box-shadow:
-    0 0 0 3px rgba(236, 72, 153, 0.08);
-}
-
 .auth-footer {
-  text-align: center;
-
   margin-top: 18px;
-
   padding-top: 15px;
 
-  border-top:
-    1px dashed #fbcfe8;
+  border-top: 1px dashed rgba(217, 70, 239, 0.23);
 
+  color: #b9adc9;
   font-size: 0.82rem;
+  text-align: center;
 }
 
 .auth-footer span,
 .link-text {
-  color: #db2777;
-
+  color: #f0abfc;
   cursor: pointer;
-
   text-decoration: underline;
 }
 
-
 /* =========================================================
-   47. ACCOUNT
+   21. ACCOUNT
    ========================================================= */
 
 .account-header {
   display: flex;
-
   align-items: center;
-
   gap: 15px;
 
   margin-bottom: 20px;
-
   padding-bottom: 15px;
 
-  border-bottom:
-    1px solid #fbcfe8;
+  border-bottom: 1px solid rgba(217, 70, 239, 0.2);
 }
 
 .avatar-circle {
-  width: 52px;
-
-  height: 52px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
 
-  color: white;
+  color: #fff;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
 
   font-size: 1.3rem;
-
   font-weight: 900;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f472b6,
-      #db2777
-    );
-
-  box-shadow:
-    0 6px 18px rgba(219, 39, 119, 0.25);
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
 }
 
 .account-tabs {
   display: flex;
-
   gap: 5px;
-
   margin-bottom: 20px;
-
-  border-bottom:
-    1px solid #fbcfe8;
-
   overflow-x: auto;
+
+  border-bottom: 1px solid rgba(217, 70, 239, 0.2);
 }
 
 .account-tabs button {
   padding: 9px 13px;
-
   border: 0;
+  border-radius: 8px 8px 0 0;
 
+  color: #b9adc9;
   background: transparent;
 
-  color: #9d174d;
-
   font-weight: 700;
-
-  cursor: pointer;
-
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .account-tabs button.active,
 .account-tabs button:hover {
-  color: #db2777;
-
-  background: #fce7f3;
-
-  border-radius: 8px;
+  color: #f9a8d4;
+  background: rgba(217, 70, 239, 0.12);
 }
 
-
 /* =========================================================
-   48. SUMMARY BOX
+   22. SUMMARY AND STATUS
    ========================================================= */
 
 .summary-box {
   display: flex;
-
   flex-direction: column;
-
   gap: 3px;
 }
 
 .summary-title {
+  color: #b9adc9;
   font-size: 0.75rem;
-
-  color: #9d174d;
 }
 
 .summary-number {
+  color: #fff;
   font-size: 1.15rem;
-
   font-weight: 900;
 }
 
 .summary-number.highlight {
-  color: #db2777;
+  color: #f0abfc;
 }
-
-
-/* =========================================================
-   49. ERROR
-   ========================================================= */
 
 .pink-error-banner {
   margin-top: 15px;
-
   padding: 12px;
 
+  border: 1px solid rgba(251, 113, 133, 0.4);
   border-radius: 10px;
 
-  color: #be123c;
-
-  background: #ffe4e6;
-
-  border:
-    1px solid #fda4af;
+  color: #fecdd3;
+  background: rgba(190, 24, 93, 0.16);
 
   font-size: 0.82rem;
 }
 
-
-/* =========================================================
-   50. PLACEHOLDER
-   ========================================================= */
-
 .placeholder-state {
   padding: 45px 20px;
-
+  color: #b9adc9;
   text-align: center;
-
-  color: #9d174d;
 }
 
 .placeholder-icon {
-  font-size: 2.5rem;
-
   margin-bottom: 10px;
+  color: #e879f9;
+  font-size: 2.5rem;
 }
 
+.auth-prompt-banner {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto 24px;
+  padding: 15px 18px;
+
+  border: 1px solid rgba(217, 70, 239, 0.3);
+  border-radius: 14px;
+
+  color: #e8def5;
+  background: rgba(20, 13, 31, 0.88);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+}
+
+.auth-prompt-banner span {
+  color: #f0abfc;
+  font-weight: 800;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 /* =========================================================
-   51. FOOTER
+   23. FOOTER
    ========================================================= */
 
 .app-footer {
   position: relative;
-
   z-index: 1;
 
+  width: 100%;
   margin-top: auto;
-
   padding: 30px 20px;
 
-  text-align: center;
+  border-top: 1px solid rgba(217, 70, 239, 0.2);
 
-  background:
-    rgba(255,255,255,0.85);
-
-  border-top:
-    1px solid #fbcfe8;
-
-  color: #9d174d;
+  color: #a99ab9;
+  background: rgba(5, 5, 9, 0.84);
 
   font-size: 0.82rem;
+  text-align: center;
+
+  backdrop-filter: blur(14px);
 }
 
-
 /* =========================================================
-   52. ANIMATIONS
+   24. ANIMATIONS
    ========================================================= */
 
 @keyframes softFloat {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
   }
 
@@ -2304,94 +1904,119 @@ input {
   }
 }
 
+@keyframes facePulse {
+  0%, 100% {
+    opacity: 0.65;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;
-
-    transform:
-      translateY(25px)
-      scale(0.95);
+    transform: translateY(20px) scale(0.97);
   }
 
   to {
     opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
-
 /* =========================================================
-   53. RESPONSIVE TABLET
+   25. RESPONSIVE TABLET
    ========================================================= */
 
-@media (max-width: 900px) {
-
+@media (max-width: 1100px) {
   .navbar {
     padding: 13px 20px;
   }
 
-  .three-containers-wrapper,
-  .four-containers-wrapper {
-    max-width: 100%;
+  .nav-links {
+    gap: 6px 9px;
   }
 
-  .workspace-section {
-    padding-left: 18px;
+  .nav-links a,
+  .nav-links button {
+    padding: 8px 9px;
+    font-size: 0.82rem;
+  }
 
-    padding-right: 18px;
+  .workspace-section,
+  .section-block {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
-
 /* =========================================================
-   54. RESPONSIVE MOBILE
+   26. RESPONSIVE MOBILE
    ========================================================= */
 
 @media (max-width: 768px) {
-
   .navbar {
-    flex-direction: column;
-
+    position: sticky;
+    justify-content: center;
     gap: 12px;
+    padding: 13px 15px;
+  }
 
-    padding: 14px;
+  .nav-logo {
+    width: 100%;
+    font-size: 1.2rem;
+    text-align: center;
+    white-space: normal;
   }
 
   .nav-links {
-    gap: 15px;
+    width: 100%;
+    justify-content: center;
+    gap: 6px;
+  }
 
-    flex-wrap: wrap;
+  .nav-links a,
+  .nav-links button {
+    padding: 8px 9px;
+    font-size: 0.78rem;
+  }
 
+  .nav-auth,
+  .user-profile-badge {
+    width: 100%;
     justify-content: center;
   }
 
   .hero-section {
-    padding:
-      50px 18px 35px;
+    padding: 55px 18px 40px;
   }
 
   .hero-section h1 {
-    font-size: 2rem;
+    font-size: clamp(1.9rem, 7vw, 2.6rem);
+  }
+
+  .hero-section p {
+    font-size: 0.92rem;
   }
 
   .workspace-section {
-    padding:
-      15px 12px 60px;
+    padding: 15px 14px 60px;
+  }
+
+  .section-block {
+    padding: 0 14px;
+    margin-bottom: 42px;
   }
 
   .section-title {
-    font-size: 1.65rem;
-
     margin-bottom: 30px;
   }
 
   .pink-container {
-    padding: 20px;
-
-    border-radius: 22px;
+    padding: 21px;
+    border-radius: 21px;
   }
 
   .quiz-grid {
@@ -2402,42 +2027,55 @@ input {
     font-size: 1.05rem;
   }
 
-  .webcam-box {
+  .webcam-box,
+  .webcam-box:hover {
     height: 260px;
+    transform: none !important;
   }
 
   .oval-ring,
   .face-oval-guide {
     width: 65%;
-
     height: 78%;
   }
 
   .scans-thumbnail-row {
-    grid-template-columns:
-      repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .result-hero-badge {
-    flex-direction: column;
-
     align-items: flex-start;
-
-    gap: 8px;
+    flex-direction: column;
   }
 
   .prob-item {
-    grid-template-columns:
-      75px 1fr 40px;
+    grid-template-columns: 75px minmax(0, 1fr) 40px;
+  }
+
+  .modal-overlay {
+    padding: 12px;
   }
 
   .modal-card {
-    padding: 23px;
-
+    padding: 24px 20px;
     border-radius: 20px;
   }
 
-  /* CAMERA MUST NEVER MOVE */
+  .pink-card,
+  .history-card {
+    padding: 18px;
+  }
+
+  .model-details-grid,
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-options-grid {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+
+  /* Keep camera controls stable */
   .container-capture,
   .container-capture:hover,
   .webcam-box,
@@ -2446,45 +2084,70 @@ input {
   }
 
   .video-stream {
-    transform:
-      scaleX(-1) !important;
+    transform: scaleX(-1) !important;
   }
 
   .capture-snap-btn,
   .capture-snap-btn:hover,
   .capture-snap-btn:active {
-    transform:
-      translateX(-50%) !important;
+    transform: translateX(-50%) !important;
   }
 }
 
-
 /* =========================================================
-   55. SMALL MOBILE
+   27. SMALL MOBILE
    ========================================================= */
 
 @media (max-width: 480px) {
-
-  .nav-logo {
-    font-size: 1.1rem;
+  .navbar {
+    padding: 12px 10px;
   }
 
-  .nav-links a {
+  .nav-logo {
+    font-size: 1.08rem;
+  }
+
+  .nav-links {
+    gap: 5px;
+  }
+
+  .nav-links a,
+  .nav-links button {
+    padding: 7px 6px;
+    font-size: 0.72rem;
+  }
+
+  .pink-login-btn,
+  .profile-btn,
+  .logout-btn {
+    padding: 8px 12px;
     font-size: 0.78rem;
   }
 
+  .hero-section {
+    padding: 42px 14px 30px;
+  }
+
   .hero-section h1 {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
+    letter-spacing: -0.5px;
   }
 
   .hero-section p {
-    font-size: 0.9rem;
+    font-size: 0.87rem;
+  }
+
+  .workspace-section {
+    padding: 12px 10px 45px;
+  }
+
+  .section-block {
+    padding: 0 10px;
   }
 
   .pink-container {
-    padding: 17px;
-
-    border-radius: 19px;
+    padding: 16px;
+    border-radius: 18px;
   }
 
   .container-header {
@@ -2493,13 +2156,16 @@ input {
 
   .container-num {
     width: 34px;
-
     height: 34px;
-
     border-radius: 10px;
   }
 
-  .webcam-box {
+  .container-header h3 {
+    font-size: 0.98rem;
+  }
+
+  .webcam-box,
+  .webcam-box:hover {
     height: 235px;
   }
 
@@ -2509,9 +2175,8 @@ input {
 
   .start-cam-btn,
   .upload-file-label {
-    font-size: 0.75rem;
-
-    padding: 8px 12px;
+    padding: 8px 11px;
+    font-size: 0.74rem;
   }
 
   .scans-thumbnail-row {
@@ -2524,29 +2189,63 @@ input {
   }
 
   .prob-item {
-    grid-template-columns:
-      65px 1fr 35px;
-
+    grid-template-columns: 62px minmax(0, 1fr) 35px;
     gap: 6px;
+    font-size: 0.7rem;
+  }
 
-    font-size: 0.72rem;
+  .modal-card {
+    padding: 23px 16px;
+  }
+
+  .recommendation-product-item {
+    padding: 11px;
+  }
+
+  .recommendation-product-image-link {
+    height: 220px;
+  }
+
+  .recommendation-product-actions {
+    gap: 7px;
+  }
+
+  .recommendation-wishlist-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .recommendation-buy-button {
+    padding: 9px;
+    font-size: 0.82rem;
+  }
+
+  .auth-prompt-banner {
+    padding: 12px;
+    font-size: 0.82rem;
+  }
+
+  .history-table {
+    font-size: 0.74rem;
+  }
+
+  .history-table th,
+  .history-table td {
+    padding: 8px 6px;
   }
 }
 
-
 /* =========================================================
-   56. REDUCED MOTION
+   28. ACCESSIBILITY
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
-    animation: none !important;
-
-    transition: none !important;
-
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
