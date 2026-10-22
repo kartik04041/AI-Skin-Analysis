@@ -1,7 +1,14 @@
-// =========================================================
-// AI SKINCARE NODE BACKEND
-// server.js
-// =========================================================
+
+/* =========================================================
+   AI SKINCARE ANALYSIS SYSTEM
+   Node.js Backend
+   Authentication | MongoDB | Skin Analysis
+   History | Reviews | Admin Dashboard | Shop
+   ========================================================= */
+
+require("dotenv").config({
+  path: require("path").join(__dirname, ".env"),
+});
 
 const express = require("express");
 const cors = require("cors");
@@ -14,1826 +21,904 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs");
 
+const shopRoutes = require("./shopRoutes");
 const app = express();
 
 // =========================================================
-// CONFIG
+// CONFIGURATION
 // =========================================================
 
-const PORT = 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
-const PYTHON_URL = "http://127.0.0.1:5001";
+const PYTHON_URL =
+  process.env.PYTHON_URL || "http://127.0.0.1:5001";
 
 const MONGO_URI =
+  process.env.MONGO_URI ||
   "mongodb://127.0.0.1:27017/skin_analysis_db";
 
-const SECRET_KEY =
-  "glowai_super_secret_jwt_key_2026";
+const SECRET_KEY = process.env.JWT_SECRET;
 
-const ADMIN_EMAIL =
-  "email-admin@gmail.com";
+if (!SECRET_KEY) {
+  throw new Error(
+    "JWT_SECRET is missing. Add it to backend/.env."
+  );
+}
+
+const ADMIN_EMAIL = (
+  process.env.ADMIN_EMAIL || "email-admin@gmail.com"
+).trim().toLowerCase();
 
 const ADMIN_PASSWORD =
-  "admin123";
-
-const ADMIN_TOKEN =
-  "admin-fixed-token";
+  process.env.ADMIN_PASSWORD || "admin123";
 
 // =========================================================
 // MIDDLEWARE
 // =========================================================
 
+app.disable("x-powered-by");
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+    ],
     credentials: true,
   })
 );
 
-app.use(
-  express.json({
-    limit: "10mb",
-  })
-);
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use("/api/shop", shopRoutes);
 
 // =========================================================
-// UPLOAD DIRECTORY
+// MONGODB CONNECTION
 // =========================================================
 
-const uploadDir = path.join(
-  __dirname,
-  "uploads"
-);
+mongoose.set("strictQuery", true);
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, {
-    recursive: true,
-  });
-}
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected successfully.");
+  console.log("Database:", mongoose.connection.name);
+});
 
-// =========================================================
-// MULTER
-// =========================================================
+mongoose.connection.on("error", (error) => {
+  console.error("MongoDB error:", error.message);
+});
 
-const storage =
-  multer.diskStorage({
-    destination: function (
-      req,
-      file,
-      cb
-    ) {
-      cb(null, uploadDir);
-    },
-
-    filename: function (
-      req,
-      file,
-      cb
-    ) {
-      const extension =
-        path.extname(
-          file.originalname
-        ) || ".jpg";
-
-      const filename =
-        `${Date.now()}-${Math.round(
-          Math.random() * 1e9
-        )}${extension}`;
-
-      cb(null, filename);
-    },
-  });
-
-const fileFilter =
-  function (
-    req,
-    file,
-    cb
-  ) {
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (
-      allowedTypes.includes(
-        file.mimetype
-      )
-    ) {
-      cb(null, true);
-    } else {
-      cb(
-        new Error(
-          "Only JPG, JPEG, PNG and WEBP images are allowed."
-        )
-      );
-    }
-  };
-
-const upload =
-  multer({
-    storage,
-
-    fileFilter,
-
-    limits: {
-      fileSize:
-        10 * 1024 * 1024,
-    },
-  });
-
-// =========================================================
-// BASIC ROUTE
-// =========================================================
-
-app.get(
-  "/",
-  (req, res) => {
-    res.json({
-      success: true,
-      message:
-        "AI Skincare Backend is running!",
-    });
-  }
-);
-
-// =========================================================
-// HEALTH
-// =========================================================
-
-app.get(
-  "/health",
-  (req, res) => {
-    res.json({
-      success: true,
-
-      status: "online",
-
-      node: "running",
-
-      python: PYTHON_URL,
-
-      mongodb:
-        mongoose.connection
-          .readyState === 1
-          ? "connected"
-          : "disconnected",
-    });
-  }
-);
-
-// =========================================================
-// MONGODB
-// =========================================================
+mongoose.connection.on("disconnected", () => {
+  console.warn("MongoDB disconnected.");
+});
 
 mongoose
-  .connect(
-    MONGO_URI,
-    {
-      serverSelectionTimeoutMS: 5000,
-    }
-  )
-  .then(() => {
-    console.log(
-      "========================================"
-    );
-
-    console.log(
-      "✅ MongoDB connected"
-    );
-
-    console.log(
-      "📦 Database: skin_analysis_db"
-    );
-
-    console.log(
-      "========================================"
-    );
+  .connect(MONGO_URI, {
+    serverSelectionTimeoutMS: 5000,
   })
   .catch((error) => {
-    console.error(
-      "❌ MongoDB connection error:"
-    );
-
-    console.error(
-      error.message
-    );
+    console.error("MongoDB connection failed:", error.message);
+    console.error("Check MongoDB service and MONGO_URI.");
   });
 
-mongoose.connection.on(
-  "error",
-  (error) => {
-    console.error(
-      "❌ MongoDB error:",
-      error.message
-    );
+function requireDatabase(req, res, next) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({
+      success: false,
+      message:
+        "MongoDB is not connected. Start MongoDB and check backend/.env.",
+    });
+  }
+
+  next();
+}
+
+// =========================================================
+// DATABASE MODELS
+// =========================================================
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      index: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model("User", userSchema);
+
+const reviewSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+      index: true,
+    },
+    user: {
+      type: String,
+      default: "Anonymous",
+    },
+    text: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    rating: {
+      type: Number,
+      default: 5,
+      min: 1,
+      max: 5,
+    },
+  },
+  { timestamps: true }
+);
+
+const Review = mongoose.model("Review", reviewSchema);
+
+// FIXED: Correct schema structure and braces.
+const scanSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    userEmail: {
+      type: String,
+      default: "",
+      index: true,
+    },
+    analysis: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    result: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    prediction: {
+      type: String,
+      default: "",
+    },
+    label: {
+      type: String,
+      default: "",
+    },
+    concern: {
+      type: String,
+      default: "",
+    },
+    images: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    userData: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+    confidence: {
+      type: Number,
+      default: 0,
+    },
+    responseTimeMs: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
+  },
+  {
+    timestamps: true,
+    strict: false,
   }
 );
 
-mongoose.connection.on(
-  "disconnected",
-  () => {
-    console.log(
-      "⚠️ MongoDB disconnected"
-    );
-  }
+const Scan = mongoose.model("Scan", scanSchema, "scans");
+
+const loginEventSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+      index: true,
+    },
+    email: {
+      type: String,
+      default: "",
+      index: true,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    loggedInAt: {
+      type: Date,
+      default: Date.now,
+      index: true,
+    },
+  },
+  { timestamps: true }
 );
 
-// =========================================================
-// USER MODEL
-// =========================================================
-
-const userSchema =
-  new mongoose.Schema(
-    {
-      name: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true,
-      },
-
-      password: {
-        type: String,
-        required: true,
-      },
-    },
-    {
-      timestamps: true,
-    }
-  );
-
-const User =
-  mongoose.model(
-    "User",
-    userSchema
-  );
+const LoginEvent = mongoose.model("LoginEvent", loginEventSchema);
 
 // =========================================================
-// REVIEW MODEL
+// AUTHENTICATION HELPERS
 // =========================================================
 
-const reviewSchema =
-  new mongoose.Schema(
-    {
-      userId: {
-        type:
-          mongoose.Schema.Types.ObjectId,
+function getBearerToken(req) {
+  const header = req.headers.authorization;
 
-        ref: "User",
-
-        default: null,
-      },
-
-      user: {
-        type: String,
-
-        default:
-          "Anonymous",
-      },
-
-      text: {
-        type: String,
-
-        required: true,
-
-        trim: true,
-      },
-
-      rating: {
-        type: Number,
-
-        default: 5,
-
-        min: 1,
-
-        max: 5,
-      },
-    },
-    {
-      timestamps: true,
-    }
-  );
-
-const Review =
-  mongoose.model(
-    "Review",
-    reviewSchema
-  );
-
-// =========================================================
-// SCAN MODEL
-// =========================================================
-
-const scanSchema =
-  new mongoose.Schema(
-    {
-      userId: {
-        type:
-          mongoose.Schema.Types.ObjectId,
-
-        ref: "User",
-
-        default: null,
-      },
-
-      userEmail: {
-        type: String,
-
-        default: "",
-      },
-
-      analysis: {
-        type:
-          mongoose.Schema.Types.Mixed,
-
-        default: {},
-      },
-
-      result: {
-        type:
-          mongoose.Schema.Types.Mixed,
-
-        default: {},
-      },
-
-      prediction: {
-        type: String,
-
-        default: "",
-      },
-
-      label: {
-        type: String,
-
-        default: "",
-      },
-
-      concern: {
-        type: String,
-
-        default: "",
-      },
-
-      images: {
-        type:
-          mongoose.Schema.Types.Mixed,
-
-        default: {},
-      },
-
-      userData: {
-        type:
-          mongoose.Schema.Types.Mixed,
-
-        default: {},
-      },
-    },
-
-    {
-      timestamps: true,
-
-      strict: false,
-    }
-  );
-
-const Scan =
-  mongoose.model(
-    "Scan",
-    scanSchema,
-    "scans"
-  );
-
-// =========================================================
-// USER AUTHENTICATION
-// =========================================================
-
-function authenticateToken(
-  req,
-  res,
-  next
-) {
-  const authHeader =
-    req.headers.authorization;
-
-  if (
-    !authHeader ||
-    !authHeader.startsWith(
-      "Bearer "
-    )
-  ) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-
-        message:
-          "Authorization token required.",
-      });
+  if (!header || !header.startsWith("Bearer ")) {
+    return null;
   }
 
-  const token =
-    authHeader
-      .substring(7)
-      .trim();
+  return header.substring(7).trim();
+}
+
+function authenticateToken(req, res, next) {
+  const token = getBearerToken(req);
 
   if (!token) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-
-        message:
-          "Invalid authorization token.",
-      });
-  }
-
-  // Never allow the fixed admin token
-  // to access normal user routes.
-  if (
-    token === ADMIN_TOKEN
-  ) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-
-        message:
-          "Admin token cannot be used for normal user operations.",
-      });
+    return res.status(401).json({
+      success: false,
+      message: "Please log in to continue.",
+    });
   }
 
   try {
-    const decoded =
-      jwt.verify(
-        token,
-        SECRET_KEY
-      );
+    const decoded = jwt.verify(token, SECRET_KEY);
 
     if (
-      !decoded.user_id
+      decoded.role !== "user" ||
+      !mongoose.isValidObjectId(decoded.user_id)
     ) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-
-          message:
-            "Invalid user token.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "A valid user token is required.",
+      });
     }
 
-    req.userId =
-      decoded.user_id;
-
-    req.user =
-      decoded;
-
-    // =====================================================
-    // IMPORTANT FIX
-    // Keep the original JWT so it can be sent to Python.
-    // =====================================================
-
-    req.token =
-      token;
+    req.userId = decoded.user_id;
+    req.user = decoded;
+    req.token = token;
 
     next();
   } catch (error) {
-    console.error(
-      "JWT authentication error:",
-      error.message
-    );
-
-    return res
-      .status(401)
-      .json({
-        success: false,
-
-        message:
-          "Invalid or expired token.",
-      });
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired login session.",
+    });
   }
 }
 
-// =========================================================
-// ADMIN AUTHENTICATION
-// =========================================================
+function authenticateAdmin(req, res, next) {
+  const token = getBearerToken(req);
 
-function authenticateAdmin(
-  req,
-  res,
-  next
-) {
-  const authHeader =
-    req.headers.authorization;
-
-  if (
-    !authHeader ||
-    !authHeader.startsWith(
-      "Bearer "
-    )
-  ) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-
-        message:
-          "Admin authorization required.",
-      });
-  }
-
-  const token =
-    authHeader
-      .substring(7)
-      .trim();
-
-  // Fixed admin token
-  if (
-    token === ADMIN_TOKEN
-  ) {
-    req.isAdmin = true;
-
-    req.adminEmail =
-      ADMIN_EMAIL;
-
-    req.user = {
-      email:
-        ADMIN_EMAIL,
-
-      role: "admin",
-
-      isAdmin: true,
-    };
-
-    return next();
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Admin authorization required.",
+    });
   }
 
   try {
-    const decoded =
-      jwt.verify(
-        token,
-        SECRET_KEY
-      );
+    const decoded = jwt.verify(token, SECRET_KEY);
 
     if (
-      decoded.role !==
-        "admin" ||
-      decoded.email !==
+      decoded.role !== "admin" ||
+      String(decoded.email || "").trim().toLowerCase() !==
         ADMIN_EMAIL
     ) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-
-          message:
-            "Admin access required.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Admin access required.",
+      });
     }
 
     req.isAdmin = true;
-
-    req.adminEmail =
-      ADMIN_EMAIL;
-
-    req.userId =
-      decoded.user_id;
-
-    req.user =
-      decoded;
-
-    req.token =
-      token;
+    req.adminEmail = ADMIN_EMAIL;
+    req.user = decoded;
+    req.token = token;
 
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-
-        message:
-          "Invalid or expired admin token.",
-      });
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired admin session.",
+    });
   }
 }
+
+async function recordLogin({ userId, email, role }) {
+  try {
+    await LoginEvent.create({
+      userId: userId || null,
+      email,
+      role,
+      loggedInAt: new Date(),
+    });
+  } catch (error) {
+    console.error("Login event recording failed:", error.message);
+  }
+}
+
+function getPublicUser(user) {
+  return {
+    id: user._id,
+    _id: user._id,
+    name: user.name || "User",
+    username: user.name || "User",
+    email: user.email,
+    role: "user",
+    isAdmin: false,
+    createdAt: user.createdAt,
+  };
+}
+
+// =========================================================
+// BASIC ROUTES
+// =========================================================
+
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "AI Skincare Backend is running!",
+  });
+});
+
+app.get("/health", (req, res) => {
+  res.json({
+    success: true,
+    status: "online",
+    node: "running",
+    python: PYTHON_URL,
+    mongodb:
+      mongoose.connection.readyState === 1
+        ? "connected"
+        : "disconnected",
+  });
+});
 
 // =========================================================
 // REGISTER
 // =========================================================
 
-app.post(
-  "/api/register",
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const {
-        name,
-        username,
-        email,
-        password,
-      } = req.body;
-
-      if (
-        !email ||
-        !password
-      ) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-
-            message:
-              "Email and password are required.",
-          });
-      }
-
-      const cleanEmail =
-        String(email)
-          .trim()
-          .toLowerCase();
-
-      if (
-        cleanEmail ===
-        ADMIN_EMAIL
-      ) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-
-            message:
-              "This email is reserved for administrator login.",
-          });
-      }
-
-      if (
-        String(password).length <
-        6
-      ) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-
-            message:
-              "Password must contain at least 6 characters.",
-          });
-      }
-
-      const existingUser =
-        await User.findOne({
-          email:
-            cleanEmail,
-        });
-
-      if (
-        existingUser
-      ) {
-        return res
-          .status(409)
-          .json({
-            success: false,
-
-            message:
-              "User already exists.",
-          });
-      }
-
-      const hashedPassword =
-        await bcrypt.hash(
-          password,
-          10
-        );
-
-      const displayName =
-        String(
-          name ||
-          username ||
-          "User"
-        ).trim();
-
-      const newUser =
-        new User({
-          name:
-            displayName,
-
-          email:
-            cleanEmail,
-
-          password:
-            hashedPassword,
-        });
-
-      await newUser.save();
-
-      const token =
-        jwt.sign(
-          {
-            user_id:
-              newUser._id.toString(),
-
-            email:
-              newUser.email,
-
-            role: "user",
-          },
-
-          SECRET_KEY,
-
-          {
-            expiresIn:
-              "7d",
-          }
-        );
-
-      return res
-        .status(201)
-        .json({
-          success: true,
-
-          message:
-            "Registration successful.",
-
-          token,
-
-          user: {
-            id:
-              newUser._id,
-
-            _id:
-              newUser._id,
-
-            username:
-              displayName,
-
-            name:
-              displayName,
-
-            email:
-              newUser.email,
-
-            role: "user",
-
-            isAdmin: false,
-
-            createdAt:
-              newUser.createdAt,
-          },
-        });
-    } catch (error) {
-      console.error(
-        "Register error:",
-        error
-      );
-
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Registration failed.",
-
-          error:
-            error.message,
-        });
-    }
-  }
-);
-
-// =========================================================
-// USER LOGIN
-// =========================================================
-
-app.post(
-  "/api/login",
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const {
-        email,
-        password,
-      } = req.body;
-
-      if (
-        !email ||
-        !password
-      ) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-
-            message:
-              "Email and password are required.",
-          });
-      }
-
-      const cleanEmail =
-        String(email)
-          .trim()
-          .toLowerCase();
-
-      // Admin must use admin login
-      if (
-        cleanEmail ===
-        ADMIN_EMAIL
-      ) {
-        return res
-          .status(403)
-          .json({
-            success: false,
-
-            message:
-              "Please use the Admin Login option.",
-          });
-      }
-
-      const user =
-        await User.findOne({
-          email:
-            cleanEmail,
-        });
-
-      if (!user) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-
-            message:
-              "Invalid email or password.",
-          });
-      }
-
-      const passwordMatch =
-        await bcrypt.compare(
-          password,
-          user.password
-        );
-
-      if (
-        !passwordMatch
-      ) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-
-            message:
-              "Invalid email or password.",
-          });
-      }
-
-      const token =
-        jwt.sign(
-          {
-            user_id:
-              user._id.toString(),
-
-            email:
-              user.email,
-
-            role: "user",
-          },
-
-          SECRET_KEY,
-
-          {
-            expiresIn:
-              "7d",
-          }
-        );
-
-      return res.json({
-        success: true,
-
-        message:
-          "Login successful.",
-
-        token,
-
-        user: {
-          id:
-            user._id,
-
-          _id:
-            user._id,
-
-          username:
-            user.name ||
-            "User",
-
-          name:
-            user.name ||
-            "User",
-
-          email:
-            user.email,
-
-          role: "user",
-
-          isAdmin: false,
-
-          createdAt:
-            user.createdAt,
-        },
+app.post("/api/register", requireDatabase, async (req, res) => {
+  try {
+    const { name, username, email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required.",
       });
-    } catch (error) {
-      console.error(
-        "Login error:",
-        error
-      );
-
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Login failed.",
-
-          error:
-            error.message,
-        });
     }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+
+    if (cleanEmail === ADMIN_EMAIL) {
+      return res.status(400).json({
+        success: false,
+        message: "This email is reserved for the administrator.",
+      });
+    }
+
+    if (String(password).length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must contain at least 6 characters.",
+      });
+    }
+
+    const existingUser = await User.findOne({
+      email: cleanEmail,
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists.",
+      });
+    }
+
+    const displayName = String(name || username || "User").trim();
+    const hashedPassword = await bcrypt.hash(String(password), 12);
+
+    const user = await User.create({
+      name: displayName,
+      email: cleanEmail,
+      password: hashedPassword,
+    });
+
+    const token = jwt.sign(
+      {
+        user_id: user._id.toString(),
+        email: user.email,
+        role: "user",
+      },
+      SECRET_KEY,
+      { expiresIn: "7d" }
+    );
+
+    await recordLogin({
+      userId: user._id,
+      email: user.email,
+      role: "user",
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Registration successful.",
+      token,
+      user: getPublicUser(user),
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists.",
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Registration failed.",
+    });
   }
-);
+});
+
+// =========================================================
+// NORMAL USER LOGIN
+// =========================================================
+
+app.post("/api/login", requireDatabase, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required.",
+      });
+    }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+
+    if (cleanEmail === ADMIN_EMAIL) {
+      return res.status(403).json({
+        success: false,
+        message: "Please use the Admin Login option.",
+      });
+    }
+
+    const user = await User.findOne({
+      email: cleanEmail,
+    }).select("+password");
+
+    if (
+      !user ||
+      !(await bcrypt.compare(String(password), user.password))
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        user_id: user._id.toString(),
+        email: user.email,
+        role: "user",
+      },
+      SECRET_KEY,
+      { expiresIn: "7d" }
+    );
+
+    await recordLogin({
+      userId: user._id,
+      email: user.email,
+      role: "user",
+    });
+
+    return res.json({
+      success: true,
+      message: "Login successful.",
+      token,
+      user: getPublicUser(user),
+    });
+  } catch (error) {
+    console.error("User login error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Login failed.",
+    });
+  }
+});
 
 // =========================================================
 // ADMIN LOGIN
 // =========================================================
 
-app.post(
-  "/api/admin/login",
-  (req, res) => {
-    const {
-      email,
-      password,
-    } = req.body;
+app.post("/api/admin/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-    if (
-      !email ||
-      !password
-    ) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-
-          message:
-            "Admin email and password are required.",
-        });
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Admin email and password are required.",
+      });
     }
 
-    const cleanEmail =
-      String(email)
-        .trim()
-        .toLowerCase();
+    const cleanEmail = String(email).trim().toLowerCase();
 
     if (
-      cleanEmail !==
-        ADMIN_EMAIL ||
-      password !==
-        ADMIN_PASSWORD
+      cleanEmail !== ADMIN_EMAIL ||
+      String(password) !== ADMIN_PASSWORD
     ) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-
-          message:
-            "Invalid admin credentials.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid admin credentials.",
+      });
     }
 
-    const token =
-      jwt.sign(
-        {
-          user_id: "admin",
+    const token = jwt.sign(
+      {
+        user_id: "admin",
+        email: ADMIN_EMAIL,
+        role: "admin",
+        isAdmin: true,
+      },
+      SECRET_KEY,
+      { expiresIn: "7d" }
+    );
 
-          email:
-            ADMIN_EMAIL,
-
-          role: "admin",
-
-          isAdmin: true,
-        },
-
-        SECRET_KEY,
-
-        {
-          expiresIn:
-            "7d",
-        }
-      );
+    if (mongoose.connection.readyState === 1) {
+      await recordLogin({
+        userId: null,
+        email: ADMIN_EMAIL,
+        role: "admin",
+      });
+    }
 
     return res.json({
       success: true,
-
-      message:
-        "Admin login successful.",
-
+      message: "Admin login successful.",
       token,
-
       user: {
+        id: "admin",
+        _id: "admin",
         username: "admin",
-
-        name:
-          "Administrator",
-
-        email:
-          ADMIN_EMAIL,
-
+        name: "Administrator",
+        email: ADMIN_EMAIL,
         role: "admin",
-
         isAdmin: true,
       },
     });
+  } catch (error) {
+    console.error("Admin login error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Admin login failed.",
+    });
   }
-);
+});
 
 // =========================================================
-// UPLOAD + PYTHON AI ANALYSIS
+// IMAGE UPLOAD CONFIGURATION
+// =========================================================
+
+const uploadDir = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const extension = path.extname(file.originalname) || ".jpg";
+    const filename =
+      `${Date.now()}-${Math.round(Math.random() * 1e9)}${extension}`;
+
+    cb(null, filename);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+  ];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    return cb(null, true);
+  }
+
+  return cb(
+    new Error("Only JPG, JPEG, PNG and WEBP images are allowed.")
+  );
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+    files: 3,
+  },
+});
+
+// =========================================================
+// SKIN ANALYSIS
+// POST /api/upload
 // =========================================================
 
 app.post(
   "/api/upload",
-
   authenticateToken,
-
   upload.fields([
-    {
-      name: "front",
-      maxCount: 1,
-    },
-
-    {
-      name: "left",
-      maxCount: 1,
-    },
-
-    {
-      name: "right",
-      maxCount: 1,
-    },
+    { name: "front", maxCount: 1 },
+    { name: "left", maxCount: 1 },
+    { name: "right", maxCount: 1 },
   ]),
-
-  async (
-    req,
-    res
-  ) => {
-    const uploadedFiles =
-      [];
+  requireDatabase,
+  async (req, res) => {
+    const analysisStartedAt = Date.now();
+    const uploadedFiles = [];
 
     try {
-      console.log(
-        "========================================"
-      );
+      const formData = new FormData();
 
-      console.log(
-        "📸 NEW SKIN ANALYSIS"
-      );
+      for (const field of ["front", "left", "right"]) {
+        const file = req.files?.[field]?.[0];
 
-      console.log(
-        "User:",
-        req.userId
-      );
+        if (file) {
+          uploadedFiles.push(file.path);
 
-      console.log(
-        "Email:",
-        req.user?.email
-      );
-
-      console.log(
-        "Token available:",
-        !!req.token
-      );
-
-      console.log(
-        "Files:",
-        Object.keys(
-          req.files || {}
-        )
-      );
-
-      console.log(
-        "========================================"
-      );
-
-      // =====================================================
-      // CHECK MONGODB
-      // =====================================================
-
-      if (
-        mongoose.connection
-          .readyState !== 1
-      ) {
-        return res
-          .status(503)
-          .json({
-            success: false,
-
-            message:
-              "MongoDB is not connected. Please start MongoDB.",
-          });
+          formData.append(
+            field,
+            fs.createReadStream(file.path)
+          );
+        }
       }
 
-      // =====================================================
-      // CREATE PYTHON FORM DATA
-      // =====================================================
-
-      const formData =
-        new FormData();
-
-      // =====================================================
-      // FRONT IMAGE
-      // =====================================================
-
-      if (
-        req.files?.front?.[0]
-      ) {
-        const file =
-          req.files.front[0];
-
-        uploadedFiles.push(
-          file.path
-        );
-
-        formData.append(
-          "front",
-
-          fs.createReadStream(
-            file.path
-          )
-        );
+      if (uploadedFiles.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Please upload at least one skin image.",
+        });
       }
 
-      // =====================================================
-      // LEFT IMAGE
-      // =====================================================
+      const userDataFields = [
+        "gender",
+        "age",
+        "sleep",
+        "concern",
+        "secondaryConcern",
+        "sensitivity",
+        "waterIntake",
+        "climate",
+        "lighting",
+      ];
 
-      if (
-        req.files?.left?.[0]
-      ) {
-        const file =
-          req.files.left[0];
-
-        uploadedFiles.push(
-          file.path
-        );
-
-        formData.append(
-          "left",
-
-          fs.createReadStream(
-            file.path
-          )
-        );
+      for (const field of userDataFields) {
+        if (req.body[field] !== undefined) {
+          formData.append(field, String(req.body[field]));
+        }
       }
 
-      // =====================================================
-      // RIGHT IMAGE
-      // =====================================================
+      formData.append("user_id", String(req.userId));
 
-      if (
-        req.files?.right?.[0]
-      ) {
-        const file =
-          req.files.right[0];
+      const currentUser = await User.findById(req.userId);
 
-        uploadedFiles.push(
-          file.path
-        );
-
-        formData.append(
-          "right",
-
-          fs.createReadStream(
-            file.path
-          )
-        );
+      if (!currentUser) {
+        return res.status(401).json({
+          success: false,
+          message: "User not found. Please log in again.",
+        });
       }
 
-      // =====================================================
-      // IMAGE REQUIRED
-      // =====================================================
+      console.log("Starting skin analysis for:", currentUser.email);
 
-      if (
-        uploadedFiles.length ===
-        0
-      ) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-
-            message:
-              "Please upload at least one image.",
-          });
-      }
-
-      // =====================================================
-      // USER DATA
-      // =====================================================
-
-      const userDataFields =
-        [
-          "gender",
-          "age",
-          "sleep",
-          "concern",
-          "secondaryConcern",
-          "sensitivity",
-          "waterIntake",
-          "climate",
-          "lighting",
-        ];
-
-      userDataFields.forEach(
-        (field) => {
-          if (
-            req.body[field] !==
-            undefined
-          ) {
-            formData.append(
-              field,
-
-              String(
-                req.body[field]
-              )
-            );
-          }
+      const pythonResponse = await axios.post(
+        `${PYTHON_URL}/predict`,
+        formData,
+        {
+          headers: {
+            ...formData.getHeaders(),
+            Authorization: `Bearer ${req.token}`,
+            "X-User-ID": String(req.userId),
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
+          timeout: 120000,
+          validateStatus: () => true,
         }
       );
 
-      // =====================================================
-      // USER ID
-      // =====================================================
-
-      formData.append(
-        "user_id",
-        String(
-          req.userId
-        )
-      );
-
-      // =====================================================
-      // SEND TO PYTHON
-      // =====================================================
-
-      console.log(
-        "🤖 Sending authenticated request to Python..."
-      );
-
-      console.log(
-        "Python endpoint:",
-        `${PYTHON_URL}/predict`
-      );
-
-      console.log(
-        "JWT forwarded:",
-        !!req.token
-      );
-
-      const pythonResponse =
-        await axios.post(
-          `${PYTHON_URL}/predict`,
-
-          formData,
-
-          {
-            headers: {
-              ...formData.getHeaders(),
-
-              // =================================================
-              // CRITICAL AUTH FIX
-              // =================================================
-
-              Authorization:
-                `Bearer ${req.token}`,
-
-              "X-User-ID":
-                String(
-                  req.userId
-                ),
-            },
-
-            maxContentLength:
-              Infinity,
-
-            maxBodyLength:
-              Infinity,
-
-            timeout:
-              120000,
-
-            // We handle Python HTTP
-            // errors ourselves.
-            validateStatus:
-              () => true,
-          }
-        );
-
-      // =====================================================
-      // PYTHON RESPONSE
-      // =====================================================
-
-      console.log(
-        "========================================"
-      );
-
-      console.log(
-        "PYTHON STATUS:",
-        pythonResponse.status
-      );
-
-      console.log(
-        "PYTHON RESPONSE:",
-        pythonResponse.data
-      );
-
-      console.log(
-        "========================================"
-      );
-
-      // =====================================================
-      // PYTHON AUTH ERROR
-      // =====================================================
-
       if (
-        pythonResponse.status ===
-        401
+        pythonResponse.status < 200 ||
+        pythonResponse.status >= 300
       ) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-
-            message:
-              "AI service rejected authentication. Please restart the Python AI service and try again.",
-
-            error:
-              pythonResponse.data
-                ?.message ||
-              "Python AI service returned 401.",
-          });
+        return res.status(502).json({
+          success: false,
+          message:
+            pythonResponse.data?.message ||
+            "Python AI service failed to process the image.",
+          error: pythonResponse.data,
+        });
       }
 
-      // =====================================================
-      // PYTHON FORBIDDEN
-      // =====================================================
+      const aiData = pythonResponse.data;
 
-      if (
-        pythonResponse.status ===
-        403
-      ) {
-        return res
-          .status(403)
-          .json({
-            success: false,
-
-            message:
-              pythonResponse.data
-                ?.message ||
-              "AI service denied the scan.",
-
-            error:
-              pythonResponse.data,
-          });
+      if (!aiData || aiData.success === false) {
+        return res.status(500).json({
+          success: false,
+          message: aiData?.message || "AI analysis failed.",
+        });
       }
 
-      // =====================================================
-      // PYTHON SERVER ERROR
-      // =====================================================
+      const analysis =
+        aiData.analysis && typeof aiData.analysis === "object"
+          ? aiData.analysis
+          : aiData;
 
-      if (
-        pythonResponse.status <
-          200 ||
-        pythonResponse.status >=
-          300
-      ) {
-        return res
-          .status(502)
-          .json({
-            success: false,
-
-            message:
-              pythonResponse.data
-                ?.message ||
-              "Python AI service failed to process the image.",
-
-            error:
-              pythonResponse.data,
-          });
-      }
-
-      const aiData =
-        pythonResponse.data;
-
-      // =====================================================
-      // CHECK AI RESPONSE
-      // =====================================================
-
-      if (
-        !aiData ||
-        aiData.success ===
-          false
-      ) {
-        return res
-          .status(500)
-          .json({
-            success: false,
-
-            message:
-              aiData?.message ||
-              "AI analysis failed.",
-
-            error:
-              aiData,
-          });
-      }
-
-      // =====================================================
-      // EXTRACT PREDICTION
-      // =====================================================
+      const result =
+        aiData.result && typeof aiData.result === "object"
+          ? aiData.result
+          : aiData;
 
       const prediction =
-        aiData?.prediction ||
-        aiData?.label ||
-        aiData?.class ||
-        aiData?.type ||
-        aiData?.result
-          ?.prediction ||
-        aiData?.result
-          ?.label ||
-        "";
+        aiData.prediction ||
+        aiData.label ||
+        aiData.class ||
+        aiData.type ||
+        result.prediction ||
+        result.label ||
+        result.class ||
+        result.type ||
+        (typeof aiData.result === "string" ? aiData.result : "");
 
-      // =====================================================
-      // EXTRACT CONFIDENCE
-      // =====================================================
-
-      const confidence =
-        aiData?.confidence ??
-        aiData?.confidence_score ??
-        aiData?.probability ??
-        aiData?.result
-          ?.confidence ??
-        aiData?.result
-          ?.confidence_score ??
+      const rawConfidence =
+        aiData.confidence ??
+        aiData.confidence_score ??
+        aiData.probability ??
+        result.confidence ??
+        result.confidence_score ??
         0;
 
-      // =====================================================
-      // EXTRACT CONCERN
-      // =====================================================
+      const confidence = Number(rawConfidence) || 0;
 
       const concern =
-        aiData?.concern ||
-        aiData?.result
-          ?.concern ||
+        aiData.concern ||
+        result.concern ||
         prediction ||
         req.body.concern ||
         "";
 
-      // =====================================================
-      // FIND CURRENT USER
-      // =====================================================
+      // Actual elapsed time through successful AI processing.
+      const responseTimeMs = Date.now() - analysisStartedAt;
 
-      const currentUser =
-        await User.findById(
-          req.userId
-        );
+      const scan = await Scan.create({
+        userId: currentUser._id,
+        userEmail: currentUser.email,
+        analysis,
+        result,
+        prediction: String(prediction || ""),
+        label: String(aiData.label || prediction || ""),
+        concern: String(concern || ""),
+        confidence,
+        responseTimeMs,
+        userData: { ...req.body },
+        images: {
+          front: !!req.files?.front?.[0],
+          left: !!req.files?.left?.[0],
+          right: !!req.files?.right?.[0],
+        },
+      });
 
-      if (
-        !currentUser
-      ) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-
-            message:
-              "User account no longer exists. Please login again.",
-          });
-      }
-
-      // =====================================================
-      // SAVE SCAN
-      // =====================================================
-
-      const scan =
-        new Scan({
-          userId:
-            req.userId,
-
-          userEmail:
-            currentUser.email ||
-            "",
-
-          analysis:
-            aiData,
-
-          result:
-            aiData,
-
-          prediction:
-            String(
-              prediction || ""
-            ),
-
-          label:
-            String(
-              aiData?.label ||
-              prediction ||
-              ""
-            ),
-
-          concern:
-            String(
-              concern || ""
-            ),
-
-          userData:
-            req.body,
-
-          images: {
-            front:
-              !!req.files
-                ?.front?.[0],
-
-            left:
-              !!req.files
-                ?.left?.[0],
-
-            right:
-              !!req.files
-                ?.right?.[0],
-          },
-        });
-
-      await scan.save();
-
-      // =====================================================
-      // SUCCESS LOG
-      // =====================================================
-
-      console.log(
-        "========================================"
-      );
-
-      console.log(
-        "✅ SCAN SAVED SUCCESSFULLY"
-      );
-
-      console.log(
-        "SCAN ID:",
-        scan._id
-      );
-
-      console.log(
-        "USER ID:",
-        req.userId
-      );
-
-      console.log(
-        "PREDICTION:",
-        prediction
-      );
-
-      console.log(
-        "CONFIDENCE:",
-        confidence
-      );
-
-      console.log(
-        "========================================"
-      );
-
-      // =====================================================
-      // RESPONSE
-      // =====================================================
+      console.log("Skin scan saved:", scan._id.toString());
+      console.log("AI processing time:", `${responseTimeMs} ms`);
 
       return res.json({
         success: true,
-
-        message:
-          "Skin analysis completed successfully.",
-
-        analysis:
-          aiData,
-
+        message: "Skin analysis completed successfully.",
+        analysis: aiData,
         historyItem: {
-          _id:
-            scan._id,
-
-          id:
-            scan._id,
-
-          userId:
-            scan.userId,
-
-          userEmail:
-            scan.userEmail,
-
-          prediction:
-            String(
-              prediction || ""
-            ),
-
-          label:
-            String(
-              aiData?.label ||
-              prediction ||
-              ""
-            ),
-
-          type:
-            String(
-              prediction || ""
-            ),
-
-          concern:
-            String(
-              concern || ""
-            ),
-
-          confidence:
-            confidence,
-
-          water:
-            req.body
-              .waterIntake ||
-            "",
-
-          waterIntake:
-            req.body
-              .waterIntake ||
-            "",
-
-          hydration:
-            req.body
-              .waterIntake ||
-            "",
-
-          climate:
-            req.body
-              .climate ||
-            "",
-
-          userData:
-            req.body,
-
-          analysis:
-            aiData,
-
-          result:
-            aiData,
-
-          createdAt:
-            scan.createdAt,
-
-          updatedAt:
-            scan.updatedAt,
+          _id: scan._id,
+          id: scan._id,
+          userId: scan.userId,
+          userEmail: scan.userEmail,
+          prediction: scan.prediction,
+          label: scan.label,
+          type: scan.prediction,
+          concern: scan.concern,
+          confidence: scan.confidence,
+          responseTimeMs: scan.responseTimeMs,
+          water: req.body.waterIntake || "",
+          waterIntake: req.body.waterIntake || "",
+          hydration: req.body.waterIntake || "",
+          climate: req.body.climate || "",
+          userData: scan.userData,
+          analysis: scan.analysis,
+          result: scan.result,
+          createdAt: scan.createdAt,
+          updatedAt: scan.updatedAt,
         },
       });
     } catch (error) {
-      console.error(
-        "========================================"
-      );
-
-      console.error(
-        "❌ ANALYSIS ERROR"
-      );
-
-      console.error(
-        error
-      );
+      console.error("Skin analysis error:", error.message);
 
       if (
-        error.response
+        error.code === "ECONNREFUSED" ||
+        error.code === "ECONNRESET"
       ) {
-        console.error(
-          "Python status:",
-          error.response.status
-        );
-
-        console.error(
-          "Python response:",
-          error.response.data
-        );
-      }
-
-      console.error(
-        "========================================"
-      );
-
-      // =====================================================
-      // PYTHON AUTH ERROR
-      // =====================================================
-
-      if (
-        error.response
-          ?.status === 401
-      ) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-
-            message:
-              error.response
-                ?.data
-                ?.message ||
-              "AI service authentication failed.",
-
-            error:
-              "Python service rejected the JWT.",
-          });
-      }
-
-      // =====================================================
-      // PYTHON NOT RUNNING
-      // =====================================================
-
-      if (
-        error.code ===
-        "ECONNREFUSED"
-      ) {
-        return res
-          .status(503)
-          .json({
-            success: false,
-
-            message:
-              "Python AI service is not running on port 5001.",
-
-            error:
-              error.message,
-          });
-      }
-
-      return res
-        .status(500)
-        .json({
+        return res.status(503).json({
           success: false,
-
           message:
-            error.response
-              ?.data
-              ?.message ||
-            "Failed to process skin analysis.",
-
-          error:
-            error.message,
+            "Python AI service is unavailable. Check port 5001.",
         });
-    } finally {
-      // =====================================================
-      // DELETE TEMPORARY FILES
-      // =====================================================
+      }
 
-      uploadedFiles.forEach(
-        (filePath) => {
-          try {
-            if (
-              fs.existsSync(
-                filePath
-              )
-            ) {
-              fs.unlinkSync(
-                filePath
-              );
-            }
-          } catch (
-            deleteError
-          ) {
-            console.error(
-              "Cleanup error:",
-              deleteError.message
-            );
+      if (
+        error.code === "ECONNABORTED" ||
+        error.code === "ETIMEDOUT"
+      ) {
+        return res.status(504).json({
+          success: false,
+          message: "AI analysis timed out. Please try again.",
+        });
+      }
+
+      return res.status(500).json({
+        success: false,
+        message:
+          error.response?.data?.message ||
+          "Failed to process skin analysis.",
+      });
+    } finally {
+      uploadedFiles.forEach((filePath) => {
+        try {
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
           }
+        } catch (cleanupError) {
+          console.error(
+            "Temporary file cleanup error:",
+            cleanupError.message
+          );
         }
-      );
+      });
     }
   }
 );
@@ -1842,60 +927,27 @@ app.post(
 // PUBLIC REVIEWS
 // =========================================================
 
-app.get(
-  "/api/reviews",
-  async (
-    req,
-    res
-  ) => {
-    try {
-      if (
-        mongoose.connection
-          .readyState !== 1
-      ) {
-        return res
-          .status(503)
-          .json({
-            success: false,
+app.get("/api/reviews", requireDatabase, async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .lean();
 
-            message:
-              "MongoDB is not connected.",
-          });
-      }
+    return res.json({
+      success: true,
+      count: reviews.length,
+      reviews,
+    });
+  } catch (error) {
+    console.error("Public reviews error:", error.message);
 
-      const reviews =
-        await Review.find()
-          .sort({
-            createdAt: -1,
-          })
-          .limit(100)
-          .lean();
-
-      return res.json({
-        success: true,
-
-        reviews,
-      });
-    } catch (error) {
-      console.error(
-        "Reviews error:",
-        error
-      );
-
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch reviews.",
-
-          error:
-            error.message,
-        });
-    }
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch reviews.",
+    });
   }
-);
+});
 
 // =========================================================
 // ADD REVIEW
@@ -1903,172 +955,52 @@ app.get(
 
 app.post(
   "/api/reviews",
-
   authenticateToken,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      const {
-        text,
-        rating,
-      } = req.body;
+      const { text, rating } = req.body;
 
-      if (
-        !text ||
-        !String(text).trim()
-      ) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-
-            message:
-              "Review text is required.",
-          });
+      if (!text || !String(text).trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Review text is required.",
+        });
       }
 
-      const currentUser =
-        await User.findById(
-          req.userId
-        );
+      const user = await User.findById(req.userId);
 
-      if (
-        !currentUser
-      ) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-
-            message:
-              "User account not found.",
-          });
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "User account not found.",
+        });
       }
 
-      const cleanRating =
-        Math.min(
-          Math.max(
-            Number(
-              rating
-            ) || 5,
-
-            1
-          ),
-
-          5
-        );
-
-      const newReview =
-        new Review({
-          userId:
-            req.userId,
-
-          user:
-            currentUser.name ||
-            currentUser.email ||
-            "Anonymous",
-
-          text:
-            String(
-              text
-            ).trim(),
-
-          rating:
-            cleanRating,
-        });
-
-      await newReview.save();
-
-      return res
-        .status(201)
-        .json({
-          success: true,
-
-          message:
-            "Review submitted successfully.",
-
-          review:
-            newReview,
-        });
-    } catch (error) {
-      console.error(
-        "Review submission error:",
-        error
+      const cleanRating = Math.min(
+        Math.max(Number(rating) || 5, 1),
+        5
       );
 
-      return res
-        .status(500)
-        .json({
-          success: false,
+      const review = await Review.create({
+        userId: user._id,
+        user: user.name || user.email || "Anonymous",
+        text: String(text).trim(),
+        rating: cleanRating,
+      });
 
-          message:
-            "Unable to submit review.",
-
-          error:
-            error.message,
-        });
-    }
-  }
-);
-
-// =========================================================
-// DELETE REVIEW
-// =========================================================
-
-app.delete(
-  "/api/reviews/:id",
-
-  authenticateAdmin,
-
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const deletedReview =
-        await Review.findByIdAndDelete(
-          req.params.id
-        );
-
-      if (
-        !deletedReview
-      ) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-
-            message:
-              "Review not found.",
-          });
-      }
-
-      return res.json({
+      return res.status(201).json({
         success: true,
-
-        message:
-          "Review deleted successfully.",
+        message: "Review submitted successfully.",
+        review,
       });
     } catch (error) {
-      console.error(
-        "Delete review error:",
-        error
-      );
+      console.error("Review submission error:", error.message);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to delete review.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to submit review.",
+      });
     }
   }
 );
@@ -2079,224 +1011,99 @@ app.delete(
 
 app.get(
   "/api/history",
-
   authenticateToken,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      console.log(
-        "========================================"
-      );
+      const scans = await Scan.find({
+        userId: req.userId,
+      })
+        .sort({ createdAt: -1 })
+        .limit(100)
+        .lean();
 
-      console.log(
-        "📚 HISTORY REQUEST"
-      );
+      const history = scans.map((scan) => {
+        const analysis =
+          scan.analysis && typeof scan.analysis === "object"
+            ? scan.analysis
+            : {};
 
-      console.log(
-        "USER ID:",
-        req.userId
-      );
+        const result =
+          scan.result && typeof scan.result === "object"
+            ? scan.result
+            : {};
 
-      console.log(
-        "========================================"
-      );
+        const prediction =
+          scan.prediction ||
+          scan.label ||
+          analysis.prediction ||
+          analysis.label ||
+          analysis.class ||
+          analysis.type ||
+          result.prediction ||
+          result.label ||
+          result.class ||
+          result.type ||
+          "";
 
-      if (
-        mongoose.connection
-          .readyState !== 1
-      ) {
-        return res
-          .status(503)
-          .json({
-            success: false,
+        const confidence =
+          scan.confidence ??
+          analysis.confidence ??
+          analysis.confidence_score ??
+          analysis.probability ??
+          result.confidence ??
+          result.confidence_score ??
+          0;
 
-            message:
-              "MongoDB is not connected.",
-          });
-      }
+        const concern =
+          scan.concern ||
+          analysis.concern ||
+          result.concern ||
+          prediction ||
+          "";
 
-      let userObjectId;
+        const water =
+          scan.userData?.waterIntake ||
+          scan.userData?.water ||
+          analysis.waterIntake ||
+          analysis.water ||
+          "";
 
-      try {
-        userObjectId =
-          new mongoose.Types.ObjectId(
-            req.userId
-          );
-      } catch (error) {
-        return res
-          .status(401)
-          .json({
-            success: false,
+        const climate =
+          scan.userData?.climate ||
+          analysis.climate ||
+          "";
 
-            message:
-              "Invalid user ID.",
-          });
-      }
-
-      const scans =
-        await Scan.find({
-          userId:
-            userObjectId,
-        })
-          .sort({
-            createdAt: -1,
-          })
-          .limit(100)
-          .lean();
-
-      const history =
-        scans.map(
-          (scan) => {
-            const analysis =
-              scan.analysis &&
-              typeof scan.analysis ===
-                "object"
-                ? scan.analysis
-                : {};
-
-            const result =
-              scan.result &&
-              typeof scan.result ===
-                "object"
-                ? scan.result
-                : {};
-
-            const prediction =
-              scan.prediction ||
-              scan.label ||
-              analysis.prediction ||
-              analysis.label ||
-              analysis.class ||
-              analysis.type ||
-              result.prediction ||
-              result.label ||
-              result.class ||
-              result.type ||
-              "";
-
-            const confidence =
-              scan.confidence ??
-              analysis.confidence ??
-              analysis.confidence_score ??
-              analysis.probability ??
-              result.confidence ??
-              result.confidence_score ??
-              0;
-
-            const concern =
-              scan.concern ||
-              analysis.concern ||
-              result.concern ||
-              prediction ||
-              "";
-
-            const water =
-              scan.userData
-                ?.waterIntake ||
-              scan.userData
-                ?.water ||
-              analysis.waterIntake ||
-              analysis.water ||
-              "";
-
-            const climate =
-              scan.userData
-                ?.climate ||
-              analysis.climate ||
-              "";
-
-            return {
-              _id:
-                scan._id,
-
-              id:
-                scan._id,
-
-              userId:
-                scan.userId,
-
-              userEmail:
-                scan.userEmail,
-
-              type:
-                prediction,
-
-              prediction:
-                prediction,
-
-              label:
-                scan.label ||
-                prediction,
-
-              concern:
-                concern,
-
-              confidence:
-                confidence,
-
-              water:
-                water,
-
-              waterIntake:
-                water,
-
-              hydration:
-                water,
-
-              climate:
-                climate,
-
-              analysis:
-                analysis,
-
-              result:
-                result,
-
-              userData:
-                scan.userData ||
-                {},
-
-              createdAt:
-                scan.createdAt,
-
-              updatedAt:
-                scan.updatedAt,
-            };
-          }
-        );
-
-      console.log(
-        `✅ Found ${history.length} scans for user ${req.userId}`
-      );
+        return {
+          ...scan,
+          id: scan._id,
+          type: prediction,
+          prediction,
+          label: scan.label || prediction,
+          concern,
+          confidence,
+          water,
+          waterIntake: water,
+          hydration: water,
+          climate,
+          analysis,
+          result,
+          userData: scan.userData || {},
+        };
+      });
 
       return res.json({
         success: true,
-
-        count:
-          history.length,
-
+        count: history.length,
         history,
       });
     } catch (error) {
-      console.error(
-        "History error:",
-        error
-      );
+      console.error("History error:", error.message);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch history.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch skin analysis history.",
+      });
     }
   }
 );
@@ -2307,466 +1114,322 @@ app.get(
 
 app.get(
   "/api/profile",
-
   authenticateToken,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      const user =
-        await User.findById(
-          req.userId
-        )
-          .select(
-            "-password"
-          )
-          .lean();
+      const user = await User.findById(req.userId).lean();
 
       if (!user) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-
-            message:
-              "User not found.",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "User not found.",
+        });
       }
 
       return res.json({
         success: true,
-
         user: {
-          id:
-            user._id,
-
-          _id:
-            user._id,
-
-          username:
-            user.name ||
-            "User",
-
-          name:
-            user.name ||
-            "User",
-
-          email:
-            user.email,
-
-          role:
-            "user",
-
-          isAdmin:
-            false,
-
-          createdAt:
-            user.createdAt,
+          id: user._id,
+          _id: user._id,
+          username: user.name || "User",
+          name: user.name || "User",
+          email: user.email,
+          role: "user",
+          isAdmin: false,
+          createdAt: user.createdAt,
         },
       });
     } catch (error) {
-      console.error(
-        "Profile error:",
-        error
-      );
+      console.error("Profile error:", error.message);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch profile.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch profile.",
+      });
     }
   }
 );
 
 // =========================================================
-// ADMIN STATS
+// ADMIN DASHBOARD STATISTICS
+// GET /api/admin/stats
 // =========================================================
 
 app.get(
   "/api/admin/stats",
-
   authenticateAdmin,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      if (
-        mongoose.connection
-          .readyState !== 1
-      ) {
-        return res
-          .status(503)
-          .json({
-            success: false,
+      const now = new Date();
 
-            message:
-              "MongoDB is not connected.",
-          });
-      }
+      const startOfToday = new Date(now);
+      startOfToday.setHours(0, 0, 0, 0);
 
-      const now =
-        new Date();
+      const sevenDaysAgo = new Date(startOfToday);
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
 
-      const startOfToday =
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate()
-        );
-
-      const startOfSevenDaysAgo =
-        new Date(
-          now.getTime() -
-          6 *
-            24 *
-            60 *
-            60 *
-            1000
-        );
+      const activeSince = new Date(
+        now.getTime() - 15 * 60 * 1000
+      );
 
       const [
         totalUsers,
         totalScans,
         totalReviews,
+        totalLogins,
         todayUsers,
         todayScans,
-      ] =
-        await Promise.all([
-          User.countDocuments(),
+        todayLogins,
+        activeUserIds,
+        userGrowthRaw,
+        scanTrendRaw,
+        popularConcernsRaw,
+        recentUsers,
+        ratingResult,
+        responseTimeResult,
+      ] = await Promise.all([
+        User.countDocuments(),
 
-          Scan.countDocuments(),
+        Scan.countDocuments(),
 
-          Review.countDocuments(),
+        Review.countDocuments(),
 
-          User.countDocuments({
-            createdAt: {
-              $gte:
-                startOfToday,
-            },
-          }),
+        LoginEvent.countDocuments(),
 
-          Scan.countDocuments({
-            createdAt: {
-              $gte:
-                startOfToday,
-            },
-          }),
-        ]);
+        User.countDocuments({
+          createdAt: { $gte: startOfToday },
+        }),
 
-      // =====================================================
-      // USER GROWTH
-      // =====================================================
+        Scan.countDocuments({
+          createdAt: { $gte: startOfToday },
+        }),
 
-      const userGrowthRaw =
-        await User.aggregate([
+        LoginEvent.countDocuments({
+          loggedInAt: { $gte: startOfToday },
+        }),
+
+        LoginEvent.distinct("userId", {
+          role: "user",
+          loggedInAt: { $gte: activeSince },
+          userId: { $ne: null },
+        }),
+
+        // User registrations by day.
+        User.aggregate([
           {
             $match: {
-              createdAt: {
-                $gte:
-                  startOfSevenDaysAgo,
-              },
+              createdAt: { $gte: sevenDaysAgo },
             },
           },
-
           {
             $group: {
               _id: {
                 $dateToString: {
-                  format:
-                    "%Y-%m-%d",
-
-                  date:
-                    "$createdAt",
+                  format: "%Y-%m-%d",
+                  date: "$createdAt",
+                  timezone: "Asia/Kolkata",
                 },
               },
-
-              count: {
-                $sum: 1,
-              },
+              count: { $sum: 1 },
             },
           },
+          { $sort: { _id: 1 } },
+        ]),
 
-          {
-            $sort: {
-              _id: 1,
-            },
-          },
-        ]);
-
-      // =====================================================
-      // SCAN TREND
-      // =====================================================
-
-      const scanTrendRaw =
-        await Scan.aggregate([
+        // FIXED: Daily skin analysis chart data.
+        Scan.aggregate([
           {
             $match: {
-              createdAt: {
-                $gte:
-                  startOfSevenDaysAgo,
-              },
+              createdAt: { $gte: sevenDaysAgo },
             },
           },
-
           {
             $group: {
               _id: {
                 $dateToString: {
-                  format:
-                    "%Y-%m-%d",
-
-                  date:
-                    "$createdAt",
+                  format: "%Y-%m-%d",
+                  date: "$createdAt",
+                  timezone: "Asia/Kolkata",
                 },
               },
-
-              count: {
-                $sum: 1,
-              },
+              count: { $sum: 1 },
             },
           },
+          { $sort: { _id: 1 } },
+        ]),
 
-          {
-            $sort: {
-              _id: 1,
-            },
-          },
-        ]);
-
-      // =====================================================
-      // SEVEN DAY ARRAY
-      // =====================================================
-
-      const makeSevenDayArray =
-        (rawData) => {
-          const output = [];
-
-          for (
-            let i = 6;
-            i >= 0;
-            i--
-          ) {
-            const date =
-              new Date(
-                now.getTime() -
-                  i *
-                    24 *
-                    60 *
-                    60 *
-                    1000
-              );
-
-            const dateString =
-              date
-                .toISOString()
-                .split(
-                  "T"
-                )[0];
-
-            const found =
-              rawData.find(
-                (item) =>
-                  item._id ===
-                  dateString
-              );
-
-            output.push({
-              label:
-                date.toLocaleDateString(
-                  "en-IN",
-                  {
-                    day: "2-digit",
-
-                    month:
-                      "short",
-                  }
-                ),
-
-              count:
-                found?.count ||
-                0,
-            });
-          }
-
-          return output;
-        };
-
-      const userGrowth =
-        makeSevenDayArray(
-          userGrowthRaw
-        );
-
-      const scanTrend =
-        makeSevenDayArray(
-          scanTrendRaw
-        );
-
-      // =====================================================
-      // POPULAR CONCERNS
-      // =====================================================
-
-      const popularConcerns =
-        await Scan.aggregate([
+        // Popular recorded skin concerns.
+        Scan.aggregate([
           {
             $match: {
               concern: {
                 $exists: true,
-
+                $type: "string",
                 $ne: "",
               },
             },
           },
-
           {
             $group: {
-              _id:
-                "$concern",
-
-              count: {
-                $sum: 1,
-              },
-            },
-          },
-
-          {
-            $sort: {
-              count: -1,
-            },
-          },
-
-          {
-            $limit: 5,
-          },
-        ]);
-
-      // =====================================================
-      // RECENT USERS
-      // =====================================================
-
-      const recentUsers =
-        await User.find()
-          .select(
-            "-password"
-          )
-          .sort({
-            createdAt: -1,
-          })
-          .limit(8)
-          .lean();
-
-      // =====================================================
-      // AVERAGE RATING
-      // =====================================================
-
-      let avgRating = 0;
-
-      if (
-        totalReviews > 0
-      ) {
-        const ratingResult =
-          await Review.aggregate([
-            {
-              $group: {
-                _id: null,
-
-                average: {
-                  $avg:
-                    "$rating",
+              _id: {
+                $toLower: {
+                  $trim: { input: "$concern" },
                 },
               },
+              count: { $sum: 1 },
             },
-          ]);
+          },
+          { $sort: { count: -1 } },
+          { $limit: 5 },
+        ]),
 
-        avgRating =
-          Number(
-            ratingResult[0]
-              ?.average || 0
-          ).toFixed(1);
+        User.find()
+          .select("name email createdAt")
+          .sort({ createdAt: -1 })
+          .limit(8)
+          .lean(),
+
+        // Average review rating.
+        Review.aggregate([
+          {
+            $group: {
+              _id: null,
+              average: { $avg: "$rating" },
+            },
+          },
+        ]),
+
+        // FIXED: Response-time metric, separate from chart data.
+        Scan.aggregate([
+          {
+            $match: {
+              responseTimeMs: {
+                $type: "number",
+                $gt: 0,
+              },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              averageMs: { $avg: "$responseTimeMs" },
+              samples: { $sum: 1 },
+            },
+          },
+        ]),
+      ]);
+
+      const toMap = (items) =>
+        new Map(items.map((item) => [item._id, item.count]));
+
+      const userMap = toMap(userGrowthRaw);
+      const scanMap = toMap(scanTrendRaw);
+
+      const userGrowth = [];
+      const scanTrend = [];
+
+      for (let offset = 6; offset >= 0; offset--) {
+        const date = new Date(startOfToday);
+        date.setDate(date.getDate() - offset);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        const dateKey = `${year}-${month}-${day}`;
+
+        const label = date.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+        });
+
+        userGrowth.push({
+          date: dateKey,
+          label,
+          count: userMap.get(dateKey) || 0,
+        });
+
+        scanTrend.push({
+          date: dateKey,
+          label,
+          count: scanMap.get(dateKey) || 0,
+        });
       }
 
-      // =====================================================
-      // RESPONSE
-      // =====================================================
+      const avgRating = Number(ratingResult[0]?.average || 0);
+
+      const responseTimeSamples =
+        responseTimeResult[0]?.samples || 0;
+
+      const avgResponseTime =
+        responseTimeSamples > 0
+          ? Number(
+              (responseTimeResult[0].averageMs / 1000).toFixed(2)
+            )
+          : null;
+
+      // Accuracy must be measured using a labeled validation dataset.
+      const accuracySetting = process.env.MODEL_ACCURACY;
+
+      const modelAccuracy =
+        accuracySetting !== undefined &&
+        accuracySetting.trim() !== "" &&
+        Number.isFinite(Number(accuracySetting)) &&
+        Number(accuracySetting) >= 0 &&
+        Number(accuracySetting) <= 100
+          ? Number(accuracySetting)
+          : null;
+
+      const systemHealth =
+        mongoose.connection.readyState === 1 ? 100 : 0;
 
       return res.json({
         success: true,
-
         stats: {
           totalUsers,
-
-          currentUsers:
-            0,
-
-          totalLogins:
-            0,
-
-          todayLogins:
-            0,
-
+          currentUsers: activeUserIds.length,
+          totalLogins,
+          todayLogins,
           totalScans,
-
           todayScans,
-
-          totalFeedback:
-            totalReviews,
-
-          avgRating:
-            Number(
-              avgRating
-            ),
-
-          modelAccuracy:
-            94.8,
-
-          systemHealth:
-            mongoose.connection
-              .readyState ===
-            1
-              ? 100
-              : 0,
-
-          avgResponseTime:
-            1.15,
-
+          totalFeedback: totalReviews,
+          totalReviews,
+          avgRating: Number(avgRating.toFixed(1)),
           todayUsers,
 
           userGrowth,
-
           scanTrend,
 
-          popularConcerns,
+          popularConcerns: popularConcernsRaw.map((item) => ({
+            _id: item._id || "Unspecified",
+            name: item._id || "Unspecified",
+            count: item.count,
+          })),
 
-          recentUsers,
+          recentUsers: recentUsers.map((user) => ({
+            id: user._id,
+            _id: user._id,
+            name: user.name || "User",
+            username: user.name || "User",
+            email: user.email,
+            createdAt: user.createdAt,
+          })),
+
+          modelAccuracy,
+          avgResponseTime,
+          responseTimeSamples,
+          systemHealth,
         },
       });
     } catch (error) {
-      console.error(
-        "Admin stats error:",
-        error
-      );
+      console.error("Admin stats error:", error);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch admin statistics.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch admin statistics.",
+      });
     }
   }
 );
@@ -2777,124 +1440,68 @@ app.get(
 
 app.get(
   "/api/admin/users",
-
   authenticateAdmin,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      const users =
-        await User.find()
-          .select(
-            "-password"
-          )
-          .sort({
-            createdAt: -1,
-          })
-          .limit(500)
-          .lean();
+      const users = await User.find()
+        .select("name email createdAt")
+        .sort({ createdAt: -1 })
+        .limit(500)
+        .lean();
 
       return res.json({
         success: true,
-
-        users:
-          users.map(
-            (user) => ({
-              id:
-                user._id,
-
-              _id:
-                user._id,
-
-              name:
-                user.name ||
-                "User",
-
-              username:
-                user.name ||
-                "User",
-
-              email:
-                user.email,
-
-              role:
-                "user",
-
-              isAdmin:
-                false,
-
-              createdAt:
-                user.createdAt,
-            })
-          ),
+        count: users.length,
+        users: users.map((user) => ({
+          id: user._id,
+          _id: user._id,
+          name: user.name || "User",
+          username: user.name || "User",
+          email: user.email,
+          role: "user",
+          isAdmin: false,
+          createdAt: user.createdAt,
+        })),
       });
     } catch (error) {
-      console.error(
-        "Admin users error:",
-        error
-      );
+      console.error("Admin users error:", error.message);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch users.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch users.",
+      });
     }
   }
 );
 
 // =========================================================
-// ADMIN SCANS
+// ADMIN SKIN SCANS
 // =========================================================
 
 app.get(
   "/api/admin/scans",
-
   authenticateAdmin,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      const scans =
-        await Scan.find()
-          .sort({
-            createdAt: -1,
-          })
-          .limit(500)
-          .lean();
+      const scans = await Scan.find()
+        .sort({ createdAt: -1 })
+        .limit(500)
+        .lean();
 
       return res.json({
         success: true,
-
+        count: scans.length,
         scans,
       });
     } catch (error) {
-      console.error(
-        "Admin scans error:",
-        error
-      );
+      console.error("Admin scans error:", error.message);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch scans.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch skin scans.",
+      });
     }
   }
 );
@@ -2905,65 +1512,72 @@ app.get(
 
 app.get(
   "/api/admin/reviews",
-
   authenticateAdmin,
-
-  async (
-    req,
-    res
-  ) => {
+  requireDatabase,
+  async (req, res) => {
     try {
-      const reviews =
-        await Review.find()
-          .sort({
-            createdAt: -1,
-          })
-          .limit(500)
-          .lean();
+      const reviews = await Review.find()
+        .sort({ createdAt: -1 })
+        .limit(500)
+        .lean();
 
       return res.json({
         success: true,
-
+        count: reviews.length,
         reviews,
       });
     } catch (error) {
-      console.error(
-        "Admin reviews error:",
-        error
-      );
+      console.error("Admin reviews error:", error.message);
 
-      return res
-        .status(500)
-        .json({
-          success: false,
-
-          message:
-            "Unable to fetch admin reviews.",
-
-          error:
-            error.message,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch admin reviews.",
+      });
     }
   }
 );
 
 // =========================================================
-// 404 ROUTE
+// DELETE REVIEW — ADMIN
+// DELETE /api/reviews/:id
 // =========================================================
 
-app.use(
-  (
-    req,
-    res
-  ) => {
-    res
-      .status(404)
-      .json({
-        success: false,
+app.delete(
+  "/api/reviews/:id",
+  authenticateAdmin,
+  requireDatabase,
+  async (req, res) => {
+    try {
+      if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid review ID.",
+        });
+      }
 
-        message:
-          `Route not found: ${req.method} ${req.originalUrl}`,
+      const deletedReview = await Review.findByIdAndDelete(
+        req.params.id
+      );
+
+      if (!deletedReview) {
+        return res.status(404).json({
+          success: false,
+          message: "Review not found.",
+        });
+      }
+
+      return res.json({
+        success: true,
+        message: "Review deleted successfully.",
       });
+    } catch (error) {
+      console.error("Delete review error:", error.message);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to delete review.",
+      });
+    }
   }
 );
 
@@ -2971,105 +1585,67 @@ app.use(
 // GLOBAL ERROR HANDLER
 // =========================================================
 
-app.use(
-  (
-    error,
-    req,
-    res,
-    next
-  ) => {
-    console.error(
-      "GLOBAL SERVER ERROR:",
-      error
-    );
+app.use((error, req, res, next) => {
+  console.error("Server error:", error.message);
 
-    if (
-      error instanceof
-      multer.MulterError
-    ) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-
-          message:
-            `Upload error: ${error.message}`,
-        });
-    }
-
-    return res
-      .status(500)
-      .json({
-        success: false,
-
-        message:
-          error.message ||
-          "Internal server error.",
-      });
+  if (res.headersSent) {
+    return next(error);
   }
-);
+
+  if (error instanceof multer.MulterError) {
+    return res.status(400).json({
+      success: false,
+      message: `Upload error: ${error.message}`,
+    });
+  }
+
+  if (error.message?.includes("Only JPG")) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  return res.status(500).json({
+    success: false,
+    message: error.message || "Internal server error.",
+  });
+});
+
+// =========================================================
+// 404 HANDLER
+// =========================================================
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
+  });
+});
 
 // =========================================================
 // START SERVER
 // =========================================================
 
-app.listen(
-  PORT,
-  () => {
-    console.log("");
-
-    console.log(
-      "========================================"
-    );
-
-    console.log(
-      "       AI SKINCARE NODE SERVER"
-    );
-
-    console.log(
-      "========================================"
-    );
-
-    console.log(
-      `✅ Node server: http://localhost:${PORT}`
-    );
-
-    console.log(
-      `✅ Python AI: ${PYTHON_URL}`
-    );
-
-    console.log(
-      "✅ User Login: /api/login"
-    );
-
-    console.log(
-      "✅ User Register: /api/register"
-    );
-
-    console.log(
-      "✅ User History: /api/history"
-    );
-
-    console.log(
-      "✅ User Profile: /api/profile"
-    );
-
-    console.log(
-      "✅ Skin Analysis: /api/upload"
-    );
-
-    console.log(
-      "✅ Public Reviews: /api/reviews"
-    );
-
-    console.log(
-      "✅ Admin Stats: /api/admin/stats"
-    );
-
-    console.log(
-      "========================================"
-    );
-
-    console.log("");
-  }
-);
+app.listen(PORT, () => {
+  console.log("");
+  console.log("========================================");
+  console.log("       AI SKINCARE NODE SERVER");
+  console.log("========================================");
+  console.log(`Node server: http://localhost:${PORT}`);
+  console.log(`Python AI: ${PYTHON_URL}`);
+  console.log("User login: POST /api/login");
+  console.log("User register: POST /api/register");
+  console.log("User history: GET /api/history");
+  console.log("User profile: GET /api/profile");
+  console.log("Skin analysis: POST /api/upload");
+  console.log("Public reviews: GET /api/reviews");
+  console.log("Admin login: POST /api/admin/login");
+  console.log("Admin stats: GET /api/admin/stats");
+  console.log("Admin users: GET /api/admin/users");
+  console.log("Admin scans: GET /api/admin/scans");
+  console.log("Admin reviews: GET /api/admin/reviews");
+  console.log("Shop API: /api/shop");
+  console.log("========================================");
+  console.log("");
+});
